@@ -55,11 +55,12 @@ public class RestRequest extends AsyncTask<String, Void, JSONObject> {
         }
 
         Log.i(gs.CAT,"interpretation effectuee");
+        Log.i(gs.CAT, json.toString());
         return json;
     }
 
     protected void onPostExecute(JSONObject result) {
         Log.i(gs.CAT,"onPostExecute");
-        mAct.traiteReponse(result, action);
+        mAct.postRequest(result, action);
     }
 }

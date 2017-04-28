@@ -29,6 +29,7 @@ import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 
 /**
  * Created by Gimlibéta on 21/02/2017.
@@ -40,8 +41,9 @@ public class GlobalState extends Application{
     public CookieManager cookieManager;
 
     public Boolean connected = false;
-    /*public String login;
-    public String pass;*/
+    public String email;
+    public int idUser;
+    /*public String pass;*/
     public int notificationId = 1;
 
     @Override
@@ -114,18 +116,27 @@ public class GlobalState extends Application{
     public String requete(String qs) {
         if (qs != null)
         {
-            String urlData = "https://api.livemylife.coniface.fr/verif.php";
+            //String urlData = "https://api.livemylife.coniface.fr/verif.php";
+            //For localhost
+            String urlData = "http://10.0.2.2/PHP-LiveMyLife/verif.php";
 
             try {
                 URL url = new URL(urlData + "?" + qs);
                 Log.i(CAT,"url utilisée : " + url.toString());
                 HttpURLConnection urlConnection = null;
                 urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("Content-Language", Locale.getDefault().toString());
+
+                Log.i("Appli","Language : " + Locale.getDefault().toString());
+
                 InputStream in = null;
                 in = new BufferedInputStream(urlConnection.getInputStream());
                 String txtReponse = convertStreamToString(in);
                 urlConnection.disconnect();
                 return txtReponse;
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {

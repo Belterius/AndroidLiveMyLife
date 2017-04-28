@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AndroidLiveMyLife</string>
     <string name="title_activity_maps">Map</string>
+
     <string name="google_maps_key">AIzaSyCPcmmWh8OTpkzykHX_wQjmtYp7C_7Erxw</string>
     <string name="title_activity_login">Sign in</string>
 
@@ -16,4 +17,13 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="title_new_story">New story</string>
+    <string name="title_browse_story">Browse story</string>
+    <string name="title_my_account">My account</string>
+    <string name="title_activity_local_activities">localActivities</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
 </resources>

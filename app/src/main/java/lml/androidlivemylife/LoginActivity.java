@@ -77,8 +77,6 @@ public class LoginActivity extends RestActivity {
                         this.gs.connected = true;
 
                         goToMainPage();
-
-                        this.finish();
                     }
 
                 } catch (JSONException e) {
@@ -91,6 +89,7 @@ public class LoginActivity extends RestActivity {
     private void goToMainPage(){
         Intent nextView = new Intent(this,LocalStoriesActivity.class);
         startActivity(nextView);
+        this.finish();
     }
 
 }

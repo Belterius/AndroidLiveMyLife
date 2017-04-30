@@ -90,4 +90,21 @@ public abstract class RestActivity extends FinishAllReceiver {
         super.onDestroy();
     }
 
+    public void toastError(String errorToDisplay){
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(errorToDisplay);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+
+    }
+
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import asyncRequest.RestActivity;
 public class LoginActivity extends RestActivity {
 
     private TextInputEditText editEmail;

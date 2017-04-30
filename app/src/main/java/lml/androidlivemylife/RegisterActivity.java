@@ -9,6 +9,7 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import asyncRequest.RestActivity;
 public class RegisterActivity extends RestActivity {
 
     private TextInputEditText editEmail;

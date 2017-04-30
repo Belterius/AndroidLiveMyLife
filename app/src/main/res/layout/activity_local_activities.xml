@@ -9,10 +9,11 @@
     tools:context="lml.androidlivemylife.LocalStoriesActivity">
 
     <FrameLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:id="@+id/content_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/message"
@@ -26,12 +27,25 @@
 
     </FrameLayout>
 
+    <include
+        android:id="@+id/layout_my_profile"
+        layout="@layout/activity_show_my_profile"
+        layout_weight="1"
+        layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="invisible" />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_weight="0.07"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation">
+
+    </android.support.design.widget.BottomNavigationView>
 
 </LinearLayout>

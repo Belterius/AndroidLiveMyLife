@@ -50,7 +50,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LocalStoriesActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MyProfileActivity" />
+        <activity android:name=".EditMyProfileActivity"></activity>
     </application>
 
 </manifest>

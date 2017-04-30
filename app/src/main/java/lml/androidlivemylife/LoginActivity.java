@@ -8,7 +8,9 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ClassPackage.Personne;
 import asyncRequest.RestActivity;
+
 public class LoginActivity extends RestActivity {
 
     private TextInputEditText editEmail;
@@ -49,7 +51,7 @@ public class LoginActivity extends RestActivity {
                 + "&password=" +password;
 
         //Avoid doing the request
-        if(this.gs.connected && email.equals(this.gs.email)){
+        if(this.gs.connected && email.equals(this.gs.myAccount.getEmail())){
             goToMainPage();
         }else{
             sendRequest(qs,action);
@@ -59,10 +61,7 @@ public class LoginActivity extends RestActivity {
 
     public void goToRegister(View v){
         Intent nextView = new Intent(this,RegisterActivity.class);
-
-        Bundle dataToPass = new Bundle();
         nextView.putExtra("email",this.editEmail.getText().toString());
-
         startActivity(nextView);
     }
 
@@ -72,12 +71,24 @@ public class LoginActivity extends RestActivity {
             case "signin" :
                 try {
 
-                    if(o.getBoolean("connected")){
+                    JSONObject user = o.getJSONObject("user");
+                    if(o.getInt("status") == 200 && user != null){
 
-                        this.gs.email = editEmail.getText().toString();
                         this.gs.connected = true;
 
+                        this.gs.myAccount = new Personne(
+                                user.getString("id"),
+                                editEmail.getText().toString(),
+                                user.getString("pseudo"),
+                                user.getString("firstname"),
+                                user.getString("lastname"),
+                                user.getString("description"),
+                                user.getString("photo")
+                        );
+
                         goToMainPage();
+                    }else{
+                       this.toastError(o.getString("feedback"));
                     }
 
                 } catch (JSONException e) {

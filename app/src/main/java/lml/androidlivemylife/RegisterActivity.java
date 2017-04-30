@@ -1,7 +1,6 @@
 package lml.androidlivemylife;
 
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,7 +8,9 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ClassPackage.Personne;
 import asyncRequest.RestActivity;
+
 public class RegisterActivity extends RestActivity {
 
     private TextInputEditText editEmail;
@@ -40,6 +41,7 @@ public class RegisterActivity extends RestActivity {
     public boolean register(View v){
 
         String email = editEmail.getText().toString();
+        String pseudo = editPseudo.getText().toString();
         String firstname = editFirstname.getText().toString();
         String lastname = editLastname.getText().toString();
         String description = editDescription.getText().toString();
@@ -54,10 +56,11 @@ public class RegisterActivity extends RestActivity {
 
         String qs = "action=" + action
                 + "&email=" + email
+                + "&pseudo=" + pseudo
                 + "&password=" +password
-                + "&firstname=" +password
-                + "&lastname=" +password
-                + "&description=" +password
+                + "&firstname=" +firstname
+                + "&lastname=" +lastname
+                + "&description=" +description
                 + "&photo=" + "defaultPicture.png";
 
         sendRequest(qs,action);
@@ -70,12 +73,25 @@ public class RegisterActivity extends RestActivity {
         switch (action){
             case "register" :
                 try {
-                    if( Integer.toString(o.getInt("idUser")) !=  null){
 
-                        this.gs.idUser =  o.getInt("idUser");
+                    JSONObject user = o.getJSONObject("user");
+                    if( o.getInt("status") == 200 && user != null ){
+
+                        this.gs.myAccount = new Personne(
+                                user.getString("id"),
+                                editEmail.getText().toString(),
+                                user.getString("pseudo"),
+                                user.getString("firstname"),
+                                user.getString("lastname"),
+                                user.getString("description"),
+                                user.getString("photo")
+                        );
+
                         this.gs.connected = true;
 
                         finish();
+                    }else{
+                        this.toastError(o.getString("feedback"));
                     }
 
                 } catch (JSONException e) {

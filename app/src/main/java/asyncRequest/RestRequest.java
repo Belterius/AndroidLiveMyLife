@@ -1,4 +1,4 @@
-package lml.androidlivemylife;
+package asyncRequest;
 
 
 import android.os.AsyncTask;
@@ -6,6 +6,8 @@ import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import lml.androidlivemylife.GlobalState;
 
 // Il ne s'agit plus de classes filles...
 // On passe donc des références à la classe mère dans le constructeur
@@ -55,11 +57,12 @@ public class RestRequest extends AsyncTask<String, Void, JSONObject> {
         }
 
         Log.i(gs.CAT,"interpretation effectuee");
+        Log.i(gs.CAT, json.toString());
         return json;
     }
 
     protected void onPostExecute(JSONObject result) {
         Log.i(gs.CAT,"onPostExecute");
-        mAct.traiteReponse(result, action);
+        mAct.postRequest(result, action);
     }
 }

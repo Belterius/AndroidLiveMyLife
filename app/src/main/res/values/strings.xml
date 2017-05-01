@@ -38,6 +38,8 @@
 
     <!-- Strings related to maps -->
     <string name="maps_test_button">Test Button</string>
+    <string name="maps_test_edit">Test Button</string>
+    <string name="maps_test_integer">Test Button</string>
 
 
 </resources>

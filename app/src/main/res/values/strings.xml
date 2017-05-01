@@ -26,4 +26,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <!-- Strings related to maps -->
+    <string name="maps_test_button">Test Button</string>
+
+
 </resources>

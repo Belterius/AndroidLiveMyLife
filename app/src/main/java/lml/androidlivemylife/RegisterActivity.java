@@ -27,6 +27,7 @@ public class RegisterActivity extends RestActivity {
         setContentView(R.layout.activity_register);
 
         editEmail = (TextInputEditText) findViewById(R.id.register_email);
+        editPseudo = (TextInputEditText) findViewById(R.id.register_pseudo);
         editFirstname = (TextInputEditText) findViewById(R.id.register_firstname);
         editLastname = (TextInputEditText) findViewById(R.id.register_lastname);
         editDescription = (EditText) findViewById(R.id.register_description);
@@ -79,7 +80,7 @@ public class RegisterActivity extends RestActivity {
 
                         this.gs.myAccount = new Personne(
                                 user.getString("id"),
-                                editEmail.getText().toString(),
+                                user.getString("email"),
                                 user.getString("pseudo"),
                                 user.getString("firstname"),
                                 user.getString("lastname"),

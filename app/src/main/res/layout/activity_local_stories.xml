@@ -30,8 +30,6 @@
     <include
         android:id="@+id/layout_my_profile"
         layout="@layout/activity_show_my_profile"
-        layout_weight="1"
-        layout_width="match_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

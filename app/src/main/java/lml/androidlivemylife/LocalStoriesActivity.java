@@ -29,7 +29,7 @@ public class LocalStoriesActivity extends RestActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    //TODO implementer l'utilisation des fragments pour gérer le menu
                     return true;
                 case R.id.navigation_new:
                     mTextMessage.setText(R.string.title_new_story);
@@ -41,7 +41,6 @@ public class LocalStoriesActivity extends RestActivity {
                     //mTextMessage.setText(R.string.title_my_account);
                     initMyProfileView();
                     findViewById(R.id.layout_my_profile).setVisibility(View.VISIBLE);
-
                     return true;
             }
             return false;
@@ -75,7 +74,7 @@ public class LocalStoriesActivity extends RestActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_local_activities);
+        setContentView(R.layout.activity_local_stories);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);

@@ -23,7 +23,7 @@
     <string name="title_browse_story">Browse story</string>
     <string name="title_my_account">My account</string>
     <string name="title_activity_local_activities">localActivities</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">My Stories</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="prompt_pseudo">Pseudo</string>

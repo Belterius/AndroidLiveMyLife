@@ -17,6 +17,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEventSource;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
@@ -28,7 +34,13 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Locale;
+
+import ClassPackage.Personne;
 
 /**
  * Created by Gimlibéta on 21/02/2017.
@@ -40,8 +52,8 @@ public class GlobalState extends Application{
     public CookieManager cookieManager;
 
     public Boolean connected = false;
-    /*public String login;
-    public String pass;*/
+    public Personne myAccount;
+
     public int notificationId = 1;
 
     @Override
@@ -114,21 +126,37 @@ public class GlobalState extends Application{
     public String requete(String qs) {
         if (qs != null)
         {
-            String urlData = "https://api.livemylife.coniface.fr/verif.php";
-
+            //String urlData = "https://api.livemylife.coniface.fr/verif.php";
+            //For localhost
+            String urlData = "http://10.0.2.2/PHP-LiveMyLife/verif.php";
+            String urlStr = urlData + "?" + qs;
             try {
-                URL url = new URL(urlData + "?" + qs);
-                Log.i(CAT,"url utilisée : " + url.toString());
+
+                //To encode the parameters
+                URL url = new URL(urlStr);
+                URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+                url = uri.toURL();
+
+                Log.i(CAT,"used url : " + url.toString());
                 HttpURLConnection urlConnection = null;
                 urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("Content-Language", Locale.getDefault().toString());
+
+                Log.i("Appli","Language : " + Locale.getDefault().toString());
+
                 InputStream in = null;
                 in = new BufferedInputStream(urlConnection.getInputStream());
                 String txtReponse = convertStreamToString(in);
                 urlConnection.disconnect();
                 return txtReponse;
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
 

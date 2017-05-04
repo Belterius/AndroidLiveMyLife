@@ -33,7 +33,7 @@
     <string name="prompt_description">Enter your bio !</string>
     <string name="title_my_profile">My profile</string>
     <string name="change_password">Change my password</string>
-    <string name="prompt_my_pseudo" >My pseudo :</string>
+    <string name="prompt_my_pseudo">My pseudo :</string>
     <string name="prompt_my_name">My name :</string>
 
     <!-- Strings related to maps -->

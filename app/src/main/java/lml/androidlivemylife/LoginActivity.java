@@ -152,7 +152,7 @@ public class LoginActivity extends RestActivity {
     }
 
     private void goToMainPage(){
-        Intent nextView = new Intent(this,LocalStoriesActivity.class);
+        Intent nextView = new Intent(this,MapsActivity.class);
         startActivity(nextView);
         this.finish();
     }

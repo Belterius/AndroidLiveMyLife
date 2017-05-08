@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +19,8 @@ import org.json.JSONObject;
 
 import asyncRequest.RestActivity;
 
-public class LocalStoriesActivity extends RestActivity {
+public class MainActivity extends RestActivity {
 
-    private TextView mTextMessage;
     private BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -29,25 +30,42 @@ public class LocalStoriesActivity extends RestActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
+                    switchToLocalStories();
+                    break;
                 case R.id.navigation_new:
-                    mTextMessage.setText(R.string.title_new_story);
-                    return true;
+                    switchToNewStory();
+                    break;
                 case R.id.navigation_browse:
-                    mTextMessage.setText(R.string.title_browse_story);
-                    return true;
+                    switchToBrowseStory();
+                    break;
                 case R.id.navigation_account:
-                    //mTextMessage.setText(R.string.title_my_account);
-                    initMyProfileView();
-                    findViewById(R.id.layout_my_profile).setVisibility(View.VISIBLE);
-
-                    return true;
+                    switchToMyAccount();
+                    break;
             }
-            return false;
+            return true;
         }
 
     };
+
+    public void switchToLocalStories() {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_home, LocalStoriesFragment.newInstance("test","test")).commit();
+    }
+
+    public void switchToNewStory() {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_home, NewStoryFragment.newInstance("test","test")).commit();
+    }
+
+    public void switchToBrowseStory() {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_home, BrowseStoryFragment.newInstance("test","test")).commit();
+    }
+
+    public void switchToMyAccount() {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_home, MyAccountFragment.newInstance("test","test")).commit();
+    }
 
     @Override
     public void postRequest(JSONObject o, String action) {
@@ -75,11 +93,14 @@ public class LocalStoriesActivity extends RestActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_local_activities);
+        setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_home, LocalStoriesFragment.newInstance("test","test"));
+        transaction.commit();
 
         checkLocationPermission();
     }
@@ -97,10 +118,6 @@ public class LocalStoriesActivity extends RestActivity {
 
     public void goToMaps(View v){
         startActivity(new Intent(this, MapsActivity.class));
-    }
-
-    public void goToLocalStories(View v){
-        startActivity(new Intent(this, LocalStoriesActivity.class));
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;

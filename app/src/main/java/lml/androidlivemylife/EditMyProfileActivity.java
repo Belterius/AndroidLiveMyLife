@@ -1,7 +1,5 @@
 package lml.androidlivemylife;
 
-import android.app.Activity;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -10,9 +8,6 @@ import android.widget.ImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
-
-import ClassPackage.Personne;
 import asyncRequest.RestActivity;
 
 public class EditMyProfileActivity extends RestActivity {

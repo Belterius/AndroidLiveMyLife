@@ -1,12 +1,24 @@
 package lml.androidlivemylife;
 
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.util.Log;
 import android.view.View;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.function.Function;
 
 import ClassPackage.Personne;
 import asyncRequest.RestActivity;
@@ -15,6 +27,7 @@ public class LoginActivity extends RestActivity {
 
     private TextInputEditText editEmail;
     private TextInputEditText editPassword;
+    final public String TAG = "login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +42,14 @@ public class LoginActivity extends RestActivity {
 
         gs = (GlobalState) getApplication();
 
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingleton.getInstance(this).getRequestQueue() != null) {
+            MySingleton.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 
     @Override
@@ -54,7 +75,7 @@ public class LoginActivity extends RestActivity {
         if(this.gs.connected && email.equals(this.gs.myAccount.getEmail())){
             goToMainPage();
         }else{
-            sendRequest(qs,action);
+            this.gs.doRequestWithApi(this.TAG, qs, this::getMyAccount);
         }
 
     }
@@ -96,6 +117,38 @@ public class LoginActivity extends RestActivity {
                 }
                 break;
         }
+    }
+
+    public Boolean getMyAccount(JSONObject o){
+
+        try {
+            JSONObject user = o.getJSONObject("user");
+
+            if(o.getInt("status") == 200 && user != null){
+
+                this.gs.connected = true;
+
+                this.gs.myAccount = new Personne(
+                        user.getString("id"),
+                        editEmail.getText().toString(),
+                        user.getString("pseudo"),
+                        user.getString("firstname"),
+                        user.getString("lastname"),
+                        user.getString("description"),
+                        user.getString("photo")
+                );
+
+                goToMainPage();
+                return true;
+            }else{
+                this.toastError(o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     private void goToMainPage(){

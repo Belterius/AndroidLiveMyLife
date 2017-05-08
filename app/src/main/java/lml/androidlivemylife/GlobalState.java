@@ -1,29 +1,17 @@
 package lml.androidlivemylife;
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.accessibility.AccessibilityEventSource;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -37,8 +25,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Locale;
+import java.util.function.Function;
 
 import ClassPackage.Personne;
 
@@ -101,7 +89,6 @@ public class GlobalState extends Application{
         Boolean bStatut = false;
         if (netInfo != null)
         {
-
             NetworkInfo.State netState = netInfo.getState();
 
             if (netState.compareTo(NetworkInfo.State.CONNECTED) == 0)
@@ -163,6 +150,52 @@ public class GlobalState extends Application{
         }
 
         return "";
+    }
+
+    public void doRequestWithApi(final String TAG, String qs, final Function<JSONObject,Boolean> f){
+
+        if (qs == null){
+            return;
+        }
+
+        //String urlData = "https://api.livemylife.coniface.fr/verif.php";
+        //For localhost
+        String urlData = "http://10.0.2.2/PHP-LiveMyLife/verif.php";
+        String urlStr = urlData + "?" + qs;
+
+        URL url = null;
+        try {
+
+            url = new URL(urlStr);
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+            url = uri.toURL();
+
+            Log.i(this.CAT, "Start Building");
+
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.GET, url.toString(), new JSONObject(),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    f.apply(response);
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
+                            Log.i(TAG, error.toString());
+                        }
+                    });
+
+            // Access the RequestQueue through your singleton class.
+            MySingleton.getInstance(this).addToRequestQueue(jsObjRequest);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

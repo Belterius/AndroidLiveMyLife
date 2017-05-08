@@ -1,17 +1,18 @@
 package lml.androidlivemylife;
 
-import android.support.design.widget.TextInputEditText;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ClassPackage.GlobalState;
 import ClassPackage.Personne;
-import asyncRequest.RestActivity;
 
-public class RegisterActivity extends RestActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private TextInputEditText editEmail;
     private TextInputEditText editPseudo;
@@ -20,6 +21,8 @@ public class RegisterActivity extends RestActivity {
     private EditText editDescription;
     private TextInputEditText editPassword;
     private TextInputEditText editPasswordConfirm;
+    final public String TAG = "register";
+    private GlobalState gs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class RegisterActivity extends RestActivity {
 
         Bundle b = this.getIntent().getExtras();
         this.editEmail.setText(b.getString("email"));
+
+        gs = new GlobalState();
     }
 
     public boolean register(View v){
@@ -64,41 +69,39 @@ public class RegisterActivity extends RestActivity {
                 + "&description=" +description
                 + "&photo=" + "defaultPicture.png";
 
-        sendRequest(qs,action);
+        this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::postRequest);
 
         return true;
     }
 
-    @Override
-    public void postRequest(JSONObject o, String action) {
-        switch (action){
-            case "register" :
-                try {
+    public Boolean postRequest(JSONObject o) {
+        try {
 
-                    JSONObject user = o.getJSONObject("user");
-                    if( o.getInt("status") == 200 && user != null ){
+            JSONObject user = o.getJSONObject("user");
+            if( o.getInt("status") == 200 && user != null ){
 
-                        this.gs.myAccount = new Personne(
-                                user.getString("id"),
-                                user.getString("email"),
-                                user.getString("pseudo"),
-                                user.getString("firstname"),
-                                user.getString("lastname"),
-                                user.getString("description"),
-                                user.getString("photo")
-                        );
+                this.gs.setMyAccount(new Personne(
+                        user.getString("id"),
+                        user.getString("email"),
+                        user.getString("pseudo"),
+                        user.getString("firstname"),
+                        user.getString("lastname"),
+                        user.getString("description"),
+                        user.getString("photo")
+                ));
 
-                        this.gs.connected = true;
+                this.gs.setConnected(true);
+                finish();
+                return true;
 
-                        finish();
-                    }else{
-                        this.toastError(o.getString("feedback"));
-                    }
+            }else{
+                this.gs.toastError(this, o.getString("feedback"));
+            }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        return false;
     }
 }

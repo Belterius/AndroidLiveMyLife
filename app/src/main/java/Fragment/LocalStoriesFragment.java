@@ -1,4 +1,4 @@
-package lml.androidlivemylife;
+package Fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ClassPackage.GlobalState;
+import lml.androidlivemylife.R;
 
 
 /**
@@ -22,6 +25,8 @@ public class LocalStoriesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private GlobalState gs;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -58,6 +63,8 @@ public class LocalStoriesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        gs = new GlobalState();
     }
 
     @Override

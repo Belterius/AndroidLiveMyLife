@@ -1,6 +1,8 @@
 package lml.androidlivemylife;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -8,46 +10,47 @@ import android.widget.ImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import asyncRequest.RestActivity;
+import ClassPackage.GlobalState;
 
-public class EditMyProfileActivity extends RestActivity {
+public class EditMyProfileActivity extends AppCompatActivity {
 
     private EditText editPseudo;
     private ImageView editPhoto;
     EditText editDescription;
 
     private int nbWaitingUpdating;
+    private GlobalState gs;
 
-    @Override
-    public void postRequest(JSONObject o, String action) {
-        switch (action){
-            case "updatePseudo" :
-                try {
-                    if(o.getInt("status") == 200){
-                        this.gs.myAccount.setPseudo(editPseudo.getText().toString());
-                        nbWaitingUpdating--;
-                    }else{
-                        this.toastError(o.getString("feedback"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case "updateDescriptionUser" :
-                try {
-                    if(o.getInt("status") == 200){
-                        this.gs.myAccount.setDescription(editDescription.getText().toString());
-                        nbWaitingUpdating--;
-                    }else{
-                        this.toastError(o.getString("feedback"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
+    final public String TAG = "editMyProfile";
+
+    private Boolean updatePseudo(JSONObject o){
+        try {
+            if(o.getInt("status") == 200){
+                this.gs.getMyAccount().setPseudo(editPseudo.getText().toString());
+                nbWaitingUpdating--;
+            }else{
+                this.gs.toastError(this, o.getString("feedback"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        tryToFinish();
+        return tryToFinish();
+    }
+
+    private Boolean updateDescription(JSONObject o){
+        try {
+            if(o.getInt("status") == 200){
+                this.gs.getMyAccount().setDescription(editDescription.getText().toString());
+                nbWaitingUpdating--;
+            }else{
+                this.gs.toastError(this, o.getString("feedback"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return tryToFinish();
     }
 
     @Override
@@ -63,11 +66,13 @@ public class EditMyProfileActivity extends RestActivity {
         this.editPseudo.setText(b.getString("pseudo"));
         this.editDescription.setText(b.getString("description"));
 
+        gs = new GlobalState();
+
         //TODO : Faire pour la photo
         //this.editPhoto.setText(b.getString("photo"));
     }
 
-    public void updateMyPersonalData(View v){
+    public Boolean updateMyPersonalData(View v){
 
         String new_pseudo = editPseudo.getText().toString();
         String new_description = editDescription.getText().toString();
@@ -75,33 +80,40 @@ public class EditMyProfileActivity extends RestActivity {
         String qs = "";
         String action = "";
 
-        if(! new_pseudo.equals(this.gs.myAccount.getPseudo())){
+        if(! new_pseudo.equals(this.gs.getMyAccount().getPseudo())){
             action = "updatePseudo";
 
             qs = "action=" + action
                     + "&pseudo=" + new_pseudo;
 
-            sendRequest(qs, action);
+            this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::updatePseudo);
             nbWaitingUpdating++;
         }
 
-        if(! new_description.equals(this.gs.myAccount.getDescription())){
+        if(! new_description.equals(this.gs.getMyAccount().getDescription())){
             action = "updateDescriptionUser";
 
             qs = "action=" + action
                     + "&description=" + new_description;
 
-            sendRequest(qs, action);
+            this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::updateDescription);
             nbWaitingUpdating++;
         }
 
         /**TODO : update photo**/
-        tryToFinish();
+        return tryToFinish();
     }
 
-    public void tryToFinish(){
+    public Boolean tryToFinish(){
         if(nbWaitingUpdating == 0){
             this.finish();
+            return true;
         }
+        return false;
+    }
+
+    public void goToChangeMyPasswordActivity(View v){
+        Intent nextView = new Intent(this,ChangeMyPasswordActivity.class);
+        startActivity(nextView);
     }
 }

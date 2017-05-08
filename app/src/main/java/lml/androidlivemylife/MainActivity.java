@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -17,11 +18,16 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import asyncRequest.RestActivity;
+import ClassPackage.GlobalState;
+import Fragment.BrowseStoryFragment;
+import Fragment.LocalStoriesFragment;
+import Fragment.MyAccountFragment;
+import Fragment.NewStoryFragment;
 
-public class MainActivity extends RestActivity {
+public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigation;
+    private GlobalState gs;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,29 +74,6 @@ public class MainActivity extends RestActivity {
     }
 
     @Override
-    public void postRequest(JSONObject o, String action) {
-
-        switch (action){
-            case "getUser" :
-                try {
-                    JSONObject user = o.getJSONArray("user").getJSONObject(0);
-                    if(o.getInt("status") == 200 && user != null){
-                        ((TextView)findViewById(R.id.show_profile_name)).setText(user.getString("firstname").toString() + " " + user.getString("lastname").toString());
-                        ((TextView)findViewById(R.id.show_profile_description)).setText(user.getString("description").toString());
-                        //((ImageView)findViewById(R.id.show_profile_picture)).setImageResource(user.getString("photo").toString());
-                        //TODO : charger aussi les différentes story et afficher le slider avec les preview
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            break;
-        }
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -103,6 +86,8 @@ public class MainActivity extends RestActivity {
         transaction.commit();
 
         checkLocationPermission();
+
+        gs = new GlobalState();
     }
 
     @Override
@@ -111,7 +96,7 @@ public class MainActivity extends RestActivity {
 
         if(this.navigation.getSelectedItemId() == R.id.navigation_account){
             //Refresh the data
-            initMyProfileView();
+            //initMyProfileView();
         }
     }
 
@@ -150,29 +135,6 @@ public class MainActivity extends RestActivity {
         } else {
             return true;
         }
-    }
-
-    public void initMyProfileView(){
-        ((TextView)findViewById(R.id.show_profile_name)).setText(this.gs.myAccount.getFirstname() + " " + this.gs.myAccount.getLastname());
-        ((TextView)findViewById(R.id.show_profile_pseudo)).setText(this.gs.myAccount.getPseudo());
-        ((TextView)findViewById(R.id.show_profile_description)).setText(this.gs.myAccount.getDescription());
-        //((ImageView)findViewById(R.id.show_profile_picture)).setImageResource(user.getString("photo").toString());
-        //TODO : charger aussi les différentes story et afficher le slider avec les preview
-
-    }
-
-    public void editMyProfile(View v){
-        goToEditMyProfilePage();
-    }
-
-    private void goToEditMyProfilePage(){
-        Intent nextView = new Intent(this,EditMyProfileActivity.class);
-
-        nextView.putExtra("pseudo",this.gs.myAccount.getPseudo().toString());
-        nextView.putExtra("description",this.gs.myAccount.getDescription().toString());
-        nextView.putExtra("photo",this.gs.myAccount.getPicture().toString());
-
-        startActivity(nextView);
     }
 
 }

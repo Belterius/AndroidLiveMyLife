@@ -1,4 +1,4 @@
-package lml.androidlivemylife;
+package API_request;
 
 import android.content.Context;
 import android.graphics.Bitmap;

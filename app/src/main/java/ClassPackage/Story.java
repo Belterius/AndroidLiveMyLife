@@ -10,7 +10,7 @@ public class Story {
     private String description;
     private String highlight;
     private boolean isPublished;
-    private Personne author;
+    private MyUser author;
 
     public Story(String idStory, String title, String description, String highlight, boolean isPublished) {
         this.idStory = idStory;
@@ -63,11 +63,11 @@ public class Story {
         isPublished = published;
     }
 
-    public Personne getAuthor() {
+    public MyUser getAuthor() {
         return author;
     }
 
-    public void setAuthor(Personne author) {
+    public void setAuthor(MyUser author) {
         this.author = author;
     }
 

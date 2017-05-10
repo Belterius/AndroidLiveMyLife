@@ -10,6 +10,7 @@ public class Story {
     private String description;
     private String highlight;
     private boolean isPublished;
+    private Personne author;
 
     public Story(String idStory, String title, String description, String highlight, boolean isPublished) {
         this.idStory = idStory;
@@ -60,6 +61,14 @@ public class Story {
 
     public void setPublished(boolean published) {
         isPublished = published;
+    }
+
+    public Personne getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Personne author) {
+        this.author = author;
     }
 
     @Override

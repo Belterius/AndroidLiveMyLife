@@ -1,4 +1,4 @@
-package lml.androidlivemylife;
+package GPS;
 
 /**
  * Created by loic on 01/05/2017.

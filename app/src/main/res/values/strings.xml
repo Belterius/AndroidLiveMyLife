@@ -40,6 +40,9 @@
     <string name="maps_test_button">Test Button</string>
     <string name="maps_test_edit">Test Button</string>
     <string name="maps_test_integer">Test Button</string>
+    <string name="prompt_new_password">New password</string>
+    <string name="prompt_new_password_confirm">Confirm new password</string>
+    <string name="prompt_old_password">Current password</string>
 
 
 </resources>

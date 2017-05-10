@@ -51,7 +51,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".EditMyProfileActivity" />
-        <activity android:name=".ChangeMyPasswordActivity"></activity>
+        <activity android:name=".ChangeMyPasswordActivity" />
     </application>
 
 </manifest>

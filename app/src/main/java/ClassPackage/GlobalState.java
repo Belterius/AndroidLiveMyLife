@@ -40,7 +40,7 @@ public class GlobalState{
     private static CookieManager cookieManager = null;
 
     private static Boolean connected = false;
-    private static Personne myAccount;
+    private static MyUser myAccount;
 
     private static int notificationId = 1;
 
@@ -67,11 +67,11 @@ public class GlobalState{
         GlobalState.connected = connected;
     }
 
-    public Personne getMyAccount() {
+    public MyUser getMyAccount() {
         return myAccount;
     }
 
-    public void setMyAccount(Personne myAccount) {
+    public void setMyAccount(MyUser myAccount) {
         GlobalState.myAccount = myAccount;
     }
 

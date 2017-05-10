@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ClassPackage.GlobalState;
-import ClassPackage.Personne;
+import ClassPackage.MyUser;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
             JSONObject user = o.getJSONObject("user");
             if( o.getInt("status") == 200 && user != null ){
 
-                this.gs.setMyAccount(new Personne(
+                this.gs.setMyAccount(new MyUser(
                         user.getString("id"),
                         user.getString("email"),
                         user.getString("pseudo"),

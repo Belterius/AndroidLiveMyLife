@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import API_request.MySingleton;
 import ClassPackage.GlobalState;
-import ClassPackage.Personne;
+import ClassPackage.MyUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 this.gs.setConnected(true);
 
-                this.gs.setMyAccount(new Personne(
+                this.gs.setMyAccount(new MyUser(
                         user.getString("id"),
                         editEmail.getText().toString(),
                         user.getString("pseudo"),

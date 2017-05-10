@@ -18,6 +18,11 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- To upload files -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -52,6 +57,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".EditMyProfileActivity" />
         <activity android:name=".ChangeMyPasswordActivity" />
+        <activity android:name=".RecordImageActivity"></activity>
     </application>
 
 </manifest>

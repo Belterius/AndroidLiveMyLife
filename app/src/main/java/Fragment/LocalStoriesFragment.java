@@ -4,11 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import ClassPackage.GlobalState;
+import ClassPackage.MyUser;
+import ClassPackage.Story;
+import lml.androidlivemylife.MainActivity;
 import lml.androidlivemylife.R;
 
 
@@ -25,6 +36,8 @@ public class LocalStoriesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    final public String TAG = "localStories";
+    private ArrayList<Story> storiesList;
 
     private GlobalState gs;
 
@@ -65,6 +78,18 @@ public class LocalStoriesFragment extends Fragment {
         }
 
         gs = new GlobalState();
+
+        storiesList = new ArrayList<Story>();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initLocalStoriesView();
+    }
+
+    public void initLocalStoriesView(){
+        getPersonalStories();
     }
 
     @Override
@@ -72,6 +97,39 @@ public class LocalStoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_local_stories, container, false);
+    }
+
+    public void getPersonalStories(){
+        String qs = "action=getPersonalStories"
+                + "&idUser=" +gs.getMyAccount().getIdUser();
+        gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
+    }
+
+    public Boolean getMyPersonalStories(JSONObject o){
+        storiesList.clear(); //On remet la liste à zéro
+        try {
+            JSONArray stories = o.getJSONArray("stories");
+            if(o.getInt("status") == 200 && stories != null){
+                for(int i=0; i<stories.length(); i++){
+                    JSONObject json_data = stories.getJSONObject(i);
+                    Story story = new Story(json_data.getString("storyId"),
+                            json_data.getString("storyTitle"),
+                            json_data.getString("storyDescription"),
+                            json_data.getString("storyPicture"),
+                            Boolean.valueOf(json_data.getString("storyIsPublished")));
+                    storiesList.add(story);
+                }
+
+                return true;
+            }else{
+                this.gs.toastError(this.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

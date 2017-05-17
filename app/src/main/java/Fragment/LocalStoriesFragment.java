@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -38,6 +40,7 @@ public class LocalStoriesFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     final public String TAG = "localStories";
     private ArrayList<Story> storiesList;
+    private ListView lv;
 
     private GlobalState gs;
 
@@ -77,36 +80,41 @@ public class LocalStoriesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        gs = new GlobalState();
-
         storiesList = new ArrayList<Story>();
+        gs = new GlobalState();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initLocalStoriesView();
-    }
-
-    public void initLocalStoriesView(){
-        getPersonalStories();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_local_stories, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
+        lv = (ListView) rootView.findViewById(R.id.listView);
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+        getPersonalStories();
+        ArrayAdapter<Story> arrayAdapter = new ArrayAdapter<Story>(this.getActivity(), android.R.layout.simple_list_item_1, storiesList);
+        lv.setAdapter(arrayAdapter);
     }
 
     public void getPersonalStories(){
+        //storiesList.clear(); //On remet la liste à zéro
         String qs = "action=getPersonalStories"
                 + "&idUser=" +gs.getMyAccount().getIdUser();
         gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
     }
 
     public Boolean getMyPersonalStories(JSONObject o){
-        storiesList.clear(); //On remet la liste à zéro
         try {
             JSONArray stories = o.getJSONArray("stories");
             if(o.getInt("status") == 200 && stories != null){
@@ -119,7 +127,6 @@ public class LocalStoriesFragment extends Fragment {
                             Boolean.valueOf(json_data.getString("storyIsPublished")));
                     storiesList.add(story);
                 }
-
                 return true;
             }else{
                 this.gs.toastError(this.getActivity(), o.getString("feedback"));

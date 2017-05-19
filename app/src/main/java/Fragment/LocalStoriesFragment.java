@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.SortedList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,17 +40,16 @@ public class LocalStoriesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    final public String TAG = "localStories";
-    private ArrayList<Story> storiesList;
-    private ListView lv;
-
-    private GlobalState gs;
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+
+    final public String TAG = "localStories";
+
+    private ListView lv;
+    private ArrayAdapter<Story> arrayAdapter;
+
+    private GlobalState gs;
 
     public LocalStoriesFragment() {
         // Required empty public constructor
@@ -80,7 +81,6 @@ public class LocalStoriesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        storiesList = new ArrayList<Story>();
         gs = new GlobalState();
     }
 
@@ -95,27 +95,26 @@ public class LocalStoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
+        arrayAdapter = new ArrayAdapter<Story>(this.getActivity(), android.R.layout.simple_list_item_1);
+        lv.setAdapter(arrayAdapter);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         getPersonalStories();
-        ArrayAdapter<Story> arrayAdapter = new ArrayAdapter<Story>(this.getActivity(), android.R.layout.simple_list_item_1, storiesList);
-        lv.setAdapter(arrayAdapter);
     }
 
     public void getPersonalStories(){
-        //storiesList.clear(); //On remet la liste à zéro
         String qs = "action=getPersonalStories"
                 + "&idUser=" +gs.getMyAccount().getIdUser();
         gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
     }
 
-    public Boolean getMyPersonalStories(JSONObject o){
+    public boolean getMyPersonalStories(JSONObject o){
         try {
+            ArrayList<Story> storyArrayList  = new ArrayList<>();
             JSONArray stories = o.getJSONArray("stories");
             if(o.getInt("status") == 200 && stories != null){
                 for(int i=0; i<stories.length(); i++){
@@ -125,8 +124,9 @@ public class LocalStoriesFragment extends Fragment {
                             json_data.getString("storyDescription"),
                             json_data.getString("storyPicture"),
                             Boolean.valueOf(json_data.getString("storyIsPublished")));
-                    storiesList.add(story);
+                    storyArrayList.add(story);
                 }
+                arrayAdapter.addAll(storyArrayList);
                 return true;
             }else{
                 this.gs.toastError(this.getActivity(), o.getString("feedback"));

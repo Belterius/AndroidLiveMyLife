@@ -2,17 +2,23 @@ package lml.androidlivemylife;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
+import ClassPackage.RequestClass;
+import ClassPackage.ToastClass;
+import ExtendedPackage.UploadPictureActivity;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends UploadPictureActivity {
 
     private TextInputEditText editEmail;
     private TextInputEditText editPseudo;
@@ -37,6 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
         editPassword = (TextInputEditText) findViewById(R.id.register_password);
         editPasswordConfirm = (TextInputEditText) findViewById(R.id.register_password_confirm);
 
+        //For extended class
+        this.imageViewPicturePreview = (ImageView) findViewById(R.id.register_imageView);
 
         Bundle b = this.getIntent().getExtras();
         this.editEmail.setText(b.getString("email"));
@@ -44,6 +52,11 @@ public class RegisterActivity extends AppCompatActivity {
         gs = new GlobalState();
     }
 
+    /**
+     * Click on register
+     * @param v
+     * @return
+     */
     public boolean register(View v){
 
         String email = editEmail.getText().toString();
@@ -55,25 +68,32 @@ public class RegisterActivity extends AppCompatActivity {
         String passwordConfirm = editPasswordConfirm.getText().toString();
 
         if(! password.equals(passwordConfirm)){
+            ToastClass.toastError(this, "Passwords are not the same !");
             return false;
         }
 
         String action = "register";
 
-        String qs = "action=" + action
-                + "&email=" + email
-                + "&pseudo=" + pseudo
-                + "&password=" +password
-                + "&firstname=" +firstname
-                + "&lastname=" +lastname
-                + "&description=" +description
-                + "&photo=" + "defaultPicture.png";
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", action);
+        dataToPass.put("email", email);
+        dataToPass.put("pseudo", pseudo);
+        dataToPass.put("password", password);
+        dataToPass.put("firstname", firstname);
+        dataToPass.put("lastname", lastname);
+        dataToPass.put("description", description);
+        dataToPass.put("photo", getStringImage(bitmap));
 
-        this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::postRequest);
+        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::postRequest, dataToPass);
 
         return true;
     }
 
+    /**
+     * Get the response from the server
+     * @param o JSONObject
+     * @return
+     */
     public Boolean postRequest(JSONObject o) {
         try {
 
@@ -94,8 +114,27 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
                 return true;
 
-            }else{
-                this.gs.toastError(this, o.getString("feedback"));
+            }else {
+                ToastClass.toastError(this, o.getString("feedback"));
+            }
+
+            //Account created but problem with the picture
+            if (o.getInt("status") == 202 && user != null){
+
+                    this.gs.setMyAccount(new MyUser(
+                            user.getString("id"),
+                            user.getString("email"),
+                            user.getString("pseudo"),
+                            user.getString("firstname"),
+                            user.getString("lastname"),
+                            user.getString("description"),
+                            user.getString("")
+                    ));
+
+                    ToastClass.toastError(this, o.getString("feedback"));
+                    this.gs.setConnected(true);
+                    finish();
+                    return true;
             }
 
         } catch (JSONException e) {
@@ -104,4 +143,5 @@ public class RegisterActivity extends AppCompatActivity {
 
         return false;
     }
+
 }

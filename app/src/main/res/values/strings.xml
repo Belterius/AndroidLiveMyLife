@@ -49,6 +49,7 @@
     <string name="btnRecordVideo">Record Video</string>
     <string name="or">(or)</string>
     <string name="btnUploadToServer">Upload to Server</string>
+    <string name="prompt_use_picture">Browse to choose a picture</string>
 
 
 </resources>

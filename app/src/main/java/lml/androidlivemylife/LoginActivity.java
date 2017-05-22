@@ -9,9 +9,14 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import API_request.MySingleton;
+import java.util.HashMap;
+import java.util.Map;
+
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
+import ClassPackage.RequestClass;
+import ClassPackage.ToastClass;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStop () {
         super.onStop();
-        if (MySingleton.getInstance(this).getRequestQueue() != null) {
-            MySingleton.getInstance(this).getRequestQueue().cancelAll(TAG);
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
         }
     }
 
@@ -57,17 +62,17 @@ public class LoginActivity extends AppCompatActivity {
         String password = editPassword.getText().toString();
         String action = "signin";
 
-        String qs = "action=" + action
-                + "&email=" + email
-                + "&password=" +password;
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", action);
+        dataToPass.put("email", email);
+        dataToPass.put("password", password);
 
         //Avoid doing the request
         if(this.gs.getConnected() && email.equals(this.gs.getMyAccount().getEmail())){
             goToMainPage();
         }else{
-            this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::getMyAccount);
+            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::getMyAccount, dataToPass);
         }
-
     }
 
     public void goToRegister(View v){
@@ -79,10 +84,12 @@ public class LoginActivity extends AppCompatActivity {
     public Boolean getMyAccount(JSONObject o){
 
         try {
-            JSONObject user = o.getJSONObject("user");
 
-            if(o.getInt("status") == 200 && user != null){
+            if(o.getInt("status") == 200 && o.getJSONObject("user") != null){
 
+                JSONObject user = o.getJSONObject("user");
+
+                if(user != null)
                 this.gs.setConnected(true);
 
                 this.gs.setMyAccount(new MyUser(
@@ -92,13 +99,13 @@ public class LoginActivity extends AppCompatActivity {
                         user.getString("firstname"),
                         user.getString("lastname"),
                         user.getString("description"),
-                        user.getString("photo")
+                        user.getString("url")
                 ));
 
                 goToMainPage();
                 return true;
             }else{
-                this.gs.toastError(this, o.getString("feedback"));
+                ToastClass.toastError(this, o.getString("feedback"));
             }
 
         } catch (JSONException e) {

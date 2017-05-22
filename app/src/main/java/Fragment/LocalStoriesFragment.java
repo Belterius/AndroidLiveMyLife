@@ -4,26 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.util.SortedList;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ClassPackage.GlobalState;
-import ClassPackage.MyUser;
+import API_request.RequestClass;
 import ClassPackage.Story;
-import lml.androidlivemylife.MainActivity;
+import ClassPackage.ToastClass;
 import lml.androidlivemylife.R;
 
 
@@ -107,9 +105,12 @@ public class LocalStoriesFragment extends Fragment {
     }
 
     public void getPersonalStories(){
-        String qs = "action=getPersonalStories"
-                + "&idUser=" +gs.getMyAccount().getIdUser();
-        gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
+
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getPersonalStories");
+        dataToPass.put("idUser", gs.getMyAccount().getIdUser());
+
+        RequestClass.doRequestWithApi(this.getContext(), this.TAG,dataToPass, this::getMyPersonalStories);
     }
 
     public boolean getMyPersonalStories(JSONObject o){
@@ -129,7 +130,7 @@ public class LocalStoriesFragment extends Fragment {
                 arrayAdapter.addAll(storyArrayList);
                 return true;
             }else{
-                this.gs.toastError(this.getActivity(), o.getString("feedback"));
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
             }
 
         } catch (JSONException e) {

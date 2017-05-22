@@ -44,5 +44,12 @@
     <string name="prompt_new_password_confirm">Confirm new password</string>
     <string name="prompt_old_password">Current password</string>
 
+    <!-- Strings related to uploads -->
+    <string name="btnTakePicture">Capture Image</string>
+    <string name="btnRecordVideo">Record Video</string>
+    <string name="or">(or)</string>
+    <string name="btnUploadToServer">Upload to Server</string>
+    <string name="prompt_use_picture">Browse to choose a picture</string>
+
 
 </resources>

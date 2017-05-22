@@ -2,7 +2,16 @@ package lml.androidlivemylife;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.hardware.GeomagneticField;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,8 +21,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -46,15 +57,18 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        SensorEventListener{
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
-    Location targetLocation;
-    private Location mSavedLocation;
+    private Location targetLocation;
     private Marker mCurrLocationMarker;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +78,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
@@ -262,7 +280,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
         // Sensor enabled
-        String sensor = "sensor=false";
+        String sensor = "sensor=true";
 
         String mode = "mode=walking";
 
@@ -405,5 +423,91 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
         }
+    }
+
+
+
+
+
+    //COMPASS
+    public void onSensorChanged( SensorEvent event ) {
+
+        // If we don't have a Location, we break out
+        if ( mLastLocation == null ) return;
+
+        float azimuth = event.values[0];
+        float baseAzimuth = azimuth;
+
+        GeomagneticField geoField = new GeomagneticField( Double
+                .valueOf( mLastLocation.getLatitude() ).floatValue(), Double
+                .valueOf( mLastLocation.getLongitude() ).floatValue(),
+                Double.valueOf( mLastLocation.getAltitude() ).floatValue(),
+                System.currentTimeMillis() );
+        azimuth -= geoField.getDeclination(); // converts magnetic north into true north
+
+        // Store the bearingTo in the bearTo variable
+        float bearTo = mLastLocation.bearingTo( targetLocation );
+
+        // If the bearTo is smaller than 0, add 360 to get the rotation clockwise.
+        if (bearTo < 0) {
+            bearTo = bearTo + 360;
+        }
+        //This is where we choose to point it
+        float direction = bearTo - azimuth ;
+        if (direction < 0) {
+            direction = direction + 360;
+        }
+
+        rotateImageView((ImageView) findViewById(R.id.compass), R.mipmap.ic_compass, direction );
+
+
+        //Set the field
+        String bearingText = "N";
+
+//        if ( (360 >= baseAzimuth && baseAzimuth >= 337.5) || (0 <= baseAzimuth && baseAzimuth <= 22.5) ) bearingText = "N";
+//        else if (baseAzimuth > 22.5 && baseAzimuth < 67.5) bearingText = "NE";
+//        else if (baseAzimuth >= 67.5 && baseAzimuth <= 112.5) bearingText = "E";
+//        else if (baseAzimuth > 112.5 && baseAzimuth < 157.5) bearingText = "SE";
+//        else if (baseAzimuth >= 157.5 && baseAzimuth <= 202.5) bearingText = "S";
+//        else if (baseAzimuth > 202.5 && baseAzimuth < 247.5) bearingText = "SW";
+//        else if (baseAzimuth >= 247.5 && baseAzimuth <= 292.5) bearingText = "W";
+//        else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
+//        else bearingText = "?";
+//
+//        fieldBearing.setText(bearingText);
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    private void rotateImageView(ImageView imageView, int drawable, float rotate ) {
+
+        // Decode the drawable into a bitmap
+        Bitmap bitmapOrg = BitmapFactory.decodeResource( getResources(),
+                drawable );
+
+        // Get the width/height of the drawable
+        DisplayMetrics dm = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = bitmapOrg.getWidth(), height = bitmapOrg.getHeight();
+
+        // Initialize a new Matrix
+        Matrix matrix = new Matrix();
+
+        // Decide on how much to rotate
+        rotate = rotate % 360;
+
+        // Actually rotate the image
+        matrix.postRotate( rotate, width, height );
+
+        // recreate the new Bitmap via a couple conditions
+        Bitmap rotatedBitmap = Bitmap.createBitmap( bitmapOrg, 0, 0, width, height, matrix, true );
+        //BitmapDrawable bmd = new BitmapDrawable( rotatedBitmap );
+
+        //imageView.setImageBitmap( rotatedBitmap );
+        imageView.setImageDrawable(new BitmapDrawable(getResources(), rotatedBitmap));
+        imageView.setScaleType( ImageView.ScaleType.CENTER );
     }
 }

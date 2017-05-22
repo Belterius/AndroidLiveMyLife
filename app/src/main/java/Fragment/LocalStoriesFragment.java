@@ -47,7 +47,8 @@ public class LocalStoriesFragment extends Fragment {
     final public String TAG = "localStories";
 
     private ListView lv;
-    private ArrayAdapter<Story> arrayAdapter;
+    private StoryAdapter storyAdapter;
+    private ArrayList<Story> storyArrayList;
 
     private GlobalState gs;
 
@@ -81,6 +82,7 @@ public class LocalStoriesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        storyArrayList = new ArrayList<>();
         gs = new GlobalState();
     }
 
@@ -95,8 +97,8 @@ public class LocalStoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
-        arrayAdapter = new ArrayAdapter<Story>(this.getActivity(), android.R.layout.simple_list_item_1);
-        lv.setAdapter(arrayAdapter);
+        storyAdapter = new StoryAdapter(this.getActivity(), storyArrayList);
+        lv.setAdapter(storyAdapter);
         return rootView;
     }
 
@@ -114,7 +116,7 @@ public class LocalStoriesFragment extends Fragment {
 
     public boolean getMyPersonalStories(JSONObject o){
         try {
-            ArrayList<Story> storyArrayList  = new ArrayList<>();
+            storyArrayList.clear();
             JSONArray stories = o.getJSONArray("stories");
             if(o.getInt("status") == 200 && stories != null){
                 for(int i=0; i<stories.length(); i++){
@@ -126,7 +128,7 @@ public class LocalStoriesFragment extends Fragment {
                             Boolean.valueOf(json_data.getString("storyIsPublished")));
                     storyArrayList.add(story);
                 }
-                arrayAdapter.addAll(storyArrayList);
+                storyAdapter.notifyDataSetChanged();
                 return true;
             }else{
                 this.gs.toastError(this.getActivity(), o.getString("feedback"));

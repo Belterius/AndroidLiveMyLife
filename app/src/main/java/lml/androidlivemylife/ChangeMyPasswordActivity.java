@@ -13,7 +13,7 @@ import java.util.Map;
 
 import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
-import ClassPackage.RequestClass;
+import API_request.RequestClass;
 import ClassPackage.ToastClass;
 
 public class ChangeMyPasswordActivity extends AppCompatActivity {
@@ -59,7 +59,7 @@ public class ChangeMyPasswordActivity extends AppCompatActivity {
         dataToPass.put("password_new", password_new);
 
         //Avoid doing the request
-        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::postRequestUpdatePassword, dataToPass);
+        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequestUpdatePassword);
 
     }
 

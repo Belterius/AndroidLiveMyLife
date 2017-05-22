@@ -15,7 +15,7 @@ import java.util.Map;
 import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
-import ClassPackage.RequestClass;
+import API_request.RequestClass;
 import ClassPackage.ToastClass;
 
 public class LoginActivity extends AppCompatActivity {
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         if(this.gs.getConnected() && email.equals(this.gs.getMyAccount().getEmail())){
             goToMainPage();
         }else{
-            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::getMyAccount, dataToPass);
+            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getMyAccount);
         }
     }
 
@@ -89,21 +89,24 @@ public class LoginActivity extends AppCompatActivity {
 
                 JSONObject user = o.getJSONObject("user");
 
-                if(user != null)
-                this.gs.setConnected(true);
+                if(user != null){
+                    this.gs.setConnected(true);
 
-                this.gs.setMyAccount(new MyUser(
-                        user.getString("id"),
-                        editEmail.getText().toString(),
-                        user.getString("pseudo"),
-                        user.getString("firstname"),
-                        user.getString("lastname"),
-                        user.getString("description"),
-                        user.getString("url")
-                ));
+                    this.gs.setMyAccount(new MyUser(
+                            user.getString("id"),
+                            editEmail.getText().toString(),
+                            user.getString("pseudo"),
+                            user.getString("firstname"),
+                            user.getString("lastname"),
+                            user.getString("description"),
+                            user.getString("url")
+                    ));
 
-                goToMainPage();
-                return true;
+                    goToMainPage();
+                    return true;
+                }
+
+
             }else{
                 ToastClass.toastError(this, o.getString("feedback"));
             }

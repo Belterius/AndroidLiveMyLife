@@ -1,4 +1,4 @@
-package ClassPackage;
+package API_request;
 
 import android.content.Context;
 import android.util.Log;
@@ -28,7 +28,7 @@ public class RequestClass {
 
     private static final String CAT = "RequestClass";
 
-    public static void doRequestWithApi(Context c, final String TAG, final Function<JSONObject,Boolean> f, final Map<String, String> paramsToPass){
+    public static void doRequestWithApi(Context c, final String TAG, final Map<String, String> paramsToPass, final Function<JSONObject,Boolean> f){
 
         //String urlData = "https://api.livemylife.coniface.fr/verif.php";
         //For localhost

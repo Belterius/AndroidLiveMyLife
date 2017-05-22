@@ -14,7 +14,7 @@ import java.util.Map;
 
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
-import ClassPackage.RequestClass;
+import API_request.RequestClass;
 import ClassPackage.ToastClass;
 import ExtendedPackage.UploadPictureActivity;
 
@@ -84,7 +84,7 @@ public class RegisterActivity extends UploadPictureActivity {
         dataToPass.put("description", description);
         dataToPass.put("photo", getStringImage(bitmap));
 
-        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::postRequest, dataToPass);
+        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequest);
 
         return true;
     }

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ClassPackage.GlobalState;
-import ClassPackage.RequestClass;
+import API_request.RequestClass;
 import ClassPackage.ToastClass;
 import ExtendedPackage.UploadPictureActivity;
 
@@ -107,7 +107,7 @@ public class EditMyProfileActivity extends UploadPictureActivity {
             dataToPass.put("description",new_description);
             requestDoing++;
 
-            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::updateUser, dataToPass);
+            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::updateUser);
         }
 
         if(bitmap != null){
@@ -117,7 +117,7 @@ public class EditMyProfileActivity extends UploadPictureActivity {
             dataToPass.put("photo", getStringImage(bitmap));
             requestDoing++;
 
-            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, this::updateUser, dataToPass);
+            RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::updateUser);
         }
 
         //If we do not send a request, so we close this activity

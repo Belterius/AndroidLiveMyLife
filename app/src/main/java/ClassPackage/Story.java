@@ -10,6 +10,7 @@ public class Story {
     private String description;
     private String highlight;
     private boolean isPublished;
+    private MyUser author;
 
     public Story(String idStory, String title, String description, String highlight, boolean isPublished) {
         this.idStory = idStory;
@@ -62,14 +63,16 @@ public class Story {
         isPublished = published;
     }
 
+    public MyUser getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(MyUser author) {
+        this.author = author;
+    }
+
     @Override
     public String toString() {
-        return "Story{" +
-                "idStory='" + idStory + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", highlight='" + highlight + '\'' +
-                ", isPublished=" + isPublished +
-                '}';
+        return title + "\n" + description;
     }
 }

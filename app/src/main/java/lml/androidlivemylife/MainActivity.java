@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -55,22 +56,46 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToLocalStories() {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.content_home, LocalStoriesFragment.newInstance("test","test")).commit();
+        Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
+        if (myFragment == null || !myFragment.isVisible()) {
+            manager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .replace(R.id.content_home, LocalStoriesFragment.newInstance("test","test"), "LocalStoriesFragment")
+                    .commit();
+        }
     }
 
     public void switchToNewStory() {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.content_home, NewStoryFragment.newInstance("test","test")).commit();
+        Fragment myFragment = manager.findFragmentByTag("NewStoryFragment");
+        if (myFragment == null || !myFragment.isVisible()) {
+            manager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                    .commit();
+        }
     }
 
     public void switchToBrowseStory() {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.content_home, BrowseStoryFragment.newInstance("test","test")).commit();
+        Fragment myFragment = manager.findFragmentByTag("BrowseStoryFragment");
+        if (myFragment == null || !myFragment.isVisible()) {
+            manager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                    .commit();
+        }
     }
 
     public void switchToMyAccount() {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.content_home, MyAccountFragment.newInstance("test","test")).commit();
+        Fragment myFragment = manager.findFragmentByTag("MyAccountFragment");
+        if (myFragment == null || !myFragment.isVisible()) {
+            manager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .replace(R.id.content_home, MyAccountFragment.newInstance("test", "test"), "MyAccountFragment")
+                    .commit();
+        }
     }
 
     @Override
@@ -81,9 +106,7 @@ public class MainActivity extends AppCompatActivity {
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_home, LocalStoriesFragment.newInstance("test","test"));
-        transaction.commit();
+        switchToLocalStories();
 
         checkLocationPermission();
 

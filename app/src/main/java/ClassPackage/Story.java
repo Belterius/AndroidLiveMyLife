@@ -73,12 +73,6 @@ public class Story {
 
     @Override
     public String toString() {
-        return "Story{" +
-                "idStory='" + idStory + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", highlight='" + highlight + '\'' +
-                ", isPublished=" + isPublished +
-                '}';
+        return title + "\n" + description;
     }
 }

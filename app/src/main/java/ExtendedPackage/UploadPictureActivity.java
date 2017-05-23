@@ -73,7 +73,12 @@ public class UploadPictureActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    //handling the image chooser activity result
+    /**
+     * handling the image chooser activity result
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -90,7 +95,11 @@ public class UploadPictureActivity extends AppCompatActivity {
         }
     }
 
-    //method to get the file path from uri
+    /**
+     * Gets the file path from uri
+     * @param uri
+     * @return
+     */
     public String getPath(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -109,7 +118,9 @@ public class UploadPictureActivity extends AppCompatActivity {
     }
 
 
-    //Requesting permission
+    /**
+     * Requesting permission
+     */
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             return;
@@ -123,8 +134,12 @@ public class UploadPictureActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
     }
 
-
-    //This method will be called when the user will tap on allow or deny
+    /**
+     * This method will be called when the user will tap on allow or deny
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -142,15 +157,11 @@ public class UploadPictureActivity extends AppCompatActivity {
         }
     }
 
-//    public void onClick(View v) {
-//        if (v == buttonChoose) {
-//            showFileChooser();
-//        }
-//        if (v == buttonUpload) {
-//            uploadMultipart();
-//        }
-//    }
-
+    /**
+     * Encodes the picture to Base64 string
+     * @param bmp
+     * @return the encoded picture
+     */
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);

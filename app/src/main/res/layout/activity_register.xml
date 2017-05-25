@@ -113,6 +113,7 @@
                     android:height="100dp"
                     android:autoLink="web"
                     android:ems="10"
+                    android:gravity="top"
                     android:hint="@string/prompt_description"
                     android:inputType="textMultiLine"
                     android:verticalScrollbarPosition="right" />

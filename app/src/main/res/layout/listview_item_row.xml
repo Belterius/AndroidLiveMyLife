@@ -45,4 +45,50 @@
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail" />
 
+    <!--  Hidden buttons appearing when clicking on the story -->
+    <RelativeLayout
+        android:id="@+id/buttonshidden"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/thumbnail"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/Delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="30px"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/accountmenu"
+            android:text="Delete" />
+
+        <ImageButton
+            android:id="@+id/edit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="30px"
+            android:layout_toLeftOf="@id/Delete"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add"
+            android:text="Edit" />
+
+        <ImageButton
+            android:id="@+id/publish"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@id/edit"
+            android:background="@android:color/transparent"
+
+            android:scaleType="fitCenter"
+            android:src="@drawable/magnifier"
+            android:text="Publish" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

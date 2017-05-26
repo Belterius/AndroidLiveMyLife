@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
     android:orientation="horizontal"
-    android:padding="5dip" >
+    android:padding="5dip"
+    android:descendantFocusability="blocksDescendants"
+    android:animateLayoutChanges="true">
 
     <!--  ListRow Left sied Thumbnail image -->
     <LinearLayout android:id="@+id/thumbnail"
@@ -52,14 +54,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/thumbnail"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageButton
             android:id="@+id/Delete"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="30px"
+            android:layout_marginLeft="50dp"
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:scaleType="fitCenter"
@@ -70,7 +72,7 @@
             android:id="@+id/edit"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="30px"
+            android:layout_marginLeft="50dp"
             android:layout_toLeftOf="@id/Delete"
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"

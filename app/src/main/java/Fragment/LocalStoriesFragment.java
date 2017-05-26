@@ -1,6 +1,8 @@
 package Fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -49,6 +55,7 @@ public class LocalStoriesFragment extends Fragment {
     private ListView lv;
     private StoryAdapter storyAdapter;
     private ArrayList<Story> storyArrayList;
+    private int lastItemOpened;
 
     private GlobalState gs;
 
@@ -97,8 +104,24 @@ public class LocalStoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
+
         storyAdapter = new StoryAdapter(this.getActivity(), storyArrayList);
         lv.setAdapter(storyAdapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int position, long arg3) {
+                if(lv.getChildAt(position).findViewById(R.id.buttonshidden).getVisibility() == View.GONE){
+                    showButtons(position);
+                    lastItemOpened = position;
+                }
+                else{
+                    hideButtons(position);
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -106,6 +129,20 @@ public class LocalStoriesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getPersonalStories();
+    }
+
+    public void showButtons(int position){
+        if(lastItemOpened != position){
+            View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
+            toHide.setVisibility(View.GONE);
+        }
+        View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
+        v.setVisibility(View.VISIBLE);
+    }
+
+    public void hideButtons(int position){
+        View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
+        v.setVisibility(View.GONE);
     }
 
     public void getPersonalStories(){

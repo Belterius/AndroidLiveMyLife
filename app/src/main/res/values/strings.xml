@@ -50,6 +50,9 @@
     <string name="or">(or)</string>
     <string name="btnUploadToServer">Upload to Server</string>
     <string name="prompt_use_picture">Browse to choose a picture</string>
+    <string name="title_edit_your_step">Edit your step</string>
+    <string name="prompt_description_step">Enter a description for the current step</string>
+    <string name="title_your_story">Your story</string>
 
 
 </resources>

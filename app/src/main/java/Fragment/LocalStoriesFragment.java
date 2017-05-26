@@ -131,6 +131,7 @@ public class LocalStoriesFragment extends Fragment {
         getPersonalStories();
     }
 
+<<<<<<< HEAD
     public void showButtons(int position){
         if(lastItemOpened != position){
             View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
@@ -145,9 +146,13 @@ public class LocalStoriesFragment extends Fragment {
         v.setVisibility(View.GONE);
     }
 
+=======
+    /**
+     * Récupère les stories de l'utilisateur courant (utilisation de la variable de session côté serveur)
+     */
+>>>>>>> a58b5299c596a612222e3f4189c623f5299f8f8e
     public void getPersonalStories(){
-        String qs = "action=getPersonalStories"
-                + "&idUser=" +gs.getMyAccount().getIdUser();
+        String qs = "action=getPersonalStories";
         gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
     }
 

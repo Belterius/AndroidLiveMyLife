@@ -44,7 +44,7 @@ public class RegisterActivity extends UploadPictureActivity {
         editPasswordConfirm = (TextInputEditText) findViewById(R.id.register_password_confirm);
 
         //For extended class
-        this.imageViewPicturePreview = (ImageView) findViewById(R.id.register_imageView);
+        setImageViewForUploadClass(R.id.register_imageView);
 
         Bundle b = this.getIntent().getExtras();
         this.editEmail.setText(b.getString("email"));

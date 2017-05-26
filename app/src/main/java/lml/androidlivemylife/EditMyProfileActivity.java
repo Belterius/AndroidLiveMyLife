@@ -74,8 +74,9 @@ public class EditMyProfileActivity extends UploadPictureActivity {
         setContentView(R.layout.activity_edit_my_profile);
 
         editPseudo = (EditText) findViewById(R.id.my_profile_pseudo_edit);
-        imageViewPicturePreview = (ImageView) findViewById(R.id.my_profile_picture_edit);
         editDescription = (EditText) findViewById(R.id.my_profile_bio_edit);
+
+        this.setImageViewForUploadClass(R.id.my_profile_picture_edit);
 
         gs = new GlobalState();
 

@@ -108,9 +108,11 @@ public class LocalStoriesFragment extends Fragment {
         getPersonalStories();
     }
 
+    /**
+     * Récupère les stories de l'utilisateur courant (utilisation de la variable de session côté serveur)
+     */
     public void getPersonalStories(){
-        String qs = "action=getPersonalStories"
-                + "&idUser=" +gs.getMyAccount().getIdUser();
+        String qs = "action=getPersonalStories";
         gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
     }
 

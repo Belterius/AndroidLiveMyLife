@@ -164,7 +164,7 @@ public class LocalStoriesFragment extends Fragment {
                             json_data.getString("storyTitle"),
                             json_data.getString("storyDescription"),
                             json_data.getString("storyPicture"),
-                            Boolean.valueOf(json_data.getString("storyIsPublished")));
+                            "1".equals(json_data.getString("storyIsPublished")));
                     storyArrayList.add(story);
                 }
                 storyAdapter.notifyDataSetChanged();

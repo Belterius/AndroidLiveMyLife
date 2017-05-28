@@ -65,7 +65,6 @@
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/accountmenu"
             android:text="Delete" />
 
         <ImageButton
@@ -77,7 +76,6 @@
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/add"
             android:text="Edit" />
 
         <ImageButton
@@ -87,7 +85,6 @@
             android:layout_toLeftOf="@id/storybutton2"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/magnifier"
             android:text="Publish" />
 
     </RelativeLayout>

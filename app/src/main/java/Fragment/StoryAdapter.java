@@ -82,6 +82,15 @@ public class StoryAdapter extends BaseAdapter {
         holder.desc.setText(data.get(position).getDescription());
         holder.img.setImageResource(R.drawable.magnifier);
         //holder.img.setImageResource(data.get(position).getHighlight());
+        if(data.get(position).isPublished() == false){
+            holder.imgb1.setImageResource(R.drawable.publish);
+            holder.imgb2.setImageResource(R.drawable.edit);
+        }
+        else{
+            holder.imgb1.setImageResource(R.drawable.facebook);
+            holder.imgb2.setImageResource(R.drawable.twitter);
+        }
+        holder.imgb3.setImageResource(R.drawable.delete);
         holder.imgb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

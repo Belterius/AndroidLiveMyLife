@@ -85,13 +85,23 @@ public class StoryAdapter extends BaseAdapter {
         holder.imgb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(parent.getContext(), "Publish " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                if(data.get(position).isPublished() == false){
+                    Toast.makeText(parent.getContext(), "Publish " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(parent.getContext(), "Facebook - " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                }
             }
         });
         holder.imgb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(parent.getContext(), "Edit " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                if(data.get(position).isPublished() == false){
+                    Toast.makeText(parent.getContext(), "Edit " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(parent.getContext(), "Twitter - " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                }
             }
         });
         holder.imgb3.setOnClickListener(new View.OnClickListener() {

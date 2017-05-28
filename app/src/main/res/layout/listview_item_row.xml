@@ -57,7 +57,7 @@
         android:visibility="gone">
 
         <ImageButton
-            android:id="@+id/Delete"
+            android:id="@+id/storybutton3"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -69,11 +69,11 @@
             android:text="Delete" />
 
         <ImageButton
-            android:id="@+id/edit"
+            android:id="@+id/storybutton2"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="50dp"
-            android:layout_toLeftOf="@id/Delete"
+            android:layout_toLeftOf="@id/storybutton3"
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:scaleType="fitCenter"
@@ -81,12 +81,11 @@
             android:text="Edit" />
 
         <ImageButton
-            android:id="@+id/publish"
+            android:id="@+id/storybutton1"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_toLeftOf="@id/edit"
+            android:layout_toLeftOf="@id/storybutton2"
             android:background="@android:color/transparent"
-
             android:scaleType="fitCenter"
             android:src="@drawable/magnifier"
             android:text="Publish" />

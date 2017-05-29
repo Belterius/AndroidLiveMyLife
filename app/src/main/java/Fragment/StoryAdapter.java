@@ -2,10 +2,12 @@ package Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,20 +134,40 @@ public class StoryAdapter extends BaseAdapter {
         holder.imgb3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Animation animation = AnimationUtils.loadAnimation(fragment.getContext(), android.R.anim.slide_out_right);
-                rowView.startAnimation(animation);
-                Handler handle = new Handler();
-                handle.postDelayed(new Runnable() {
+                AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
+                alert.setTitle("Delete");
+                alert.setMessage("Are you sure you want to delete this story?");
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
                     @Override
-                    public void run() {
-                        lastRemoved = position;
-                        fragment.getStoryArrayList().remove(lastRemoved);
-                        lastRemoved = -1;
-                        notifyDataSetChanged();
-                        animation.cancel();
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Animation animation = AnimationUtils.loadAnimation(fragment.getContext(), android.R.anim.slide_out_right);
+                        rowView.startAnimation(animation);
+                        Handler handle = new Handler();
+                        handle.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lastRemoved = position;
+                                fragment.getStoryArrayList().remove(lastRemoved);
+                                lastRemoved = -1;
+                                notifyDataSetChanged();
+                                animation.cancel();
+                            }
+                        },500);
+                        deleteStory(data.get(position).getIdStory());
+                        dialog.dismiss();
                     }
-                },500);
-                deleteStory(data.get(position).getIdStory());
+                });
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
             }
         });
 

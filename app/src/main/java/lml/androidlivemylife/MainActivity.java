@@ -69,10 +69,20 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment myFragment = manager.findFragmentByTag("NewStoryFragment");
         if (myFragment == null || !myFragment.isVisible()) {
-            manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
-                    .commit();
+            Fragment myFragment2 = manager.findFragmentByTag("LocalStoriesFragment");
+            if(myFragment2 != null && myFragment2.isVisible()){
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                        .commit();
+            }
+
         }
     }
 
@@ -80,10 +90,19 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment myFragment = manager.findFragmentByTag("BrowseStoryFragment");
         if (myFragment == null || !myFragment.isVisible()) {
-            manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
-                    .commit();
+            Fragment myFragment2 = manager.findFragmentByTag("MyAccountFragment");
+            if(myFragment2 != null && myFragment2.isVisible()){
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                        .commit();
+            }
         }
     }
 
@@ -92,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment myFragment = manager.findFragmentByTag("MyAccountFragment");
         if (myFragment == null || !myFragment.isVisible()) {
             manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.content_home, MyAccountFragment.newInstance("test", "test"), "MyAccountFragment")
                     .commit();
         }

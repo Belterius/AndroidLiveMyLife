@@ -105,7 +105,7 @@ public class LocalStoriesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
 
-        storyAdapter = new StoryAdapter(this.getActivity(), storyArrayList);
+        storyAdapter = new StoryAdapter(this.getActivity(), storyArrayList, this);
         lv.setAdapter(storyAdapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -178,6 +178,10 @@ public class LocalStoriesFragment extends Fragment {
         }
 
         return false;
+    }
+
+    public ArrayList<Story> getStoryArrayList() {
+        return storyArrayList;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

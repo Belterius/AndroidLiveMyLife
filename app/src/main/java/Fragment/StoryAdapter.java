@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import ClassPackage.GlobalState;
 import ClassPackage.Story;
 import lml.androidlivemylife.R;
 
@@ -27,14 +33,20 @@ import lml.androidlivemylife.R;
 public class StoryAdapter extends BaseAdapter {
 
     Context context;
+    private LocalStoriesFragment fragment;
     ArrayList<Story> data = null;
     private static LayoutInflater inflater=null;
+    private GlobalState gs;
+    private int position;
+    private int lastRemoved;
 
-    public StoryAdapter(Context context, ArrayList<Story> data) {
+    public StoryAdapter(Context context, ArrayList<Story> data, LocalStoriesFragment fragment) {
         this.context = context;
         this.data = data;
+        this.fragment = fragment;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        gs = new GlobalState();
     }
 
     @Override
@@ -70,6 +82,7 @@ public class StoryAdapter extends BaseAdapter {
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.listview_item_row, null);
+        this.position = position;
 
         holder.title=(TextView) rowView.findViewById(R.id.txtTitle);
         holder.desc=(TextView) rowView.findViewById(R.id.txtDesc);
@@ -116,10 +129,38 @@ public class StoryAdapter extends BaseAdapter {
         holder.imgb3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(parent.getContext(), "Delete " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                deleteStory(data.get(position).getIdStory());
+                lastRemoved = position;
             }
         });
 
         return rowView;
+    }
+
+    /**
+     * Delete la story sur laquelle on a cliqué
+     */
+    public void deleteStory(String id){
+        String qs = "action=deleteStory&storyId=" + id;
+        gs.doRequestWithApi(context, "localStories", qs, this::resultDeleteStory);
+    }
+
+    public boolean resultDeleteStory(JSONObject o){
+        try {
+            if(o.getInt("status") == 200){
+                fragment.getStoryArrayList().remove(lastRemoved);
+                lastRemoved = -1;
+                this.notifyDataSetChanged();
+                return true;
+
+            }else{
+                this.gs.toastError(fragment.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

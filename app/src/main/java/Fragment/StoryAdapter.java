@@ -2,12 +2,15 @@ package Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -129,8 +132,20 @@ public class StoryAdapter extends BaseAdapter {
         holder.imgb3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Animation animation = AnimationUtils.loadAnimation(fragment.getContext(), android.R.anim.slide_out_right);
+                rowView.startAnimation(animation);
+                Handler handle = new Handler();
+                handle.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lastRemoved = position;
+                        fragment.getStoryArrayList().remove(lastRemoved);
+                        lastRemoved = -1;
+                        notifyDataSetChanged();
+                        animation.cancel();
+                    }
+                },500);
                 deleteStory(data.get(position).getIdStory());
-                lastRemoved = position;
             }
         });
 
@@ -148,9 +163,6 @@ public class StoryAdapter extends BaseAdapter {
     public boolean resultDeleteStory(JSONObject o){
         try {
             if(o.getInt("status") == 200){
-                fragment.getStoryArrayList().remove(lastRemoved);
-                lastRemoved = -1;
-                this.notifyDataSetChanged();
                 return true;
 
             }else{

@@ -65,8 +65,7 @@
             android:paddingBottom="15dp"
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:text="Delete" />
+            android:scaleType="fitCenter" />
 
         <ImageButton
             android:id="@+id/storybutton2"
@@ -77,8 +76,7 @@
             android:layout_toLeftOf="@id/storybutton3"
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:text="Edit" />
+            android:scaleType="fitCenter" />
 
         <ImageButton
             android:id="@+id/storybutton1"
@@ -87,8 +85,8 @@
             android:paddingBottom="15dp"
             android:layout_toLeftOf="@id/storybutton2"
             android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:text="Publish" />
+            android:cacheColorHint="@android:color/transparent"
+            android:scaleType="fitCenter" />
 
     </RelativeLayout>
 

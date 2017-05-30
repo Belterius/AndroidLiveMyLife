@@ -93,7 +93,6 @@ public class UploadPictureActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
@@ -108,6 +107,9 @@ public class UploadPictureActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             setPic();
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
 
@@ -343,6 +345,13 @@ public class UploadPictureActivity extends AppCompatActivity {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+
+        //Set the bitmap which will be used for the upload
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

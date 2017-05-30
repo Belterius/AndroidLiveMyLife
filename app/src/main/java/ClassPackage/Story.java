@@ -1,5 +1,8 @@
 package ClassPackage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Francois on 01/05/2017.
  */
@@ -11,6 +14,7 @@ public class Story {
     private String highlight;
     private boolean isPublished;
     private MyUser author;
+    private List<Step> steps;
 
     public Story(String idStory, String title, String description, String highlight, boolean isPublished) {
         this.idStory = idStory;
@@ -18,9 +22,25 @@ public class Story {
         this.description = description;
         this.highlight = highlight;
         this.isPublished = isPublished;
+        this.steps = new ArrayList<Step>();
+    }
+
+    public Story(String idStory, String title, String description, String highlight, boolean isPublished, List<Step> steps ) {
+        this.idStory = idStory;
+        this.title = title;
+        this.description = description;
+        this.highlight = highlight;
+        this.isPublished = isPublished;
+        this.steps = steps;
     }
 
     public Story() {
+        this.steps = new ArrayList<Step>();
+    }
+
+    public Story(String idStory){
+        this.idStory = idStory;
+        this.steps = new ArrayList<Step>();
     }
 
     public String getIdStory() {
@@ -74,5 +94,17 @@ public class Story {
     @Override
     public String toString() {
         return title + "\n" + description;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
+
+    public void addStep(Step step){
+        this.steps.add(step);
     }
 }

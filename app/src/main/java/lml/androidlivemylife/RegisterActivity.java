@@ -15,6 +15,7 @@ import java.util.Map;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import API_request.RequestClass;
+import ClassPackage.Story;
 import ClassPackage.ToastClass;
 import ExtendedPackage.UploadPictureActivity;
 
@@ -107,7 +108,8 @@ public class RegisterActivity extends UploadPictureActivity {
                         user.getString("firstname"),
                         user.getString("lastname"),
                         user.getString("description"),
-                        user.getString("photo")
+                        user.getString("photo"),
+                        new Story(user.getJSONObject("myCurrentStory").getString("id"))
                 ));
 
                 this.gs.setConnected(true);
@@ -128,7 +130,8 @@ public class RegisterActivity extends UploadPictureActivity {
                             user.getString("firstname"),
                             user.getString("lastname"),
                             user.getString("description"),
-                            user.getString("")
+                            user.getString(""),
+                            new Story(user.getJSONObject("myCurrentStory").getString("id"))
                     ));
 
                     ToastClass.toastError(this, o.getString("feedback"));

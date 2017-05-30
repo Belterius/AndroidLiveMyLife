@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +17,8 @@ import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import API_request.RequestClass;
+import ClassPackage.Step;
+import ClassPackage.Story;
 import ClassPackage.ToastClass;
 
 public class LoginActivity extends AppCompatActivity {
@@ -99,8 +102,32 @@ public class LoginActivity extends AppCompatActivity {
                             user.getString("firstname"),
                             user.getString("lastname"),
                             user.getString("description"),
-                            user.getString("url")
+                            user.getString("photo")
                     ));
+
+                    JSONObject myCurrentStory = user.getJSONObject("myCurrentStory");
+                    if(myCurrentStory != null){
+                        this.gs.getMyAccount().setMyCurrentStory(new Story(
+                                myCurrentStory.getString("id")
+                        ));
+
+                        JSONArray mySteps = myCurrentStory.getJSONArray("steps");
+                        if(mySteps != null){
+
+                            for (int i = 0; i < mySteps.length(); i++) {
+                                JSONObject step = mySteps.getJSONObject(i);
+                                this.gs.getMyAccount().getMyCurrentStory().addStep(
+                                        new Step(
+                                                step.getString("stepId"),
+                                                step.getString("stepPicture"),
+                                                step.getString("stepGpsData"),
+                                                step.getString("stepDescription")
+                                        )
+                                );
+                            }
+
+                        }
+                    }
 
                     goToMainPage();
                     return true;

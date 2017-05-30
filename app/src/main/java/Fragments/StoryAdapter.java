@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,8 +97,15 @@ public class StoryAdapter extends BaseAdapter {
 
         holder.title.setText(data.get(position).getTitle());
         holder.desc.setText(data.get(position).getDescription());
-        holder.img.setImageResource(R.drawable.magnifier);
+//        holder.img.setImageResource(R.drawable.magnifier);
         //holder.img.setImageResource(data.get(position).getHighlight());
+        Picasso.with(context)
+                .load(data.get(position).getHighlight())
+//                .placeholder(R.drawable.loading_gears)
+//                .error(R.drawable.ic_menu_report_image)
+                .error(R.drawable.error_triangle)
+                .into(((ImageView)holder.img));
+
         if(data.get(position).isPublished() == false){
             holder.imgb1.setImageResource(R.drawable.publish);
             holder.imgb2.setImageResource(R.drawable.edit);

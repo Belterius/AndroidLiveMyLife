@@ -1,27 +1,21 @@
-package Fragment;
+package Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +23,8 @@ import java.util.ArrayList;
 
 import ClassPackage.GlobalState;
 import ClassPackage.Story;
+import lml.androidlivemylife.EditMyProfileActivity;
+import lml.androidlivemylife.PublishStoryActivity;
 import lml.androidlivemylife.R;
 
 /**
@@ -44,6 +40,7 @@ public class StoryAdapter extends BaseAdapter {
     private GlobalState gs;
     private int position;
     private int lastRemoved;
+    private String title;
 
     public StoryAdapter(Context context, ArrayList<Story> data, LocalStoriesFragment fragment) {
         this.context = context;
@@ -113,7 +110,27 @@ public class StoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if(data.get(position).isPublished() == false){
-                    Toast.makeText(parent.getContext(), "Publish " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
+                    alert.setTitle("Publish");
+                    alert.setMessage("Are you sure you want to publish this story?");
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            publishStory(data.get(position).getIdStory(), holder.title.getText().toString().toUpperCase());
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.show();
                 }
                 else{
                     Toast.makeText(parent.getContext(), "Facebook - " + holder.title.getText(), Toast.LENGTH_LONG).show();
@@ -185,6 +202,34 @@ public class StoryAdapter extends BaseAdapter {
     public boolean resultDeleteStory(JSONObject o){
         try {
             if(o.getInt("status") == 200){
+                return true;
+
+            }else{
+                this.gs.toastError(fragment.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Publish la story sur laquelle on a cliqué
+     */
+    public void publishStory(String id, String title){
+        this.title = title;
+        String qs = "action=publishStory&storyId=" + id;
+        gs.doRequestWithApi(context, "localStories", qs, this::resultPublishStory);
+    }
+
+    public boolean resultPublishStory(JSONObject o){
+        try {
+            if(o.getInt("status") == 200){
+                Intent nextView = new Intent(fragment.getContext(), PublishStoryActivity.class);
+                nextView.putExtra("storyTitle", this.title);
+                fragment.startActivity(nextView);
                 return true;
 
             }else{

@@ -10,7 +10,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -20,10 +19,10 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 
 import ClassPackage.GlobalState;
-import Fragment.BrowseStoryFragment;
-import Fragment.LocalStoriesFragment;
-import Fragment.MyAccountFragment;
-import Fragment.NewStoryFragment;
+import Fragments.BrowseStoryFragment;
+import Fragments.LocalStoriesFragment;
+import Fragments.MyAccountFragment;
+import Fragments.NewStoryFragment;
 
 public class MainActivity extends AppCompatActivity {
 

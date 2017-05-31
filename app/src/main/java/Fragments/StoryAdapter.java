@@ -3,6 +3,8 @@ package Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import ClassPackage.GlobalState;
 import ClassPackage.Story;
 import lml.androidlivemylife.EditMyProfileActivity;
+import lml.androidlivemylife.EditStoryActivity;
 import lml.androidlivemylife.PublishStoryActivity;
 import lml.androidlivemylife.R;
 
@@ -150,7 +153,13 @@ public class StoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if(data.get(position).isPublished() == false){
-                    Toast.makeText(parent.getContext(), "Edit " + holder.title.getText(), Toast.LENGTH_LONG).show();
+                    Intent nextView = new Intent(fragment.getContext(), EditStoryActivity.class);
+                    nextView.putExtra("storyId", data.get(position).getIdStory());
+                    nextView.putExtra("storyTitle", holder.title.getText().toString());
+                    nextView.putExtra("storyDescription", holder.desc.getText().toString());
+                    nextView.putExtra("storyHighlight", data.get(position).getHighlight());
+                    nextView.putExtra("action", "edit");
+                    fragment.startActivity(nextView);
                 }
                 else{
                     Toast.makeText(parent.getContext(), "Twitter - " + holder.title.getText(), Toast.LENGTH_LONG).show();

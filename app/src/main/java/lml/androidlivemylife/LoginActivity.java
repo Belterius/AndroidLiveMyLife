@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                         user.getString("firstname"),
                         user.getString("lastname"),
                         user.getString("description"),
-                        user.getString("url")
+                        user.getString("photo")
                 ));
 
                 goToMainPage();

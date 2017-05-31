@@ -138,7 +138,7 @@ public class LocalStoriesFragment extends Fragment {
      */
     public void getPersonalStories(){
         String qs = "action=getPersonalStories";
-        gs.doRequestWithApi(this.getContext(), this.TAG, qs, this::getMyPersonalStories);
+        gs.doRequestWithApi(this.getActivity(), this.TAG, qs, this::getMyPersonalStories);
     }
 
     public boolean getMyPersonalStories(JSONObject o){

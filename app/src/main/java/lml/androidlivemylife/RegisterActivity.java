@@ -146,5 +146,4 @@ public class RegisterActivity extends UploadPictureActivity {
 
         return false;
     }
-
 }

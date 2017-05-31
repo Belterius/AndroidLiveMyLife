@@ -64,25 +64,35 @@ public class UploadPictureActivity extends AppCompatActivity {
     private Uri filePath;
 
     //Used to start the capture picture intent
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
 
     private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestPermissions();
     }
 
     public void setImageViewForUploadClass(int idFromViewById){
         imageViewPicturePreview = (ImageView) findViewById(idFromViewById);
     }
 
-    //method to show file chooser
+    /**
+     * Method to show file chooser when we click on the button
+     */
     public void showFileChooser(View v) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    /**
+     * Method to take a picture when we click on the button
+     */
+    public void takeNewPicture(View v) {
+        this.dispatchTakePictureIntent();
     }
 
     /**
@@ -220,7 +230,7 @@ public class UploadPictureActivity extends AppCompatActivity {
     /**
      * Displays a new intent to take a picture
      */
-    protected void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent() {
 
 //        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);

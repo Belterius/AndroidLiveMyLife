@@ -9,7 +9,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/textView3"
@@ -46,7 +47,6 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:onClick="showFileChooser"
             app:srcCompat="@drawable/ic_menu_report_image" />
 
         <ImageView
@@ -59,6 +59,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:onClick="showFileChooser"
             app:srcCompat="@drawable/switch_image" />
 
     </RelativeLayout>

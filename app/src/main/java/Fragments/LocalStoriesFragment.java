@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +45,7 @@ public class LocalStoriesFragment extends Fragment {
 
     final public String TAG = "localStories";
 
+    private TextView title_local_stories;
     private ListView lv;
     private StoryAdapter storyAdapter;
     private ArrayList<Story> storyArrayList;
@@ -95,6 +97,7 @@ public class LocalStoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
+        title_local_stories = (TextView) rootView.findViewById(R.id.title_local_stories);
         lv = (ListView) rootView.findViewById(R.id.listView);
 
         storyAdapter = new StoryAdapter(this.getActivity(), storyArrayList, this);
@@ -161,6 +164,7 @@ public class LocalStoriesFragment extends Fragment {
                             "1".equals(json_data.getString("storyIsPublished")));
                     storyArrayList.add(story);
                 }
+
                 storyAdapter.notifyDataSetChanged();
                 return true;
             }else{
@@ -168,6 +172,7 @@ public class LocalStoriesFragment extends Fragment {
             }
 
         } catch (JSONException e) {
+            this.title_local_stories.setText("No stories created yet. Start sharing !");
             e.printStackTrace();
         }
 

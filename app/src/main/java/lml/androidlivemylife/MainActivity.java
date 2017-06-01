@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private GlobalState gs;
 
+    public BottomNavigationView getNavigation() {
+        return navigation;
+    }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

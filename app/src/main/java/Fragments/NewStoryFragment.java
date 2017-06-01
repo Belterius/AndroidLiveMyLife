@@ -1,17 +1,22 @@
 package Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import ClassPackage.GlobalState;
+import lml.androidlivemylife.CreateStoryActivity;
 import lml.androidlivemylife.EditYourStepActivity;
+import lml.androidlivemylife.MainActivity;
 import lml.androidlivemylife.R;
 
 
@@ -30,6 +35,9 @@ public class NewStoryFragment extends Fragment{
 //    private static final String ARG_PARAM2 = "param2";
 
     private GlobalState gs;
+    private ImageButton buttonCreateStep;
+    private ImageButton buttonFinalizeStory;
+    private final int STATIC_RETURN_FROM_CREATE = 1;
 
     // TODO: Rename and change types of parameters
 //    private String mParam1;
@@ -68,6 +76,16 @@ public class NewStoryFragment extends Fragment{
 //        }
 
         gs = new GlobalState();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(this.gs.getMyAccount().getMyCurrentStory().getSteps().size() > 0 ){
+            buttonFinalizeStory.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -79,8 +97,8 @@ public class NewStoryFragment extends Fragment{
         //Get the steps for the currentStory
 
         //New step button listener
-        ImageButton button = (ImageButton) view.findViewById(R.id.your_story_plus_button);
-        button.setOnClickListener(new View.OnClickListener()
+        buttonCreateStep = (ImageButton) view.findViewById(R.id.your_story_plus_button);
+        buttonCreateStep.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -90,8 +108,8 @@ public class NewStoryFragment extends Fragment{
         });
 
         //Finalize new story button listener
-        ImageButton button2 = (ImageButton) view.findViewById(R.id.your_story_next_button);
-        button2.setOnClickListener(new View.OnClickListener()
+        buttonFinalizeStory = (ImageButton) view.findViewById(R.id.your_story_next_button);
+        buttonFinalizeStory.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -160,8 +178,23 @@ public class NewStoryFragment extends Fragment{
      * Open a new intent to set the attributes to the current story
      * and to publish it
      */
-    public void finalizeStory(){
-
+    private void finalizeStory(){
+        Intent nextView = new Intent(this.getContext(), CreateStoryActivity.class);
+        startActivityForResult(nextView, STATIC_RETURN_FROM_CREATE);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (STATIC_RETURN_FROM_CREATE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    if(data.getBooleanExtra("isCreated", false)){
+                        ((MainActivity)getActivity()).getNavigation().setSelectedItemId( R.id.navigation_home);
+                    }
+                }
+                break;
+            }
+        }
+    }
 }

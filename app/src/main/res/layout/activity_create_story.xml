@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:paddingLeft="20dp"
+android:paddingRight="20dp"
+tools:context="lml.androidlivemylife.CreateStoryActivity"
+tools:layout_editor_absoluteX="8dp"
+tools:layout_editor_absoluteY="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/title_your_story"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <ImageButton
+            android:id="@+id/create_story_previous_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:onClick="goToListSteps"
+            android:rotation="180"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/right_arrow" />
+
+        <ImageButton
+            android:id="@+id/create_story_next_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:onClick="createStory"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/btn_check_buttonless_on" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/my_profile_relative_image"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginBottom="15dp">
+
+        <ImageView
+            android:id="@+id/create_story_picture_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/add_image" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/create_story_button_take_new_picture"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:onClick="takeNewPicture"
+                app:srcCompat="@drawable/photo_camera" />
+
+            <ImageView
+                android:id="@+id/create_story_button_galery"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/create_story_button_take_new_picture"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:onClick="showFileChooser"
+                app:srcCompat="@drawable/gallery" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/create_story_title_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:height="10dp"
+            android:hint="@string/prompt_new_title"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/create_stoy_description_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:height="100dp"
+            android:autoLink="web"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/prompt_story_description"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:verticalScrollbarPosition="right" />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>
+

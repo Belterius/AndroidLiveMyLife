@@ -33,14 +33,13 @@ public class EditYourStepActivity extends UploadPictureActivity {
 
         this.stepDescription = (EditText) findViewById(R.id.edit_step_description);
         this.setImageViewForUploadClass(R.id.edit_step_preview_picture);
-        this.requestPermissions();
 
         gs = new GlobalState();
 
         //False la première fois : car on passe dans le onResume à la création de la page
         //On veut éviter de passer aussi dans le this.finish()
         goToPicture = false;
-        this.dispatchTakePictureIntent();
+        this.takeNewPicture(this.getCurrentFocus());
     }
 
     @Override
@@ -68,7 +67,7 @@ public class EditYourStepActivity extends UploadPictureActivity {
     public void changePicture (View v){
         //Take picture
 //        this.showFileChooser(this.findViewById(android.R.id.content));
-        this.dispatchTakePictureIntent();
+        this.takeNewPicture(v);
     }
 
     /**
@@ -84,7 +83,7 @@ public class EditYourStepActivity extends UploadPictureActivity {
         dataToPass.put("idf_story", this.gs.getMyAccount().getMyCurrentStory().getIdStory());
         dataToPass.put("stepDescription", stepDescription);
         dataToPass.put("stepGpsData", "1;2;3");
-        dataToPass.put("stepPicture", getStringImage(bitmap));
+        dataToPass.put("stepPicture", getImageToPassForRequest());
 
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getReturnFromPublishStep);
     }

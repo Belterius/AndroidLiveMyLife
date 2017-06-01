@@ -228,6 +228,15 @@ public class UploadPictureActivity extends AppCompatActivity {
     }
 
     /**
+     * Avoids to pass the current bitmap to use getStringImage.
+     * Will convert the bitmap to Base64 for uploading
+     * @return
+     */
+    public String getImageToPassForRequest(){
+        return this.getStringImage(this.bitmap);
+    }
+
+    /**
      * Displays a new intent to take a picture
      */
     private void dispatchTakePictureIntent() {

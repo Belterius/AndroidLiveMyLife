@@ -83,7 +83,7 @@ public class RegisterActivity extends UploadPictureActivity {
         dataToPass.put("firstname", firstname);
         dataToPass.put("lastname", lastname);
         dataToPass.put("description", description);
-        dataToPass.put("photo", getStringImage(bitmap));
+        dataToPass.put("photo", getImageToPassForRequest());
 
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequest);
 

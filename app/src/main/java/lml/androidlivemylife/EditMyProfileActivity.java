@@ -115,7 +115,7 @@ public class EditMyProfileActivity extends UploadPictureActivity {
 
             Map<String, String> dataToPass = new HashMap<>();
             dataToPass.put("action", "updatePhotoUser");
-            dataToPass.put("photo", getStringImage(bitmap));
+            dataToPass.put("photo", getImageToPassForRequest());
             requestDoing++;
 
             RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::updateUser);

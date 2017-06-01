@@ -15,9 +15,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ClassPackage.GlobalState;
+import API_request.RequestClass;
 import ClassPackage.Story;
+import ClassPackage.ToastClass;
 import lml.androidlivemylife.R;
 
 
@@ -137,8 +141,10 @@ public class LocalStoriesFragment extends Fragment {
      * Récupère les stories de l'utilisateur courant (utilisation de la variable de session côté serveur)
      */
     public void getPersonalStories(){
-        String qs = "action=getPersonalStories";
-        gs.doRequestWithApi(this.getActivity(), this.TAG, qs, this::getMyPersonalStories);
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getPersonalStories");
+
+        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::getMyPersonalStories);
     }
 
     public boolean getMyPersonalStories(JSONObject o){
@@ -158,7 +164,7 @@ public class LocalStoriesFragment extends Fragment {
                 storyAdapter.notifyDataSetChanged();
                 return true;
             }else{
-                this.gs.toastError(this.getActivity(), o.getString("feedback"));
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
             }
 
         } catch (JSONException e) {

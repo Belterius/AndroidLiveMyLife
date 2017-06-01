@@ -14,7 +14,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import API_request.RequestClass;
 import ClassPackage.GlobalState;
+import ClassPackage.ToastClass;
 
 public class EditStoryActivity extends AppCompatActivity {
 
@@ -94,11 +99,15 @@ public class EditStoryActivity extends AppCompatActivity {
     private void editStory(){
         //TODO requeteBDD + retour sur écran d'accueil
         if(old_description != description_to_edit.getText() || old_title != title_to_edit.getText()){ //|| bitmap != null
-            String qs = "action=editStory&storyId=" + storyId
-                    + "&title=" + title_to_edit.getText()
-                    + "&description=" + description_to_edit.getText()
-                    + "&highlight=" + old_highlight; //TODO REMPLACER PAR LE NOUVEAU HIGHLIGHT
-            gs.doRequestWithApi(this, this.TAG, qs, this::resultEditStory);
+
+            Map<String, String> dataToPass = new HashMap<>();
+            dataToPass.put("action", "editStory");
+            dataToPass.put("storyId", storyId);
+            dataToPass.put("title", title_to_edit.getText().toString());
+            dataToPass.put("description", description_to_edit.getText().toString());
+            dataToPass.put("highlight", old_highlight); //TODO REMPLACER PAR LE NOUVEAU HIGHLIGHT
+
+            RequestClass.doRequestWithApi(this, this.TAG,dataToPass, this::resultEditStory);
         }
     }
 
@@ -112,7 +121,7 @@ public class EditStoryActivity extends AppCompatActivity {
                 return true;
             }
             else{
-                this.gs.toastError(this, o.getString("feedback"));
+                ToastClass.toastError(this, o.getString("feedback"));
             }
         } catch (JSONException e) {
             e.printStackTrace();

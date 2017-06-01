@@ -2,18 +2,12 @@ package lml.androidlivemylife;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import API_request.MySingleton;
 import ClassPackage.GlobalState;
-import ClassPackage.MyUser;
 
 public class PublishStoryActivity extends AppCompatActivity {
 
@@ -54,6 +48,9 @@ public class PublishStoryActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * To refactor : Ne pas ouvrir un nouvel intent, mais plutot renvoyer une paramètre !!
+     */
     private void goBackToLocalStories(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

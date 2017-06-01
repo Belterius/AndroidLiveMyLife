@@ -24,9 +24,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.Story;
+import ClassPackage.ToastClass;
 import lml.androidlivemylife.EditMyProfileActivity;
 import lml.androidlivemylife.EditStoryActivity;
 import lml.androidlivemylife.PublishStoryActivity;
@@ -46,6 +50,7 @@ public class StoryAdapter extends BaseAdapter {
     private int position;
     private int lastRemoved;
     private String title;
+    private String TAG = "localStories";
 
     public StoryAdapter(Context context, ArrayList<Story> data, LocalStoriesFragment fragment) {
         this.context = context;
@@ -213,8 +218,12 @@ public class StoryAdapter extends BaseAdapter {
      * Delete la story sur laquelle on a cliqué
      */
     public void deleteStory(String id){
-        String qs = "action=deleteStory&storyId=" + id;
-        gs.doRequestWithApi(context, "localStories", qs, this::resultDeleteStory);
+
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "deleteStory");
+        dataToPass.put("storyId", id);
+
+        RequestClass.doRequestWithApi(context, this.TAG,dataToPass, this::resultDeleteStory);
     }
 
     public boolean resultDeleteStory(JSONObject o){
@@ -223,7 +232,7 @@ public class StoryAdapter extends BaseAdapter {
                 return true;
 
             }else{
-                this.gs.toastError(fragment.getActivity(), o.getString("feedback"));
+                ToastClass.toastError(fragment.getActivity(), o.getString("feedback"));
             }
 
         } catch (JSONException e) {
@@ -238,8 +247,12 @@ public class StoryAdapter extends BaseAdapter {
      */
     public void publishStory(String id, String title){
         this.title = title;
-        String qs = "action=publishStory&storyId=" + id;
-        gs.doRequestWithApi(context, "localStories", qs, this::resultPublishStory);
+
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "publishStory");
+        dataToPass.put("storyId", id);
+
+        RequestClass.doRequestWithApi(context, this.TAG,dataToPass, this::resultPublishStory);
     }
 
     public boolean resultPublishStory(JSONObject o){
@@ -251,7 +264,7 @@ public class StoryAdapter extends BaseAdapter {
                 return true;
 
             }else{
-                this.gs.toastError(fragment.getActivity(), o.getString("feedback"));
+                ToastClass.toastError(fragment.getActivity(), o.getString("feedback"));
             }
 
         } catch (JSONException e) {

@@ -50,6 +50,7 @@ public class StoryAdapter extends BaseAdapter {
     private int position;
     private int lastRemoved;
     private String title;
+    private static final int result_from_publish = 1;
     private String TAG = "localStories";
 
     public StoryAdapter(Context context, ArrayList<Story> data, LocalStoriesFragment fragment) {
@@ -258,9 +259,9 @@ public class StoryAdapter extends BaseAdapter {
     public boolean resultPublishStory(JSONObject o){
         try {
             if(o.getInt("status") == 200){
-                Intent nextView = new Intent(fragment.getContext(), PublishStoryActivity.class);
+                Intent nextView = new Intent(fragment.getActivity(), PublishStoryActivity.class);
                 nextView.putExtra("storyTitle", this.title);
-                fragment.startActivity(nextView);
+                fragment.getActivity().startActivityForResult(nextView, result_from_publish);
                 return true;
 
             }else{

@@ -1,6 +1,7 @@
 package lml.androidlivemylife;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigation;
     private GlobalState gs;
+    private static final int result_from_publish = 1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -137,6 +139,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (result_from_publish) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String newText = data.getStringExtra("backFromPublishStory");
+                    FragmentManager manager = getSupportFragmentManager();
+                    Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
+                    ((LocalStoriesFragment) myFragment).getPersonalStories();
+                }
+                break;
+            }
+        }
+    }
+
+    public static int getResult_from_publish() {
+        return result_from_publish;
+    }
 
     public void goToMaps(View v){
         startActivity(new Intent(this, MapsActivity.class));

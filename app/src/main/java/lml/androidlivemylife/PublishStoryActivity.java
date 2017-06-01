@@ -1,5 +1,6 @@
 package lml.androidlivemylife;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -52,9 +53,9 @@ public class PublishStoryActivity extends AppCompatActivity {
      * To refactor : Ne pas ouvrir un nouvel intent, mais plutot renvoyer une paramètre !!
      */
     private void goBackToLocalStories(){
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("backFromPublishStory", 1);
+        setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 

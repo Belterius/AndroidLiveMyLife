@@ -47,7 +47,7 @@ public class LocalStoriesFragment extends Fragment {
 
     private TextView title_local_stories;
     private ListView lv;
-    private StoryAdapter storyAdapter;
+    private LocalStoriesAdapter localStoriesAdapter;
     private ArrayList<Story> storyArrayList;
     private int lastItemOpened;
 
@@ -100,8 +100,8 @@ public class LocalStoriesFragment extends Fragment {
         title_local_stories = (TextView) rootView.findViewById(R.id.title_local_stories);
         lv = (ListView) rootView.findViewById(R.id.listView);
 
-        storyAdapter = new StoryAdapter(this.getActivity(), storyArrayList, this);
-        lv.setAdapter(storyAdapter);
+        localStoriesAdapter = new LocalStoriesAdapter(this.getActivity(), storyArrayList, this);
+        lv.setAdapter(localStoriesAdapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -165,7 +165,7 @@ public class LocalStoriesFragment extends Fragment {
                     storyArrayList.add(story);
                 }
 
-                storyAdapter.notifyDataSetChanged();
+                localStoriesAdapter.notifyDataSetChanged();
                 return true;
             }else{
                 ToastClass.toastError(this.getActivity(), o.getString("feedback"));

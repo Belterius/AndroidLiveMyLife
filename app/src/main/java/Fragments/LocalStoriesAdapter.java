@@ -40,7 +40,7 @@ import lml.androidlivemylife.R;
  * Created by Francois on 22/05/2017.
  */
 
-public class StoryAdapter extends BaseAdapter {
+public class LocalStoriesAdapter extends BaseAdapter {
 
     Context context;
     private LocalStoriesFragment fragment;
@@ -53,7 +53,7 @@ public class StoryAdapter extends BaseAdapter {
     private static final int result_from_publish = 1;
     private String TAG = "localStories";
 
-    public StoryAdapter(Context context, ArrayList<Story> data, LocalStoriesFragment fragment) {
+    public LocalStoriesAdapter(Context context, ArrayList<Story> data, LocalStoriesFragment fragment) {
         this.context = context;
         this.data = data;
         this.fragment = fragment;

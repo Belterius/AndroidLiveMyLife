@@ -1,4 +1,4 @@
-package Fragments;
+package Fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,34 +7,49 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ClassPackage.GlobalState;
+import API_request.RequestClass;
+import ClassPackage.Story;
+import ClassPackage.ToastClass;
 import lml.androidlivemylife.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BrowseStoryFragment.OnFragmentInteractionListener} interface
+ * {@link LocalStoriesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BrowseStoryFragment#newInstance} factory method to
+ * Use the {@link LocalStoriesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BrowseStoryFragment extends Fragment {
+public class LocalStoriesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
+    private OnFragmentInteractionListener mListener;
+
+    final public String TAG = "localStories";
+
+    private ListView lv;
+    private ArrayAdapter<Story> arrayAdapter;
 
     private GlobalState gs;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    public BrowseStoryFragment() {
+    public LocalStoriesFragment() {
         // Required empty public constructor
     }
 
@@ -44,11 +59,11 @@ public class BrowseStoryFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BrowseStoryFragment.
+     * @return A new instance of fragment LocalStoriesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BrowseStoryFragment newInstance(String param1, String param2) {
-        BrowseStoryFragment fragment = new BrowseStoryFragment();
+    public static LocalStoriesFragment newInstance(String param1, String param2) {
+        LocalStoriesFragment fragment = new LocalStoriesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,10 +83,60 @@ public class BrowseStoryFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_browse_story, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
+        lv = (ListView) rootView.findViewById(R.id.listView);
+        arrayAdapter = new ArrayAdapter<Story>(this.getActivity(), android.R.layout.simple_list_item_1);
+        lv.setAdapter(arrayAdapter);
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getPersonalStories();
+    }
+
+    public void getPersonalStories(){
+
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getPersonalStories");
+
+        RequestClass.doRequestWithApi(this.getContext(), this.TAG,dataToPass, this::getMyPersonalStories);
+    }
+
+    public boolean getMyPersonalStories(JSONObject o){
+        try {
+            ArrayList<Story> storyArrayList  = new ArrayList<>();
+            JSONArray stories = o.getJSONArray("stories");
+            if(o.getInt("status") == 200 && stories != null){
+                for(int i=0; i<stories.length(); i++){
+                    JSONObject json_data = stories.getJSONObject(i);
+                    Story story = new Story(json_data.getString("storyId"),
+                            json_data.getString("storyTitle"),
+                            json_data.getString("storyDescription"),
+                            json_data.getString("storyPicture"),
+                            Boolean.valueOf(json_data.getString("storyIsPublished")));
+                    storyArrayList.add(story);
+                }
+                arrayAdapter.addAll(storyArrayList);
+                return true;
+            }else{
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -3,7 +3,6 @@ package lml.androidlivemylife;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,17 +11,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.ByteArrayOutputStream;
-
 import ClassPackage.GlobalState;
-import Fragments.BrowseStoryFragment;
-import Fragments.LocalStoriesFragment;
-import Fragments.MyAccountFragment;
-import Fragments.NewStoryFragment;
+import Fragment.BrowseStoryFragment;
+import Fragment.LocalStoriesFragment;
+import Fragment.MyAccountFragment;
+import Fragment.NewStoryFragment;
 
 public class MainActivity extends AppCompatActivity {
 

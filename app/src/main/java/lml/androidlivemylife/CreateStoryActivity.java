@@ -55,7 +55,7 @@ public class CreateStoryActivity extends UploadPictureActivity {
 
         String descriptionToPass = this.stepDescription.getText().toString();
         String titleToPass = this.title.getText().toString();
-        String action = "signin";
+        String action = "createStory";
 
         Map<String, String> dataToPass = new HashMap<>();
         dataToPass.put("action", action);
@@ -79,7 +79,6 @@ public class CreateStoryActivity extends UploadPictureActivity {
                 if(newCurrentStory != null){
 
                     this.gs.getMyAccount().setMyCurrentStory(new Story(newCurrentStory.getString("id")));
-
 
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("isCreated", true);

@@ -1,34 +1,31 @@
 package lml.androidlivemylife;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.ByteArrayOutputStream;
-
 import ClassPackage.GlobalState;
-import Fragment.BrowseStoryFragment;
-import Fragment.LocalStoriesFragment;
-import Fragment.MyAccountFragment;
-import Fragment.NewStoryFragment;
+import Fragments.BrowseStoryFragment;
+import Fragments.LocalStoriesFragment;
+import Fragments.MyAccountFragment;
+import Fragments.NewStoryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigation;
     private GlobalState gs;
+    private static final int result_from_publish = 1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -69,10 +66,20 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment myFragment = manager.findFragmentByTag("NewStoryFragment");
         if (myFragment == null || !myFragment.isVisible()) {
-            manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
-                    .commit();
+            Fragment myFragment2 = manager.findFragmentByTag("LocalStoriesFragment");
+            if(myFragment2 != null && myFragment2.isVisible()){
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                        .commit();
+            }
+
         }
     }
 
@@ -80,10 +87,19 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment myFragment = manager.findFragmentByTag("BrowseStoryFragment");
         if (myFragment == null || !myFragment.isVisible()) {
-            manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
-                    .commit();
+            Fragment myFragment2 = manager.findFragmentByTag("MyAccountFragment");
+            if(myFragment2 != null && myFragment2.isVisible()){
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                        .commit();
+            }
         }
     }
 
@@ -92,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment myFragment = manager.findFragmentByTag("MyAccountFragment");
         if (myFragment == null || !myFragment.isVisible()) {
             manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.content_home, MyAccountFragment.newInstance("test", "test"), "MyAccountFragment")
                     .commit();
         }
@@ -123,6 +139,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (result_from_publish) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String newText = data.getStringExtra("backFromPublishStory");
+                    FragmentManager manager = getSupportFragmentManager();
+                    Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
+                    ((LocalStoriesFragment) myFragment).getPersonalStories();
+                }
+                break;
+            }
+        }
+    }
+
+    public static int getResult_from_publish() {
+        return result_from_publish;
+    }
 
     public void goToMaps(View v){
         startActivity(new Intent(this, MapsActivity.class));
@@ -160,11 +195,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
 }

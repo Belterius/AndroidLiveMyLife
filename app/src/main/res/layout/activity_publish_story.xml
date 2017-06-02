@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="lml.androidlivemylife.PublishStoryActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="57dp">
+
+        <TextView
+            android:id="@+id/titleStory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:textSize="30dp"
+            android:text="Title"
+            android:textAlignment="center" />
+
+        <ImageButton
+            android:id="@+id/publish_story_previous_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:rotation="180"
+            android:scaleType="fitCenter"
+            android:src="@drawable/right_arrow" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Congratulations ! Your story is now online !"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Feel free to share it with your friends !"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttonshidden"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/storybutton2"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="75dp"
+            android:paddingTop="15dp"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:src="@drawable/twitter"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/storybutton1"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:paddingTop="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="75dp"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:src="@drawable/facebook"
+            android:scaleType="fitCenter" />
+
+    </RelativeLayout>
+
+</LinearLayout>

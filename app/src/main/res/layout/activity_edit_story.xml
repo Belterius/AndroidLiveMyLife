@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="lml.androidlivemylife.PublishStoryActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="57dp">
+
+        <TextView
+            android:id="@+id/titleStory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:textSize="30dp"
+            android:text="Title"
+            android:textAlignment="center" />
+
+        <ImageButton
+            android:id="@+id/edit_story_previous_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:rotation="180"
+            android:scaleType="fitCenter"
+            android:src="@drawable/right_arrow" />
+
+        <ImageButton
+            android:id="@+id/edit_story_validate_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/checked" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/story_highlight_edit"
+            android:layout_width="match_parent"
+            android:layout_height="151dp"
+            android:src="@android:drawable/picture_frame" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/story_title_edit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Title"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/story_description_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:height="100dp"
+            android:autoLink="web"
+            android:ems="10"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:verticalScrollbarPosition="right" />
+    </LinearLayout>
+
+</LinearLayout>

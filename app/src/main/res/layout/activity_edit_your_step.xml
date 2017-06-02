@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="122dp"
             android:gravity="top"
-            android:hint="@string/prompt_description_step"
+            android:hint="@string/prompt_description_short"
             android:lines="4"
             android:verticalScrollbarPosition="right" />
     </android.support.design.widget.TextInputLayout>

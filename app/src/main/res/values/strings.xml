@@ -55,6 +55,7 @@
     <string name="title_your_story">Your story</string>
     <string name="prompt_new_title">Title of the story</string>
     <string name="prompt_story_description">Enter a description for the current story</string>
+    <string name="prompt_description_short">Enter a description</string>
 
 
 </resources>

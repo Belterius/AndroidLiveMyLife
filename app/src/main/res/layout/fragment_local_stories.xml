@@ -9,6 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/title_local_stories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"/>
+
         <FrameLayout
             android:id="@+id/fragment_local_stories"
             android:layout_width="match_parent"
@@ -27,7 +36,6 @@
                     android:dividerHeight="1dp"
                     android:paddingLeft="2dp" >
                 </ListView>
-
 
         </FrameLayout>
 

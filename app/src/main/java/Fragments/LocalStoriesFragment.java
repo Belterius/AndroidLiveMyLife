@@ -1,4 +1,4 @@
-package Fragment;
+package Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,8 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,13 +45,24 @@ public class LocalStoriesFragment extends Fragment {
 
     final public String TAG = "localStories";
 
+    private TextView title_local_stories;
     private ListView lv;
-    private ArrayAdapter<Story> arrayAdapter;
+    private LocalStoriesAdapter localStoriesAdapter;
+    private ArrayList<Story> storyArrayList;
+    private int lastItemOpened;
 
     private GlobalState gs;
 
     public LocalStoriesFragment() {
         // Required empty public constructor
+    }
+
+    public int getLastItemOpened() {
+        return lastItemOpened;
+    }
+
+    public LocalStoriesAdapter getLocalStoriesAdapter() {
+        return localStoriesAdapter;
     }
 
     /**
@@ -79,6 +91,7 @@ public class LocalStoriesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        storyArrayList = new ArrayList<>();
         gs = new GlobalState();
     }
 
@@ -92,9 +105,26 @@ public class LocalStoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
+        title_local_stories = (TextView) rootView.findViewById(R.id.title_local_stories);
         lv = (ListView) rootView.findViewById(R.id.listView);
-        arrayAdapter = new ArrayAdapter<Story>(this.getActivity(), android.R.layout.simple_list_item_1);
-        lv.setAdapter(arrayAdapter);
+
+        localStoriesAdapter = new LocalStoriesAdapter(this.getActivity(), storyArrayList, this);
+        lv.setAdapter(localStoriesAdapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int position, long arg3) {
+                if(lv.getChildAt(position).findViewById(R.id.buttonshidden).getVisibility() == View.GONE){
+                    showButtons(position);
+                    lastItemOpened = position;
+                }
+                else{
+                    hideButtons(position);
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -104,17 +134,33 @@ public class LocalStoriesFragment extends Fragment {
         getPersonalStories();
     }
 
-    public void getPersonalStories(){
+    public void showButtons(int position){
+        if(lastItemOpened != position){
+            View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
+            toHide.setVisibility(View.GONE);
+        }
+        View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
+        v.setVisibility(View.VISIBLE);
+    }
 
+    public void hideButtons(int position){
+        View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
+        v.setVisibility(View.GONE);
+    }
+
+    /**
+     * Récupère les stories de l'utilisateur courant (utilisation de la variable de session côté serveur)
+     */
+    public void getPersonalStories(){
         Map<String, String> dataToPass = new HashMap<>();
         dataToPass.put("action", "getPersonalStories");
 
-        RequestClass.doRequestWithApi(this.getContext(), this.TAG,dataToPass, this::getMyPersonalStories);
+        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::getMyPersonalStories);
     }
 
     public boolean getMyPersonalStories(JSONObject o){
         try {
-            ArrayList<Story> storyArrayList  = new ArrayList<>();
+            storyArrayList.clear();
             JSONArray stories = o.getJSONArray("stories");
             if(o.getInt("status") == 200 && stories != null){
                 for(int i=0; i<stories.length(); i++){
@@ -123,20 +169,26 @@ public class LocalStoriesFragment extends Fragment {
                             json_data.getString("storyTitle"),
                             json_data.getString("storyDescription"),
                             json_data.getString("storyPicture"),
-                            Boolean.valueOf(json_data.getString("storyIsPublished")));
+                            "1".equals(json_data.getString("storyIsPublished")));
                     storyArrayList.add(story);
                 }
-                arrayAdapter.addAll(storyArrayList);
+
+                localStoriesAdapter.notifyDataSetChanged();
                 return true;
             }else{
                 ToastClass.toastError(this.getActivity(), o.getString("feedback"));
             }
 
         } catch (JSONException e) {
+            this.title_local_stories.setText("No stories created yet. Start sharing !");
             e.printStackTrace();
         }
 
         return false;
+    }
+
+    public ArrayList<Story> getStoryArrayList() {
+        return storyArrayList;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -59,8 +59,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".PublishStoryActivity" />
         <activity android:name=".EditMyProfileActivity" />
         <activity android:name=".ChangeMyPasswordActivity" />
 
@@ -76,6 +79,7 @@
 
         <activity android:name=".EditYourStepActivity" />
         <activity android:name=".CreateStoryActivity"></activity>
+        <activity android:name=".EditStoryActivity"></activity>
     </application>
 
 </manifest>

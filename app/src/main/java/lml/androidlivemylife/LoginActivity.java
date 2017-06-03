@@ -59,10 +59,21 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void signIn(View v){
+    /**
+     * Tries to sign in
+     * @param v
+     * @return success or failure
+     */
+    public Boolean signIn(View v){
 
         String email = editEmail.getText().toString();
         String password = editPassword.getText().toString();
+
+        if(email.equals("") || password.equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return false;
+        }
+
         String action = "signin";
 
         Map<String, String> dataToPass = new HashMap<>();
@@ -76,14 +87,25 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getMyAccount);
         }
+
+        return true;
     }
 
+    /**
+     * Creates a new Activity to register
+     * @param v
+     */
     public void goToRegister(View v){
         Intent nextView = new Intent(this,RegisterActivity.class);
         nextView.putExtra("email",this.editEmail.getText().toString());
         startActivity(nextView);
     }
 
+    /**
+     * Gets the response from the API server to login
+     * @param o
+     * @return
+     */
     public Boolean getMyAccount(JSONObject o){
 
         try {
@@ -132,7 +154,6 @@ public class LoginActivity extends AppCompatActivity {
                     goToMainPage();
                     return true;
                 }
-
 
             }else{
                 ToastClass.toastError(this, o.getString("feedback"));

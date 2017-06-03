@@ -1,4 +1,4 @@
-package Fragment;
+package Fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import ClassPackage.GlobalState;
 import lml.androidlivemylife.CreateStoryActivity;
+import lml.androidlivemylife.EditStoryActivity;
 import lml.androidlivemylife.EditYourStepActivity;
 import lml.androidlivemylife.MainActivity;
 import lml.androidlivemylife.R;
@@ -35,7 +36,7 @@ public class NewStoryFragment extends Fragment{
     private GlobalState gs;
     private ImageButton buttonCreateStep;
     private ImageButton buttonFinalizeStory;
-    private final int STATIC_RETURN_FROM_CREATE = 1;
+    private static final int STATIC_RETURN_FROM_CREATE = 1;
 
     // TODO: Rename and change types of parameters
 //    private String mParam1;
@@ -177,7 +178,8 @@ public class NewStoryFragment extends Fragment{
      * and to publish it
      */
     private void finalizeStory(){
-        Intent nextView = new Intent(this.getContext(), CreateStoryActivity.class);
+        Intent nextView = new Intent(this.getContext(), EditStoryActivity.class);
+        nextView.putExtra("isCreation", true);
         startActivityForResult(nextView, STATIC_RETURN_FROM_CREATE);
     }
 
@@ -187,9 +189,8 @@ public class NewStoryFragment extends Fragment{
         switch(requestCode) {
             case (STATIC_RETURN_FROM_CREATE) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    if(data.getBooleanExtra("isCreated", false)){
-                        ((MainActivity)getActivity()).getNavigation().setSelectedItemId( R.id.navigation_home);
-                    }
+                    //Return to my stories
+                    ((MainActivity)getActivity()).getNavigation().setSelectedItemId( R.id.navigation_home);
                 }
                 break;
             }

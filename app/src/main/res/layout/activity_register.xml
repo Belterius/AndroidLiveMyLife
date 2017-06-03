@@ -44,8 +44,9 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true">
 
-                        <ImageView
+                        <ImageButton
                             android:id="@+id/register_button_take_new_picture"
+                            android:background="@android:color/transparent"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_weight="1"
@@ -53,10 +54,12 @@
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:onClick="takeNewPicture"
-                            app:srcCompat="@drawable/photo_camera" />
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/photo_camera_with_white_border" />
 
-                        <ImageView
+                        <ImageButton
                             android:id="@+id/register_button_picture_from_gallery"
+                            android:background="@android:color/transparent"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentTop="true"
@@ -67,7 +70,8 @@
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:onClick="showFileChooser"
-                            app:srcCompat="@drawable/gallery" />
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/gallery_with_white_border" />
                     </RelativeLayout>
 
                 </RelativeLayout>

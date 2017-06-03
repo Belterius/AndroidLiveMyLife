@@ -75,7 +75,14 @@ public class EditYourStepActivity extends UploadPictureActivity {
      * @param v
      */
     public void publishStepAndGoToMyStory (View v){
+
         String stepDescription = this.stepDescription.getText().toString();
+
+        if(stepDescription.equals("") || bitmap == null){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return;
+        }
+
         String action = "publishStep";
 
         Map<String, String> dataToPass = new HashMap<>();

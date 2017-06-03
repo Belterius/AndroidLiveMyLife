@@ -56,7 +56,7 @@ public class RegisterActivity extends UploadPictureActivity {
     /**
      * Click on register
      * @param v
-     * @return
+     * @return success or failure
      */
     public boolean register(View v){
 
@@ -69,7 +69,12 @@ public class RegisterActivity extends UploadPictureActivity {
         String passwordConfirm = editPasswordConfirm.getText().toString();
 
         if(! password.equals(passwordConfirm)){
-            ToastClass.toastError(this, "Passwords are not the same !");
+            ToastClass.toastError(this, getString(R.string.error_passwords_and_confirm));
+            return false;
+        }
+
+        if(email.equals("") || pseudo.equals("") || firstname.equals("") || lastname.equals("") || description.equals("") || password.equals("") || passwordConfirm.equals("") || bitmap == null){
+            ToastClass.toastError(this, getString(R.string.error_fill_field));
             return false;
         }
 

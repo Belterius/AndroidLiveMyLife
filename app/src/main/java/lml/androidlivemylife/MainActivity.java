@@ -1,6 +1,7 @@
 package lml.androidlivemylife;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,17 +14,22 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import ClassPackage.GlobalState;
-import Fragment.BrowseStoryFragment;
-import Fragment.LocalStoriesFragment;
-import Fragment.MyAccountFragment;
-import Fragment.NewStoryFragment;
+import Fragments.BrowseStoryFragment;
+import Fragments.LocalStoriesFragment;
+import Fragments.MyAccountFragment;
+import Fragments.NewStoryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigation;
     private GlobalState gs;
+    private static final int result_from_publish = 1;
+    private static final int result_from_edit = 2;
 
     public BottomNavigationView getNavigation() {
         return navigation;
@@ -68,10 +74,20 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment myFragment = manager.findFragmentByTag("NewStoryFragment");
         if (myFragment == null || !myFragment.isVisible()) {
-            manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
-                    .commit();
+            Fragment myFragment2 = manager.findFragmentByTag("LocalStoriesFragment");
+            if(myFragment2 != null && myFragment2.isVisible()){
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.content_home, NewStoryFragment.newInstance("test", "test"), "NewStoryFragment")
+                        .commit();
+            }
+
         }
     }
 
@@ -79,10 +95,19 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment myFragment = manager.findFragmentByTag("BrowseStoryFragment");
         if (myFragment == null || !myFragment.isVisible()) {
-            manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                    .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
-                    .commit();
+            Fragment myFragment2 = manager.findFragmentByTag("MyAccountFragment");
+            if(myFragment2 != null && myFragment2.isVisible()){
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                        .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.content_home, BrowseStoryFragment.newInstance("test", "test"), "BrowseStoryFragment")
+                        .commit();
+            }
         }
     }
 
@@ -91,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment myFragment = manager.findFragmentByTag("MyAccountFragment");
         if (myFragment == null || !myFragment.isVisible()) {
             manager.beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.content_home, MyAccountFragment.newInstance("test", "test"), "MyAccountFragment")
                     .commit();
         }
@@ -123,9 +148,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void goToMaps(View v){
-        startActivity(new Intent(this, MapsActivity.class));
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (result_from_publish) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String newText = data.getStringExtra("backFromPublishStory");
+                    FragmentManager manager = getSupportFragmentManager();
+                    Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
+                    ((LocalStoriesFragment) myFragment).getPersonalStories();
+                }
+                break;
+            }
+            case (result_from_edit) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String newTitle = data.getStringExtra("newTitle");
+                    String newDescription = data.getStringExtra("newDescription");
+                    String newHighlight = data.getStringExtra("newHighlight");
+
+                    FragmentManager manager = getSupportFragmentManager();
+                    Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
+                    LocalStoriesFragment myLocalFragment = ((LocalStoriesFragment) myFragment);
+
+                    myLocalFragment.getStoryArrayList().get(myLocalFragment.getLastItemOpened()).setTitle(newTitle);
+                    myLocalFragment.getStoryArrayList().get(myLocalFragment.getLastItemOpened()).setDescription(newDescription);
+                    if(!newHighlight.equals("")){
+                        myLocalFragment.getStoryArrayList().get(myLocalFragment.getLastItemOpened()).setHighlight(newHighlight);
+                    }
+                    myLocalFragment.getLocalStoriesAdapter().notifyDataSetChanged();
+                }
+                break;
+            }
+        }
     }
+
+    public static int getResult_from_publish() {
+        return result_from_publish;
+    }
+
+    public static int getResult_from_edit() {
+        return result_from_edit;
+    }
+
+//    public void goToMaps(View v){
+//        startActivity(new Intent(this, MapsActivity.class));
+//    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean checkLocationPermission(){
@@ -158,6 +226,4 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
-
-
 }

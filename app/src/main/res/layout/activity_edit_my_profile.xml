@@ -9,13 +9,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="57dp"
         android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/title_my_profile"
@@ -26,14 +27,17 @@
         <ImageButton
             android:id="@+id/my_profile_validate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-            android:focusableInTouchMode="true"
+            android:elevation="0dp"
+            android:focusableInTouchMode="false"
             android:onClick="updateMyPersonalData"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:srcCompat="@drawable/btn_check_buttonless_on" />
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/checked" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -49,8 +53,9 @@
             android:layout_alignParentTop="true"
             app:srcCompat="@drawable/ic_menu_report_image" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView2"
+            android:background="@android:color/transparent"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
@@ -60,6 +65,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:onClick="showFileChooser"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/switch_image" />
 
     </RelativeLayout>

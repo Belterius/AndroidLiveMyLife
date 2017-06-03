@@ -100,6 +100,11 @@ public class EditMyProfileActivity extends UploadPictureActivity {
         String new_pseudo = editPseudo.getText().toString();
         String new_description = editDescription.getText().toString();
 
+        if(new_pseudo.equals("") || new_description.equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return false;
+        }
+
         if(!new_pseudo.equals(this.gs.getMyAccount().getPseudo()) || !new_description.equals(this.gs.getMyAccount().getDescription())){
 
             Map<String, String> dataToPass = new HashMap<>();

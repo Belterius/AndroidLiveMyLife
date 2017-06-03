@@ -42,12 +42,17 @@ public class ChangeMyPasswordActivity extends AppCompatActivity {
         String password_new = this.password_new.getText().toString();
         String password_new_confirm = this.password_new_confirm.getText().toString();
 
+        if(password_old.equals("") || password_new.equals("")|| password_new_confirm.equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return;
+        }
+
         if(password_old.equals(password_new)){
-            ToastClass.toastError(this, "The old password must be different from the new one !");
+            ToastClass.toastError(this, getString(R.string.error_oldPassword_equal_newPassword));
             return;
         }
         if(! password_new.toString().equals(password_new_confirm)){
-            ToastClass.toastError(this, "The new password and the confirmation password must be the same !");
+            ToastClass.toastError(this, getString(R.string.error_password_and_confirmation_different));
             return;
         }
 

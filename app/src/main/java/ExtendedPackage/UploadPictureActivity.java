@@ -218,7 +218,7 @@ public class UploadPictureActivity extends AppCompatActivity {
      * @param bmp
      * @return the encoded picture
      */
-    public String getStringImage(Bitmap bmp){
+    private String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 10, baos);
         byte[] imageBytes = baos.toByteArray();

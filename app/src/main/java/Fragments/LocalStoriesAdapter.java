@@ -49,7 +49,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
     private GlobalState gs;
     private int position;
-    private int lastRemoved;
+    private int lastRemoved = -1;
     private String title;
     private static final int result_from_publish = 1;
     private String TAG = "localStories";
@@ -164,7 +164,6 @@ public class LocalStoriesAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if( ! data.get(position).isPublished()){
-
                     Intent nextView = new Intent(fragment.getContext(), EditStoryActivity.class);
                     nextView.putExtra("isCreation", false);
                     nextView.putExtra("storyId", data.get(position).getIdStory());
@@ -199,7 +198,6 @@ public class LocalStoriesAdapter extends BaseAdapter {
                             public void run() {
                                 lastRemoved = position;
                                 fragment.getStoryArrayList().remove(lastRemoved);
-                                lastRemoved = -1;
                                 notifyDataSetChanged();
                                 animation.cancel();
                             }
@@ -282,5 +280,17 @@ public class LocalStoriesAdapter extends BaseAdapter {
         }
 
         return false;
+    }
+
+    public int getLastRemoved() {
+        return lastRemoved;
+    }
+
+    public void setLastRemoved(int lastRemoved) {
+        this.lastRemoved = lastRemoved;
+    }
+
+    public void resetLastRemoved(){
+        lastRemoved = -1;
     }
 }

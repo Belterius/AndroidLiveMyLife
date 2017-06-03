@@ -135,10 +135,13 @@ public class LocalStoriesFragment extends Fragment {
     }
 
     public void showButtons(int position){
-        if(lastItemOpened != position){
-            View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
-            toHide.setVisibility(View.GONE);
+        if(lastItemOpened != position && localStoriesAdapter.getLastRemoved() == -1){
+                View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
+                toHide.setVisibility(View.GONE);
+        }else{
+            localStoriesAdapter.resetLastRemoved();
         }
+
         View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
         v.setVisibility(View.VISIBLE);
     }

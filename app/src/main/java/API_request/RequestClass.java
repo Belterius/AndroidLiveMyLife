@@ -3,6 +3,7 @@ package API_request;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -69,6 +70,9 @@ public class RequestClass {
                     return paramsToPass;
                 }
             };
+
+            jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             // Access the RequestQueue through your singleton class.
             MySingletonRequestApi.getInstance(c).addToRequestQueue(jsObjRequest);

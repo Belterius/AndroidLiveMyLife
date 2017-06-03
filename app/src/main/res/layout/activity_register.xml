@@ -23,14 +23,58 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/register_imageView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:onClick="showFileChooser"
-                    app:srcCompat="@drawable/add_image" />
+                <RelativeLayout
+                    android:id="@+id/my_profile_relative_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <ImageView
+                        android:id="@+id/register_imageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:srcCompat="@drawable/add_image" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true">
+
+                        <ImageButton
+                            android:id="@+id/register_button_take_new_picture"
+                            android:background="@android:color/transparent"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:onClick="takeNewPicture"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/photo_camera_with_white_border" />
+
+                        <ImageButton
+                            android:id="@+id/register_button_picture_from_gallery"
+                            android:background="@android:color/transparent"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="15dp"
+                            android:layout_toEndOf="@+id/register_button_take_new_picture"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:onClick="showFileChooser"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/gallery_with_white_border" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,6 +157,7 @@
                     android:height="100dp"
                     android:autoLink="web"
                     android:ems="10"
+                    android:gravity="top"
                     android:hint="@string/prompt_description"
                     android:inputType="textMultiLine"
                     android:verticalScrollbarPosition="right" />

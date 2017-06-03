@@ -57,6 +57,14 @@ public class LocalStoriesFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public int getLastItemOpened() {
+        return lastItemOpened;
+    }
+
+    public LocalStoriesAdapter getLocalStoriesAdapter() {
+        return localStoriesAdapter;
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -127,10 +135,13 @@ public class LocalStoriesFragment extends Fragment {
     }
 
     public void showButtons(int position){
-        if(lastItemOpened != position){
-            View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
-            toHide.setVisibility(View.GONE);
+        if(lastItemOpened != position && localStoriesAdapter.getLastRemoved() == -1){
+                View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
+                toHide.setVisibility(View.GONE);
+        }else{
+            localStoriesAdapter.resetLastRemoved();
         }
+
         View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
         v.setVisibility(View.VISIBLE);
     }

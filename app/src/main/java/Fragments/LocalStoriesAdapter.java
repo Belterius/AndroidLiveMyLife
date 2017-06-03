@@ -33,6 +33,7 @@ import ClassPackage.Story;
 import ClassPackage.ToastClass;
 import lml.androidlivemylife.EditMyProfileActivity;
 import lml.androidlivemylife.EditStoryActivity;
+import lml.androidlivemylife.MainActivity;
 import lml.androidlivemylife.PublishStoryActivity;
 import lml.androidlivemylife.R;
 
@@ -48,7 +49,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
     private GlobalState gs;
     private int position;
-    private int lastRemoved;
+    private int lastRemoved = -1;
     private String title;
     private static final int result_from_publish = 1;
     private String TAG = "localStories";
@@ -115,7 +116,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
                 .error(R.drawable.error_triangle)
                 .into(((ImageView)holder.img));
 
-        if(data.get(position).isPublished() == false){
+        if(! data.get(position).isPublished()){
             holder.imgb1.setImageResource(R.drawable.publish);
             holder.imgb2.setImageResource(R.drawable.edit);
         }
@@ -125,9 +126,11 @@ public class LocalStoriesAdapter extends BaseAdapter {
         }
         holder.imgb3.setImageResource(R.drawable.delete);
         holder.imgb1.setOnClickListener(new View.OnClickListener() {
+
+            //Publish
             @Override
             public void onClick(View v) {
-                if(data.get(position).isPublished() == false){
+                if(! data.get(position).isPublished()){
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
                     alert.setTitle("Publish");
                     alert.setMessage("Are you sure you want to publish this story?");
@@ -155,23 +158,28 @@ public class LocalStoriesAdapter extends BaseAdapter {
                 }
             }
         });
+
+        //Edit
         holder.imgb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(data.get(position).isPublished() == false){
+                if( ! data.get(position).isPublished()){
                     Intent nextView = new Intent(fragment.getContext(), EditStoryActivity.class);
+                    nextView.putExtra("isCreation", false);
                     nextView.putExtra("storyId", data.get(position).getIdStory());
                     nextView.putExtra("storyTitle", holder.title.getText().toString());
                     nextView.putExtra("storyDescription", holder.desc.getText().toString());
                     nextView.putExtra("storyHighlight", data.get(position).getHighlight());
                     nextView.putExtra("action", "edit");
-                    fragment.startActivity(nextView);
+                    fragment.getActivity().startActivityForResult(nextView, MainActivity.getResult_from_edit());
                 }
                 else{
                     Toast.makeText(parent.getContext(), "Twitter - " + holder.title.getText(), Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        //Remove
         holder.imgb3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +198,6 @@ public class LocalStoriesAdapter extends BaseAdapter {
                             public void run() {
                                 lastRemoved = position;
                                 fragment.getStoryArrayList().remove(lastRemoved);
-                                lastRemoved = -1;
                                 notifyDataSetChanged();
                                 animation.cancel();
                             }
@@ -261,7 +268,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
             if(o.getInt("status") == 200){
                 Intent nextView = new Intent(fragment.getActivity(), PublishStoryActivity.class);
                 nextView.putExtra("storyTitle", this.title);
-                fragment.getActivity().startActivityForResult(nextView, result_from_publish);
+                fragment.getActivity().startActivityForResult(nextView, MainActivity.getResult_from_publish());
                 return true;
 
             }else{
@@ -273,5 +280,17 @@ public class LocalStoriesAdapter extends BaseAdapter {
         }
 
         return false;
+    }
+
+    public int getLastRemoved() {
+        return lastRemoved;
+    }
+
+    public void setLastRemoved(int lastRemoved) {
+        this.lastRemoved = lastRemoved;
+    }
+
+    public void resetLastRemoved(){
+        lastRemoved = -1;
     }
 }

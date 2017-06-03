@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="lml.androidlivemylife.EditYourStepActivity"
+android:orientation="vertical"
+android:paddingLeft="20dp"
+android:paddingRight="20dp"
+tools:layout_editor_absoluteX="8dp"
+tools:layout_editor_absoluteY="8dp">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="57dp">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:fontFamily="serif"
+        android:text="@string/title_your_story"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <ImageButton
+        android:id="@+id/your_story_plus_button"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="false"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        android:rotation="180"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/plus" />
+
+    <ImageButton
+        android:id="@+id/your_story_next_button"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/right_arrow" />
+</RelativeLayout>
+
+</LinearLayout>

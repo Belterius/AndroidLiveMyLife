@@ -14,6 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import ClassPackage.GlobalState;
 import Fragments.BrowseStoryFragment;
@@ -26,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private GlobalState gs;
     private static final int result_from_publish = 1;
+    private static final int result_from_edit = 2;
+
+    public BottomNavigationView getNavigation() {
+        return navigation;
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -139,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -152,6 +161,25 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             }
+            case (result_from_edit) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String newTitle = data.getStringExtra("newTitle");
+                    String newDescription = data.getStringExtra("newDescription");
+                    String newHighlight = data.getStringExtra("newHighlight");
+
+                    FragmentManager manager = getSupportFragmentManager();
+                    Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
+                    LocalStoriesFragment myLocalFragment = ((LocalStoriesFragment) myFragment);
+
+                    myLocalFragment.getStoryArrayList().get(myLocalFragment.getLastItemOpened()).setTitle(newTitle);
+                    myLocalFragment.getStoryArrayList().get(myLocalFragment.getLastItemOpened()).setDescription(newDescription);
+                    if(!newHighlight.equals("")){
+                        myLocalFragment.getStoryArrayList().get(myLocalFragment.getLastItemOpened()).setHighlight(newHighlight);
+                    }
+                    myLocalFragment.getLocalStoriesAdapter().notifyDataSetChanged();
+                }
+                break;
+            }
         }
     }
 
@@ -159,9 +187,13 @@ public class MainActivity extends AppCompatActivity {
         return result_from_publish;
     }
 
-    public void goToMaps(View v){
-        startActivity(new Intent(this, MapsActivity.class));
+    public static int getResult_from_edit() {
+        return result_from_edit;
     }
+
+//    public void goToMaps(View v){
+//        startActivity(new Intent(this, MapsActivity.class));
+//    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean checkLocationPermission(){
@@ -194,5 +226,4 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
-
 }

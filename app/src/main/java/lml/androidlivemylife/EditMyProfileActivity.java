@@ -74,8 +74,9 @@ public class EditMyProfileActivity extends UploadPictureActivity {
         setContentView(R.layout.activity_edit_my_profile);
 
         editPseudo = (EditText) findViewById(R.id.my_profile_pseudo_edit);
-        imageViewPicturePreview = (ImageView) findViewById(R.id.my_profile_picture_edit);
         editDescription = (EditText) findViewById(R.id.my_profile_bio_edit);
+
+        this.setImageViewForUploadClass(R.id.my_profile_picture_edit);
 
         gs = new GlobalState();
 
@@ -99,6 +100,11 @@ public class EditMyProfileActivity extends UploadPictureActivity {
         String new_pseudo = editPseudo.getText().toString();
         String new_description = editDescription.getText().toString();
 
+        if(new_pseudo.equals("") || new_description.equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return false;
+        }
+
         if(!new_pseudo.equals(this.gs.getMyAccount().getPseudo()) || !new_description.equals(this.gs.getMyAccount().getDescription())){
 
             Map<String, String> dataToPass = new HashMap<>();
@@ -114,7 +120,7 @@ public class EditMyProfileActivity extends UploadPictureActivity {
 
             Map<String, String> dataToPass = new HashMap<>();
             dataToPass.put("action", "updatePhotoUser");
-            dataToPass.put("photo", getStringImage(bitmap));
+            dataToPass.put("photo", getImageToPassForRequest());
             requestDoing++;
 
             RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::updateUser);

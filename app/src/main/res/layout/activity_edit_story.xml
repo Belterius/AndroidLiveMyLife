@@ -16,17 +16,16 @@
         android:layout_height="57dp">
 
         <TextView
-            android:id="@+id/titleStory"
+            android:id="@+id/edit_story_titleStory_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_weight="1"
             android:fontFamily="serif"
-            android:textSize="30dp"
-            android:text="Title"
-            android:textAlignment="center" />
+            android:text="@string/title"
+            android:textAlignment="center"
+            android:textSize="30dp" />
 
         <ImageButton
             android:id="@+id/edit_story_previous_button"
@@ -55,58 +54,87 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_height="130dp"
+        android:layout_marginBottom="15dp">
 
         <ImageView
-            android:id="@+id/story_highlight_edit"
+            android:id="@+id/edit_story_picture_edit"
             android:layout_width="match_parent"
-            android:layout_height="151dp"
-            android:src="@android:drawable/picture_frame" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/add_image" />
 
-    <LinearLayout
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+            <ImageButton
+                android:id="@+id/edit_story_button_take_new_picture"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@android:color/transparent"
+                android:contentDescription=""
+                android:elevation="0dp"
+                android:focusableInTouchMode="false"
+                android:onClick="takeNewPicture"
+                android:scaleType="fitCenter"
+                android:src="@drawable/photo_camera_with_white_border" />
+
+            <ImageButton
+                android:id="@+id/edit_story_button_galery"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/edit_story_button_take_new_picture"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:onClick="showFileChooser"
+                android:scaleType="fitCenter"
+                android:src="@drawable/gallery_with_white_border" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/story_title_edit"
-            android:layout_width="fill_parent"
+            android:id="@+id/edit_story_title_edit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Title"
+            android:height="10dp"
+            android:hint="@string/prompt_new_title"
             android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/story_description_edit"
+            android:id="@+id/edit_story_description_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:height="100dp"
             android:autoLink="web"
             android:ems="10"
-            android:hint="Description"
+            android:gravity="top"
+            android:hint="@string/prompt_description_short"
             android:inputType="textMultiLine"
             android:maxLines="4"
-            android:singleLine="false"
             android:verticalScrollbarPosition="right" />
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

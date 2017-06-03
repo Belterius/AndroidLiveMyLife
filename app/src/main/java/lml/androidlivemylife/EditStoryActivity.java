@@ -1,5 +1,6 @@
 package lml.androidlivemylife;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,11 @@ import java.util.Map;
 
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
+import ClassPackage.Story;
 import ClassPackage.ToastClass;
+import ExtendedPackage.UploadPictureActivity;
 
-public class EditStoryActivity extends AppCompatActivity {
+public class EditStoryActivity extends UploadPictureActivity {
 
     final public String TAG = "publishStory";
     private GlobalState gs;
@@ -29,10 +32,19 @@ public class EditStoryActivity extends AppCompatActivity {
     private TextView pageTitle;
     private TextView title_to_edit;
     private TextView description_to_edit;
+
+    /**
+     * If false : it is edition
+     * If true : it is creation
+     */
+    private Boolean isCreation;
+
     private String old_title;
     private String old_description;
     private String old_highlight;
-    private ImageView highlight_to_edit;
+
+//    private ImageView highlight_to_edit;
+
     private ImageButton previousarrow;
     private ImageButton validate;
 
@@ -41,41 +53,59 @@ public class EditStoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_story);
 
-        pageTitle = (TextView) findViewById(R.id.titleStory);
-        title_to_edit = (TextView) findViewById(R.id.story_title_edit);
-        description_to_edit = (TextView) findViewById(R.id.story_description_edit);
-        highlight_to_edit = (ImageView) findViewById(R.id.story_highlight_edit);
+        pageTitle = (TextView) findViewById(R.id.edit_story_titleStory_text);
+        title_to_edit = (TextView) findViewById(R.id.edit_story_title_edit);
+        description_to_edit = (TextView) findViewById(R.id.edit_story_description_edit);
+
+        this.setImageViewForUploadClass(R.id.edit_story_picture_edit);
+
         previousarrow = (ImageButton) findViewById(R.id.edit_story_previous_button);
         validate = (ImageButton) findViewById(R.id.edit_story_validate_button);
 
         Bundle b = this.getIntent().getExtras();
-        storyId = b.getString("storyId");
-        pageTitle.setText("Edit " + b.getString("storyTitle").toString());
-        title_to_edit.setText(b.getString("storyTitle").toString());
-        old_title = b.getString("storyTitle").toString();
-        description_to_edit.setText(b.getString("storyDescription").toString());
-        old_description = b.getString("storyDescription").toString();
-        old_highlight = b.getString("storyHighlight").toString();
 
-        Picasso.with(this.getApplicationContext())
-                .load(b.getString("storyHighlight").toString())
+        isCreation = b.getBoolean("isCreation");
+
+        if(! isCreation){
+            //It is edition => Pre-fill labels
+            storyId = b.getString("storyId");
+            pageTitle.setText(getString(R.string.title_edit_and_other_name) + b.getString("storyTitle").toString());
+            title_to_edit.setText(b.getString("storyTitle").toString());
+            old_title = b.getString("storyTitle").toString();
+            description_to_edit.setText(b.getString("storyDescription").toString());
+            old_description = b.getString("storyDescription").toString();
+            old_highlight = b.getString("storyHighlight").toString();
+
+            Picasso.with(this.getApplicationContext())
+                    .load(b.getString("storyHighlight").toString())
 //                .placeholder(R.drawable.loading_gears)
-//                .error(R.drawable.ic_menu_report_image)
-                .error(R.drawable.error_triangle)
-                .into(((ImageView)highlight_to_edit));
+                    .error(R.drawable.ic_menu_report_image)
+//                .error(R.drawable.error_triangle)
+                    .into(((ImageView)this.imageViewPicturePreview));
 
+            validate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editStory();
+                }
+            });
+
+        }else{
+
+            pageTitle.setText(R.string.title_your_story);
+
+            validate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createStory();
+                }
+            });
+        }
 
         previousarrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goBackToLocalStories();
-            }
-        });
-
-        validate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editStory();
+                finish();
             }
         });
 
@@ -92,37 +122,114 @@ public class EditStoryActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    private void goBackToLocalStories(){
-        finish();
-    }
-
+    /**
+     * Sends the request to the API to edit the given story
+     */
     private void editStory(){
-        //TODO requeteBDD + retour sur écran d'accueil
-        if(old_description != description_to_edit.getText() || old_title != title_to_edit.getText()){ //|| bitmap != null
+
+        if(description_to_edit.getText().toString().equals("") || title_to_edit.getText().toString().equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return;
+        }
+
+        if(!old_description.equals(description_to_edit.getText().toString()) || old_title.equals(title_to_edit.getText().toString()) || bitmap != null){
 
             Map<String, String> dataToPass = new HashMap<>();
             dataToPass.put("action", "editStory");
             dataToPass.put("storyId", storyId);
-            dataToPass.put("title", title_to_edit.getText().toString());
-            dataToPass.put("description", description_to_edit.getText().toString());
-            dataToPass.put("highlight", old_highlight); //TODO REMPLACER PAR LE NOUVEAU HIGHLIGHT
+            dataToPass.put("storyTitle", title_to_edit.getText().toString());
+            dataToPass.put("storyDescription", description_to_edit.getText().toString());
+            dataToPass.put("storyPicture", bitmap != null ? this.getImageToPassForRequest() : "");
 
             RequestClass.doRequestWithApi(this, this.TAG,dataToPass, this::resultEditStory);
+        }else{
+            ToastClass.toastError(this, getString(R.string.error_any_modifications));
         }
     }
 
+    /**
+     * Gets the results from the API request to edit the given story
+     */
     public boolean resultEditStory(JSONObject o){
         try {
             if(o.getInt("status") == 200){
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
+
+                JSONObject newCurrentStory = o.getJSONObject("story");
+
+                if(newCurrentStory != null){
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("newTitle", newCurrentStory.getString("storyTitle"));
+                    resultIntent.putExtra("newDescription", newCurrentStory.getString("storyDescription"));
+                    resultIntent.putExtra("newHighlight", newCurrentStory.getString("pictureUrl"));
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+
+                    return true;
+                }
             }
             else{
                 ToastClass.toastError(this, o.getString("feedback"));
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Sends the request to the API to create the current story
+     * @return success or failure
+     */
+    private Boolean createStory(){
+
+        String descriptionToPass = this.description_to_edit.getText().toString();
+        String titleToPass = this.title_to_edit.getText().toString();
+
+        if(descriptionToPass.equals("") || titleToPass.equals("") || bitmap == null){
+            ToastClass.toastError(this, getString(R.string.error_fill_field));
+            return false;
+        }
+
+        String action = "createStory";
+
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", action);
+        dataToPass.put("storyId", this.gs.getMyAccount().getMyCurrentStory().getIdStory());
+        dataToPass.put("storyTitle", titleToPass);
+        dataToPass.put("storyDescription", descriptionToPass);
+        dataToPass.put("storyPicture", getImageToPassForRequest());
+
+
+        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::finalizeCreateStory);
+
+        return true;
+    }
+
+    /**
+     * Gets the results from the API request to create the current story
+     */
+    private Boolean finalizeCreateStory(JSONObject o){
+
+        try {
+
+            if(o.getInt("status") == 200){
+
+                JSONObject newCurrentStory = o.getJSONObject("newCurrentStory");
+
+                if(newCurrentStory != null){
+
+                    this.gs.getMyAccount().setMyCurrentStory(new Story(newCurrentStory.getString("id")));
+
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_OK, resultIntent);
+
+                    this.finish();
+                    return true;
+                }
+            }else{
+                ToastClass.toastError(this, o.getString("feedback"));
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

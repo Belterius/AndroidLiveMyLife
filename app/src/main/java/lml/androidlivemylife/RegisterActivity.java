@@ -15,6 +15,7 @@ import java.util.Map;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import API_request.RequestClass;
+import ClassPackage.Story;
 import ClassPackage.ToastClass;
 import ExtendedPackage.UploadPictureActivity;
 
@@ -44,7 +45,7 @@ public class RegisterActivity extends UploadPictureActivity {
         editPasswordConfirm = (TextInputEditText) findViewById(R.id.register_password_confirm);
 
         //For extended class
-        this.imageViewPicturePreview = (ImageView) findViewById(R.id.register_imageView);
+        setImageViewForUploadClass(R.id.register_imageView);
 
         Bundle b = this.getIntent().getExtras();
         this.editEmail.setText(b.getString("email"));
@@ -55,7 +56,7 @@ public class RegisterActivity extends UploadPictureActivity {
     /**
      * Click on register
      * @param v
-     * @return
+     * @return success or failure
      */
     public boolean register(View v){
 
@@ -68,7 +69,12 @@ public class RegisterActivity extends UploadPictureActivity {
         String passwordConfirm = editPasswordConfirm.getText().toString();
 
         if(! password.equals(passwordConfirm)){
-            ToastClass.toastError(this, "Passwords are not the same !");
+            ToastClass.toastError(this, getString(R.string.error_passwords_and_confirm));
+            return false;
+        }
+
+        if(email.equals("") || pseudo.equals("") || firstname.equals("") || lastname.equals("") || description.equals("") || password.equals("") || passwordConfirm.equals("") || bitmap == null){
+            ToastClass.toastError(this, getString(R.string.error_fill_field));
             return false;
         }
 
@@ -82,7 +88,7 @@ public class RegisterActivity extends UploadPictureActivity {
         dataToPass.put("firstname", firstname);
         dataToPass.put("lastname", lastname);
         dataToPass.put("description", description);
-        dataToPass.put("photo", getStringImage(bitmap));
+        dataToPass.put("photo", getImageToPassForRequest());
 
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequest);
 
@@ -107,7 +113,8 @@ public class RegisterActivity extends UploadPictureActivity {
                         user.getString("firstname"),
                         user.getString("lastname"),
                         user.getString("description"),
-                        user.getString("photo")
+                        user.getString("photo"),
+                        new Story(user.getJSONObject("myCurrentStory").getString("id"))
                 ));
 
                 this.gs.setConnected(true);
@@ -128,7 +135,8 @@ public class RegisterActivity extends UploadPictureActivity {
                             user.getString("firstname"),
                             user.getString("lastname"),
                             user.getString("description"),
-                            user.getString("")
+                            user.getString(""),
+                            new Story(user.getJSONObject("myCurrentStory").getString("id"))
                     ));
 
                     ToastClass.toastError(this, o.getString("feedback"));
@@ -143,5 +151,4 @@ public class RegisterActivity extends UploadPictureActivity {
 
         return false;
     }
-
 }

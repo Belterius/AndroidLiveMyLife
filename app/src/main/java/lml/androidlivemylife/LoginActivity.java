@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +17,8 @@ import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import API_request.RequestClass;
+import ClassPackage.Step;
+import ClassPackage.Story;
 import ClassPackage.ToastClass;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,10 +59,21 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void signIn(View v){
+    /**
+     * Tries to sign in
+     * @param v
+     * @return success or failure
+     */
+    public Boolean signIn(View v){
 
         String email = editEmail.getText().toString();
         String password = editPassword.getText().toString();
+
+        if(email.equals("") || password.equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return false;
+        }
+
         String action = "signin";
 
         Map<String, String> dataToPass = new HashMap<>();
@@ -73,14 +87,25 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getMyAccount);
         }
+
+        return true;
     }
 
+    /**
+     * Creates a new Activity to register
+     * @param v
+     */
     public void goToRegister(View v){
         Intent nextView = new Intent(this,RegisterActivity.class);
         nextView.putExtra("email",this.editEmail.getText().toString());
         startActivity(nextView);
     }
 
+    /**
+     * Gets the response from the API server to login
+     * @param o
+     * @return
+     */
     public Boolean getMyAccount(JSONObject o){
 
         try {
@@ -102,10 +127,33 @@ public class LoginActivity extends AppCompatActivity {
                             user.getString("photo")
                     ));
 
+                    JSONObject myCurrentStory = user.getJSONObject("myCurrentStory");
+                    if(myCurrentStory != null){
+                        this.gs.getMyAccount().setMyCurrentStory(new Story(
+                                myCurrentStory.getString("id")
+                        ));
+
+                        JSONArray mySteps = myCurrentStory.getJSONArray("steps");
+                        if(mySteps != null){
+
+                            for (int i = 0; i < mySteps.length(); i++) {
+                                JSONObject step = mySteps.getJSONObject(i);
+                                this.gs.getMyAccount().getMyCurrentStory().addStep(
+                                        new Step(
+                                                step.getString("stepId"),
+                                                step.getString("stepPicture"),
+                                                step.getString("stepGpsData"),
+                                                step.getString("stepDescription")
+                                        )
+                                );
+                            }
+
+                        }
+                    }
+
                     goToMainPage();
                     return true;
                 }
-
 
             }else{
                 ToastClass.toastError(this, o.getString("feedback"));

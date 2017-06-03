@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import ClassPackage.GlobalState;
-import lml.androidlivemylife.CreateStoryActivity;
 import lml.androidlivemylife.EditStoryActivity;
 import lml.androidlivemylife.EditYourStepActivity;
 import lml.androidlivemylife.MainActivity;

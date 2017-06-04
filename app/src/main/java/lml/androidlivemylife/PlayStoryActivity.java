@@ -93,5 +93,17 @@ public class PlayStoryActivity extends AppCompatActivity {
         this.finish();
     }
 
+    /**
+     * Go the the screen where they see the picture of the step
+     * @param v
+     */
+    public void goToStepDone(View v){
+        Intent nextView = new Intent(this.getApplication().getApplicationContext(), FinishedStepActivity.class);
+        startActivity(nextView);
+
+        //Removes from the stack this Activity
+        this.finish();
+    }
+
 
 }

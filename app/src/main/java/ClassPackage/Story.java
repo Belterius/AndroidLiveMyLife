@@ -1,5 +1,6 @@
 package ClassPackage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by Francois on 01/05/2017.
  */
 
-public class Story {
+public class Story implements Serializable {
     private String idStory;
     private String title;
     private String description;
@@ -15,7 +16,17 @@ public class Story {
     private boolean isPublished;
     private MyUser author;
     private List<Step> steps;
+    private boolean isLikedByThisUser;
+    private int currentStep = -1;
 
+    /**
+     * Constructor
+     * @param idStory
+     * @param title
+     * @param description
+     * @param highlight
+     * @param isPublished
+     */
     public Story(String idStory, String title, String description, String highlight, boolean isPublished) {
         this.idStory = idStory;
         this.title = title;
@@ -25,6 +36,30 @@ public class Story {
         this.steps = new ArrayList<Step>();
     }
 
+    /**
+     * Constructor
+     * @param idStory
+     * @param title
+     * @param description
+     * @param highlight
+     */
+    public Story(String idStory, String title, String description, String highlight) {
+        this.idStory = idStory;
+        this.title = title;
+        this.description = description;
+        this.highlight = highlight;
+        this.steps = new ArrayList<Step>();
+    }
+
+    /**
+     * Constructor
+     * @param idStory
+     * @param title
+     * @param description
+     * @param highlight
+     * @param isPublished
+     * @param steps
+     */
     public Story(String idStory, String title, String description, String highlight, boolean isPublished, List<Step> steps ) {
         this.idStory = idStory;
         this.title = title;
@@ -34,10 +69,17 @@ public class Story {
         this.steps = steps;
     }
 
+    /**
+     * Default constructor
+     */
     public Story() {
         this.steps = new ArrayList<Step>();
     }
 
+    /**
+     * Constructor with id story
+     * @param idStory
+     */
     public Story(String idStory){
         this.idStory = idStory;
         this.steps = new ArrayList<Step>();
@@ -106,5 +148,21 @@ public class Story {
 
     public void addStep(Step step){
         this.steps.add(step);
+    }
+
+    public boolean isLikedByThisUser() {
+        return isLikedByThisUser;
+    }
+
+    public void setLikedByThisUser(boolean likedByThisUser) {
+        isLikedByThisUser = likedByThisUser;
+    }
+
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
+    public void setCurrentStep(int currentStep) {
+        this.currentStep = currentStep;
     }
 }

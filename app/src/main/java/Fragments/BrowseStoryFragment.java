@@ -1,14 +1,29 @@
 package Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import API_request.RequestClass;
 import ClassPackage.GlobalState;
+import ClassPackage.MyUser;
+import ClassPackage.Step;
+import ClassPackage.Story;
+import ClassPackage.ToastClass;
+import lml.androidlivemylife.StartStoryActivity;
 import lml.androidlivemylife.R;
 
 
@@ -26,11 +41,15 @@ public class BrowseStoryFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    final public String TAG = "browseStory";
+
     private GlobalState gs;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Story myStoryToPlay;
 
     private OnFragmentInteractionListener mListener;
 
@@ -57,6 +76,89 @@ public class BrowseStoryFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getStoryToPlay();
+    }
+
+    /**
+     * Sends the request to the API server - gets the data about the story to play
+     */
+    public void getStoryToPlay(){
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getStoryToPlayWithSteps");
+        dataToPass.put("storyId", "27");
+
+        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::initializeStoryToPlay);
+    }
+
+    /**
+     * Gets the data from the API server about the story to play
+     * @param o
+     * @return
+     */
+    public Boolean initializeStoryToPlay(JSONObject o){
+
+        try {
+
+            if(o.getInt("status") == 200 &&  o.getJSONObject("story") != null){
+                JSONObject myStoryToPlay = o.getJSONObject("story");
+                if(myStoryToPlay != null){
+
+                    this.myStoryToPlay = new Story(
+                            myStoryToPlay.getString("id"),
+                            myStoryToPlay.getString("storyTitle"),
+                            myStoryToPlay.getString("storyDescription"),
+                            myStoryToPlay.getString("storyPicture")
+                    );
+
+                    JSONArray mySteps = myStoryToPlay.getJSONArray("steps");
+                    if(mySteps != null){
+
+                        for (int i = 0; i < mySteps.length(); i++) {
+                            JSONObject step = mySteps.getJSONObject(i);
+                            this.myStoryToPlay.addStep(
+                                    new Step(
+                                            step.getString("stepId"),
+                                            step.getString("stepPicture"),
+                                            step.getString("stepGpsData"),
+                                            step.getString("stepDescription")
+                                    )
+                            );
+                        }
+                    }
+
+                    JSONObject myAuthor = myStoryToPlay.getJSONObject("user");
+                    if(myAuthor != null){
+                        this.myStoryToPlay.setAuthor(new MyUser(
+                                myAuthor.getString("id"),
+                                myAuthor.getString("email"),
+                                myAuthor.getString("pseudo"),
+                                myAuthor.getString("firstname"),
+                                myAuthor.getString("lastname"),
+                                myAuthor.getString("description"),
+                                myAuthor.getString("photo")
+                        ));
+                    }
+
+                    this.myStoryToPlay.setLikedByThisUser(myStoryToPlay.getBoolean("isLikedByMe"));
+                }
+                Button button = (Button) getView().findViewById(R.id.test_play_story);
+                button.setVisibility(View.VISIBLE);
+
+                return true;
+            }else{
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -65,13 +167,31 @@ public class BrowseStoryFragment extends Fragment {
         }
 
         gs = new GlobalState();
+
+    }
+
+    public void goToPlayStory(){
+        Intent nextView = new Intent(this.getContext(), StartStoryActivity.class);
+        nextView.putExtra("storyToPlay", this.myStoryToPlay);
+        startActivity(nextView);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_browse_story, container, false);
+        View v = inflater.inflate(R.layout.fragment_browse_story, container, false);
+        Button button = (Button) v.findViewById(R.id.test_play_story);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                goToPlayStory();
+            }
+        });
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

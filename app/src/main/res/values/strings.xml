@@ -64,6 +64,19 @@
     <string name="error_oldPassword_equal_newPassword">The old password must be different from the new one !</string>
     <string name="error_password_and_confirmation_different">The new password and the confirmation password must be the same !</string>
     <string name="title">Title</string>
+    <string name="estimated_time">Estimated time :</string>
+    <string name="by">By : </string>
+    <string name="story_like">You enjoyed this story ? Like it !</string>
+    <string name="description">Description :</string>
+    <string name="error_title_too_long">Title too long, please make it shorter ! (maximum 20 characters) </string>
+    <string name="title_delete">Delete</string>
+    <string name="confirmation_delete">Are you sure you want to delete this story?</string>
+    <string name="choice_yes">Yes</string>
+    <string name="choice_no">No</string>
+    <string name="title_publish">Publish</string>
+    <string name="confirmation_publish">Are you sure you want to publish this story?</string>
+    <string name="title_resume_story">Resume story ?</string>
+    <string name="alert_resume_story">Do you resume your story where you had left it ?</string>
 
 
 </resources>

@@ -58,14 +58,6 @@ public class StartStoryActivity extends AppCompatActivity {
                 .error(R.drawable.ic_menu_report_image)
                 .into(this.imageViewPicturePreview);
 
-        //Like / unlike
-        this.isLikedButton = (ImageButton) findViewById(R.id.start_story_isLike_button);
-        if(GlobalState.myCurrentPlayedStory.isLikedByThisUser()){
-            setOnClickListenerUnlike();
-        }else{
-            setOnClickListenerLike();
-        }
-
         //ETA
         //Pedestrian
         TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
@@ -74,6 +66,19 @@ public class StartStoryActivity extends AppCompatActivity {
         //Cyclist
         TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
         txt5.setText("x h");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Like / unlike
+        this.isLikedButton = (ImageButton) findViewById(R.id.start_story_isLike_button);
+        if(GlobalState.myCurrentPlayedStory.isLikedByThisUser()){
+            setOnClickListenerUnlike();
+        }else{
+            setOnClickListenerLike();
+        }
     }
 
     /**
@@ -139,6 +144,7 @@ public class StartStoryActivity extends AppCompatActivity {
     private Boolean getResponseFromServerToLikeStory(JSONObject o){
         try {
             if(o.getInt("status") == 200){
+                GlobalState.myCurrentPlayedStory.setLikedByThisUser(true);
                 setOnClickListenerUnlike();
                 return true;
             }else{
@@ -158,6 +164,7 @@ public class StartStoryActivity extends AppCompatActivity {
     private Boolean getResponseFromServerToUnlikeStory(JSONObject o){
         try {
             if(o.getInt("status") == 200){
+                GlobalState.myCurrentPlayedStory.setLikedByThisUser(false);
                 setOnClickListenerLike();
                 return true;
             }else{

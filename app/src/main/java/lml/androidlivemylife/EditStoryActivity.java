@@ -132,7 +132,7 @@ public class EditStoryActivity extends UploadPictureActivity {
             return;
         }
 
-        if(!old_description.equals(description_to_edit.getText().toString()) || old_title.equals(title_to_edit.getText().toString()) || bitmap != null){
+        if(!old_description.equals(description_to_edit.getText().toString()) || ! old_title.equals(title_to_edit.getText().toString()) || bitmap != null){
 
             Map<String, String> dataToPass = new HashMap<>();
             dataToPass.put("action", "editStory");

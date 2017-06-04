@@ -17,7 +17,7 @@ public class Story implements Serializable {
     private MyUser author;
     private List<Step> steps;
     private boolean isLikedByThisUser;
-    private int currentStep = -1;
+    private int indexCurrentStep = -1;
 
     /**
      * Constructor
@@ -158,11 +158,33 @@ public class Story implements Serializable {
         isLikedByThisUser = likedByThisUser;
     }
 
-    public int getCurrentStep() {
-        return currentStep;
+    public int getIndexCurrentStep() {
+        return indexCurrentStep;
     }
 
-    public void setCurrentStep(int currentStep) {
-        this.currentStep = currentStep;
+    public void setIndexCurrentStep(int indexCurrentStep) {
+        this.indexCurrentStep = indexCurrentStep;
+    }
+
+    /**
+     * Increment the index of the current step
+     */
+    public void incrementIndexCurrentStep(){
+        this.indexCurrentStep++;
+    }
+
+    /**
+     * Decrement the index of the current step
+     */
+    public void decrementIndexCurrentStep(){
+        this.indexCurrentStep--;
+    }
+
+    /**
+     * Gets the current played step
+     * @return
+     */
+    public Step getCurrentPlayedStep(){
+        return steps.get(indexCurrentStep);
     }
 }

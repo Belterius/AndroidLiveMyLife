@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,16 +37,20 @@ public class StartStoryActivity extends AppCompatActivity {
         Bundle b = this.getIntent().getExtras();
         GlobalState.myCurrentPlayedStory =  (Story) b.getSerializable("storyToPlay");
 
+        //Title
         TextView txt = (TextView) findViewById(R.id.start_story_title_textView);
         txt.setText(GlobalState.myCurrentPlayedStory.getTitle());
 
+        //Story made by : (and underline the text)
         TextView tx2 = (TextView) findViewById(R.id.start_story_by_textview);
         tx2.append(" " + GlobalState.myCurrentPlayedStory.getAuthor().getPseudo());
         tx2.setPaintFlags(tx2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+        //description
         TextView txt3 = (TextView) findViewById(R.id.start_story_description_textView);
         txt3.setText(GlobalState.myCurrentPlayedStory.getDescription());
 
+        //Picture - Highlight
         imageViewPicturePreview = (ImageView) findViewById(R.id.start_story_preview_picture);
         Picasso.with(this.getApplicationContext())
                 .load(GlobalState.myCurrentPlayedStory.getHighlight())
@@ -55,7 +58,7 @@ public class StartStoryActivity extends AppCompatActivity {
                 .error(R.drawable.ic_menu_report_image)
                 .into(this.imageViewPicturePreview);
 
-
+        //Like / unlike
         this.isLikedButton = (ImageButton) findViewById(R.id.start_story_isLike_button);
         if(GlobalState.myCurrentPlayedStory.isLikedByThisUser()){
             setOnClickListenerUnlike();
@@ -167,7 +170,7 @@ public class StartStoryActivity extends AppCompatActivity {
 
     public void playStory(View v){
         //Reset steps of this story
-        GlobalState.myCurrentPlayedStory.setCurrentStep(1);
+        GlobalState.myCurrentPlayedStory.setIndexCurrentStep(0);
         Intent nextView = new Intent(this.getApplication().getApplicationContext(), PlayStoryActivity.class);
         startActivity(nextView);
     }

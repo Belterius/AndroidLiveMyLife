@@ -80,7 +80,8 @@
         <activity android:name=".EditYourStepActivity" />
         <activity android:name=".EditStoryActivity" />
         <activity android:name=".StartStoryActivity" />
-        <activity android:name=".PlayStoryActivity"></activity>
+        <activity android:name=".PlayStoryActivity" />
+        <activity android:name=".FinishedStoryActivity"></activity>
     </application>
 
 </manifest>

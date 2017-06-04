@@ -25,7 +25,7 @@ tools:layout_editor_absoluteY="8dp">
             android:layout_weight="1"
             android:ellipsize="end"
             android:fontFamily="serif"
-            android:maxLength="15"
+            android:maxLength="20"
             android:maxLines="1"
             android:text="Story long text test blablabla"
             android:textAlignment="center"
@@ -98,21 +98,29 @@ tools:layout_editor_absoluteY="8dp">
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
+        android:padding="10dp"
         android:weightSum="1">
 
         <ImageView
             android:id="@+id/start_story_preview_picture"
             android:layout_width="109dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginRight="50dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_menu_report_image" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
 
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
 
         <TextView
             android:id="@+id/start_story_ETA_textview"

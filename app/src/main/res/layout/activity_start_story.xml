@@ -156,6 +156,7 @@ tools:layout_editor_absoluteY="8dp">
                         app:srcCompat="@drawable/pedestrian" />
 
                     <TextView
+                        android:id="@+id/start_story_pedestrian_time_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -181,7 +182,7 @@ tools:layout_editor_absoluteY="8dp">
                         app:srcCompat="@drawable/cyclist" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/start_story_cyclist_time_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

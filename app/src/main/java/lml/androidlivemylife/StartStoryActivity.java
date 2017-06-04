@@ -65,6 +65,15 @@ public class StartStoryActivity extends AppCompatActivity {
         }else{
             setOnClickListenerLike();
         }
+
+        //ETA
+        //Pedestrian
+        TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
+        txt4.setText("x h");
+
+        //Cyclist
+        TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
+        txt5.setText("x h");
     }
 
     /**

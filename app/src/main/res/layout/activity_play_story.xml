@@ -87,8 +87,12 @@
                 android:id="@+id/play_story_switch_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:splitTrack="true"
                 android:switchPadding="20dp"
-                android:text="Maps off" />
+                android:text="@string/maps_off"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                android:theme="@style/switchBlue" />
 
         </RelativeLayout>
 

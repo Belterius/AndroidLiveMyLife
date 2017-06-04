@@ -5,6 +5,8 @@ import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import ClassPackage.GlobalState;
@@ -29,6 +31,19 @@ public class PlayStoryActivity extends AppCompatActivity {
         //description
         TextView txt3 = (TextView) findViewById(R.id.play_story_description_textView);
         txt3.setText(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getDescription());
+
+        //Switch
+        Switch mySwitch = (Switch) findViewById(R.id.play_story_switch_button);
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //TODO - Change map - boussole
+                if(isChecked){
+                    mySwitch.setText(R.string.map_on);
+                }else{
+                    mySwitch.setText(R.string.map_off);
+                }
+            }
+        });
     }
 
     /**
@@ -77,4 +92,6 @@ public class PlayStoryActivity extends AppCompatActivity {
         //Removes from the stack this Activity
         this.finish();
     }
+
+
 }

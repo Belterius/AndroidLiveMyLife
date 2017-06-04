@@ -79,6 +79,8 @@
     <string name="alert_resume_story">Do you resume your story where you had left it ?</string>
     <string name="step">Step</string>
     <string name="story_finished">You finished the story</string>
+    <string name="map_off">Map off</string>
+    <string name="map_on">Map on</string>
 
 
 </resources>

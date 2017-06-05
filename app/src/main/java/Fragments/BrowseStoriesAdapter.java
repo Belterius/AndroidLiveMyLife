@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,11 +40,12 @@ import lml.androidlivemylife.R;
  * Created by Francois on 22/05/2017.
  */
 
-public class BrowseStoriesAdapter extends BaseAdapter {
+public class BrowseStoriesAdapter extends BaseAdapter implements Filterable {
 
     Context context;
     private BrowseStoryFragment fragment;
     ArrayList<Story> data = null;
+    ArrayList<Story> newData = null;
     private static LayoutInflater inflater=null;
     private GlobalState gs;
     private int position;
@@ -112,4 +115,38 @@ public class BrowseStoriesAdapter extends BaseAdapter {
 
         return rowView;
     }
+
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<Story> results = new ArrayList<Story>();
+                if (newData == null)
+                    newData = data;
+                if (constraint != null) {
+                    if (newData != null && newData.size() > 0) {
+                        for (final Story s : newData) {
+                            if (s.getTitle().toLowerCase().contains(constraint.toString())
+                                    || s.getDescription().toLowerCase().contains(constraint.toString())
+                                    || s.getAuthor().getPseudo().toLowerCase().contains(constraint.toString()))
+                                results.add(s);
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint,
+                                          FilterResults results) {
+                data = (ArrayList<Story>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
 }

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.wang.avi.AVLoadingIndicatorView;
@@ -42,7 +44,7 @@ import lml.androidlivemylife.StoryToPlayActivity;
  * Use the {@link BrowseStoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BrowseStoryFragment extends Fragment {
+public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryTextListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,6 +62,7 @@ public class BrowseStoryFragment extends Fragment {
     private BrowseStoriesAdapter browseStoriesAdapter;
     private ArrayList<Story> storyArrayList;
     private AVLoadingIndicatorView loader;
+    private SearchView searchView;
 
     private GlobalState gs;
 
@@ -111,10 +114,16 @@ public class BrowseStoryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_browse_story, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
         loader = (AVLoadingIndicatorView) rootView.findViewById(R.id.avi);
+        searchView = (SearchView) rootView.findViewById(R.id.searchView1);
 
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("Search Here");
 
         browseStoriesAdapter = new BrowseStoriesAdapter(this.getActivity(), storyArrayList, this);
         lv.setAdapter(browseStoriesAdapter);
+        lv.setTextFilterEnabled(true);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -141,6 +150,23 @@ public class BrowseStoryFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+        if (TextUtils.isEmpty(newText)) {
+            lv.clearTextFilter();
+        } else {
+            lv.setFilterText(newText);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        return false;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

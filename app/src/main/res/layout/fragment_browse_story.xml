@@ -20,10 +20,16 @@
             app:indicatorColor="@color/colorPrimary"
             />
 
+        <SearchView
+            android:id="@+id/searchView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <FrameLayout
             android:id="@+id/fragment_browse_story"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/searchView1"
             android:layout_above="@+id/navigation"
             >
 

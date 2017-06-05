@@ -61,6 +61,14 @@ public class BrowseStoriesAdapter extends BaseAdapter implements Filterable {
         gs = new GlobalState();
     }
 
+    public ArrayList<Story> getData() {
+        return data;
+    }
+
+    public ArrayList<Story> getNewData() {
+        return newData;
+    }
+
     @Override
     public int getCount() {
         // TODO Auto-generated method stub

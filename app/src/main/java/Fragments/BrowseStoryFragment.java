@@ -129,7 +129,7 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,
                                     int position, long arg3) {
-                Story s = (Story) storyArrayList.get(position);
+                Story s = (Story) browseStoriesAdapter.getData().get(position);
                 Intent nextView = new Intent(getActivity(), StoryToPlayActivity.class);
                 nextView.putExtra("storyTitle", s.getTitle().toString());
                 nextView.putExtra("authorPseudo", s.getAuthor().getPseudo().toString());

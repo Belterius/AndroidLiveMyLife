@@ -13,6 +13,7 @@ public class MyUser {
     private String lastname;
     private String description;
     private String picture;
+    private Story myCurrentStory;
 
     public MyUser(String idUser, String email, String pseudo, String firstname, String lastname, String description, String picture) {
         this.idUser = idUser;
@@ -22,6 +23,17 @@ public class MyUser {
         this.lastname = lastname;
         this.description = description;
         this.picture = picture;
+    }
+
+    public MyUser(String idUser, String email, String pseudo, String firstname, String lastname, String description, String picture, Story myCurrentStory) {
+        this.idUser = idUser;
+        this.email = email;
+        this.pseudo = pseudo;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.description = description;
+        this.picture = picture;
+        this.myCurrentStory = myCurrentStory;
     }
 
     public String getIdUser() {
@@ -66,5 +78,11 @@ public class MyUser {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public Story getMyCurrentStory(){return this.myCurrentStory;}
+
+    public void setMyCurrentStory(Story myCurrentStory) {
+        this.myCurrentStory = myCurrentStory;
     }
 }

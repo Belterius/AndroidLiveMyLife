@@ -1,4 +1,4 @@
-package Fragment;
+package Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.squareup.picasso.Picasso;
 
 import ClassPackage.GlobalState;
 import lml.androidlivemylife.EditMyProfileActivity;
@@ -146,7 +145,13 @@ public class MyAccountFragment extends Fragment {
         ((TextView) getView().findViewById(R.id.show_profile_name)).setText(this.gs.getMyAccount().getFirstname() + " " + this.gs.getMyAccount().getLastname());
         ((TextView) getView().findViewById(R.id.show_profile_pseudo)).setText(this.gs.getMyAccount().getPseudo());
         ((TextView) getView().findViewById(R.id.show_profile_description)).setText(this.gs.getMyAccount().getDescription());
-        //((ImageView)findViewById(R.id.show_profile_picture)).setImageResource(user.getString("photo").toString());
+
+        Picasso.with(this.getContext())
+            .load(this.gs.getMyAccount().getPicture())
+            .placeholder(R.drawable.loading_gears)
+            .error(R.drawable.ic_menu_report_image)
+            .into(((ImageView)getView().findViewById(R.id.show_profile_picture)));
+
         //TODO : charger aussi les différentes story et afficher le slider avec les preview
 
     }
@@ -157,29 +162,7 @@ public class MyAccountFragment extends Fragment {
 
     private void goToEditMyProfilePage(){
         Intent nextView = new Intent(this.getContext(),EditMyProfileActivity.class);
-
-        nextView.putExtra("pseudo",this.gs.getMyAccount().getPseudo().toString());
-        nextView.putExtra("description",this.gs.getMyAccount().getDescription().toString());
-        nextView.putExtra("photo",this.gs.getMyAccount().getPicture().toString());
-
         startActivity(nextView);
-    }
-
-    public Boolean postRequestGetUser(JSONObject o) {
-        try {
-            JSONObject user = o.getJSONArray("user").getJSONObject(0);
-            if(o.getInt("status") == 200 && user != null){
-                ((TextView) getView().findViewById(R.id.show_profile_name)).setText(user.getString("firstname").toString() + " " + user.getString("lastname").toString());
-                ((TextView) getView().findViewById(R.id.show_profile_description)).setText(user.getString("description").toString());
-                //((ImageView)findViewById(R.id.show_profile_picture)).setImageResource(user.getString("photo").toString());
-                //TODO : charger aussi les différentes story et afficher le slider avec les preview
-                return true;
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
 }

@@ -8,8 +8,13 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import API_request.MySingleton;
+import java.util.HashMap;
+import java.util.Map;
+
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
+import API_request.RequestClass;
+import ClassPackage.ToastClass;
 
 public class ChangeMyPasswordActivity extends AppCompatActivity {
 
@@ -37,31 +42,39 @@ public class ChangeMyPasswordActivity extends AppCompatActivity {
         String password_new = this.password_new.getText().toString();
         String password_new_confirm = this.password_new_confirm.getText().toString();
 
+        if(password_old.equals("") || password_new.equals("")|| password_new_confirm.equals("")){
+            ToastClass.toastError(this, getString(R.string.error_empty_field));
+            return;
+        }
+
         if(password_old.equals(password_new)){
-            this.gs.toastError(this, "The old password must be different from the new one !");
+            ToastClass.toastError(this, getString(R.string.error_oldPassword_equal_newPassword));
             return;
         }
         if(! password_new.toString().equals(password_new_confirm)){
-            this.gs.toastError(this, "The new password and the confirmation password must be the same !");
+            ToastClass.toastError(this, getString(R.string.error_password_and_confirmation_different));
             return;
         }
 
         String action = "updatePassword";
 
-        String qs = "action=" + action
-                + "&password_old=" + password_old
-                + "&password_new=" + password_new;
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", action);
+        dataToPass.put("password_old", password_old);
+        dataToPass.put("password_new", password_new);
 
-        this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::postRequestUpdatePassword);
+        //Avoid doing the request
+        RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequestUpdatePassword);
+
     }
 
     private Boolean postRequestUpdatePassword(JSONObject o){
         try {
             if(o.getInt("status") == 200){
-                finish();
+                this.finish();
                 return true;
             }else{
-                this.gs.toastError(this, o.getString("feedback"));
+                ToastClass.toastError(this, o.getString("feedback"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,8 +86,8 @@ public class ChangeMyPasswordActivity extends AppCompatActivity {
     @Override
     protected void onStop () {
         super.onStop();
-        if (MySingleton.getInstance(this).getRequestQueue() != null) {
-            MySingleton.getInstance(this).getRequestQueue().cancelAll(TAG);
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
         }
     }
 }

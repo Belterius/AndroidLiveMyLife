@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="57dp"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/title_my_profile"
@@ -28,50 +28,65 @@
             android:id="@+id/my_profile_validate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-            android:focusableInTouchMode="true"
+            android:elevation="0dp"
+            android:focusableInTouchMode="false"
             android:onClick="updateMyPersonalData"
-            app:srcCompat="@drawable/btn_check_buttonless_on" />
-    </LinearLayout>
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/checked" />
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/my_profile_relative_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:orientation="horizontal">
+        android:layout_height="130dp">
 
         <ImageView
             android:id="@+id/my_profile_picture_edit"
             android:layout_width="match_parent"
-            android:layout_height="151dp"
-            app:srcCompat="@android:drawable/picture_frame" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/ic_menu_report_image" />
 
-    <LinearLayout
+        <ImageButton
+            android:id="@+id/imageView2"
+            android:background="@android:color/transparent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:onClick="showFileChooser"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/switch_image" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/my_profile_pseudo_edit"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:height="10dp"
             android:hint="@string/prompt_pseudo"
             android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/my_profile_bio_edit"
@@ -81,18 +96,16 @@
             android:height="100dp"
             android:autoLink="web"
             android:ems="10"
+            android:gravity="top"
             android:hint="@string/prompt_description"
             android:inputType="textMultiLine"
             android:maxLines="4"
-            android:singleLine="false"
             android:verticalScrollbarPosition="right" />
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:orientation="horizontal">
 
         <Button

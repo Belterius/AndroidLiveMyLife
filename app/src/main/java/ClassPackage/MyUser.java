@@ -4,7 +4,7 @@ package ClassPackage;
  * Created by Gimlibéta on 30/04/2017.
  */
 
-public class Personne {
+public class MyUser {
 
     private String idUser;
     private String email;
@@ -14,7 +14,7 @@ public class Personne {
     private String description;
     private String picture;
 
-    public Personne(String idUser, String email, String pseudo, String firstname, String lastname, String description, String picture) {
+    public MyUser(String idUser, String email, String pseudo, String firstname, String lastname, String description, String picture) {
         this.idUser = idUser;
         this.email = email;
         this.pseudo = pseudo;

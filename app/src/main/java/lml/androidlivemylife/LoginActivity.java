@@ -7,19 +7,24 @@ import android.support.design.widget.TextInputEditText;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ClassPackage.Personne;
-import asyncRequest.RestActivity;
+import API_request.MySingleton;
+import ClassPackage.GlobalState;
+import ClassPackage.MyUser;
 
-public class LoginActivity extends RestActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText editEmail;
     private TextInputEditText editPassword;
+    final public String TAG = "login";
+    private GlobalState gs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +36,23 @@ public class LoginActivity extends RestActivity {
 
         editEmail.setText("email");
         editPassword.setText("test");
-
-        gs = (GlobalState) getApplication();
         checkLocationPermission();
+        gs = new GlobalState();
+    }
 
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingleton.getInstance(this).getRequestQueue() != null) {
+            MySingleton.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if(this.gs.connected){
+        if(gs.getConnected()){
             goToMainPage();
         }
     }
@@ -57,10 +68,10 @@ public class LoginActivity extends RestActivity {
                 + "&password=" +password;
 
         //Avoid doing the request
-        if(this.gs.connected && email.equals(this.gs.myAccount.getEmail())){
+        if(this.gs.getConnected() && email.equals(this.gs.getMyAccount().getEmail())){
             goToMainPage();
         }else{
-            sendRequest(qs,action);
+            this.gs.doRequestWithApi(this.getApplicationContext(), this.TAG, qs, this::getMyAccount);
         }
 
     }
@@ -71,41 +82,40 @@ public class LoginActivity extends RestActivity {
         startActivity(nextView);
     }
 
-    @Override
-    public void postRequest(JSONObject o, String action) {
-        switch (action){
-            case "signin" :
-                try {
+    public Boolean getMyAccount(JSONObject o){
 
-                    JSONObject user = o.getJSONObject("user");
-                    if(o.getInt("status") == 200 && user != null){
+        try {
+            JSONObject user = o.getJSONObject("user");
 
-                        this.gs.connected = true;
+            if(o.getInt("status") == 200 && user != null){
 
-                        this.gs.myAccount = new Personne(
-                                user.getString("id"),
-                                editEmail.getText().toString(),
-                                user.getString("pseudo"),
-                                user.getString("firstname"),
-                                user.getString("lastname"),
-                                user.getString("description"),
-                                user.getString("photo")
-                        );
+                this.gs.setConnected(true);
 
-                        goToMainPage();
-                    }else{
-                       this.toastError(o.getString("feedback"));
-                    }
+                this.gs.setMyAccount(new MyUser(
+                        user.getString("id"),
+                        editEmail.getText().toString(),
+                        user.getString("pseudo"),
+                        user.getString("firstname"),
+                        user.getString("lastname"),
+                        user.getString("description"),
+                        user.getString("photo")
+                ));
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
+                goToMainPage();
+                return true;
+            }else{
+                this.gs.toastError(this, o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        return false;
     }
 
     private void goToMainPage(){
-        Intent nextView = new Intent(this,MapsActivity.class);
+        Intent nextView = new Intent(this,MainActivity.class);
         startActivity(nextView);
         this.finish();
     }

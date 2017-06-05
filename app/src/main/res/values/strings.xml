@@ -23,7 +23,7 @@
     <string name="title_browse_story">Browse story</string>
     <string name="title_my_account">My account</string>
     <string name="title_activity_local_activities">localActivities</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">My Stories</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="prompt_pseudo">Pseudo</string>
@@ -33,13 +33,16 @@
     <string name="prompt_description">Enter your bio !</string>
     <string name="title_my_profile">My profile</string>
     <string name="change_password">Change my password</string>
-    <string name="prompt_my_pseudo" >My pseudo :</string>
+    <string name="prompt_my_pseudo">My pseudo :</string>
     <string name="prompt_my_name">My name :</string>
 
     <!-- Strings related to maps -->
     <string name="maps_test_button">Test Button</string>
     <string name="maps_test_edit">Test Button</string>
     <string name="maps_test_integer">Test Button</string>
+    <string name="prompt_new_password">New password</string>
+    <string name="prompt_new_password_confirm">Confirm new password</string>
+    <string name="prompt_old_password">Current password</string>
 
 
 </resources>

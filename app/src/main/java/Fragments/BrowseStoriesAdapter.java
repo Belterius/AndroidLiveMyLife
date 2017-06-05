@@ -90,15 +90,17 @@ public class BrowseStoriesAdapter extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.listview_item_row, null);
         this.position = position;
+        Story dataStory = data.get(position);
 
         holder.title=(TextView) rowView.findViewById(R.id.txtTitle);
         holder.desc=(TextView) rowView.findViewById(R.id.txtDesc);
         holder.img=(ImageView) rowView.findViewById(R.id.imgIcon);
         holder.author= (TextView) rowView.findViewById(R.id.txtAuthor);
 
-        holder.title.setText(data.get(position).getTitle());
-        holder.desc.setText(data.get(position).getDescription());
-        //holder.author.setText("by " + data.get(position).getAuthor().getFirstname() + data.get(position).getAuthor().getLastname());
+        holder.title.setText(dataStory.getTitle());
+        holder.desc.setText(dataStory.getDescription());
+        holder.author.setText(" by " + dataStory.getAuthor().getPseudo());
+        holder.author.setVisibility(View.VISIBLE);
 //        holder.img.setImageResource(R.drawable.magnifier);
         //holder.img.setImageResource(data.get(position).getHighlight());
         Picasso.with(context)

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
+import ClassPackage.MyUser;
 import ClassPackage.Story;
 import ClassPackage.ToastClass;
 import lml.androidlivemylife.R;
@@ -150,7 +151,7 @@ public class BrowseStoryFragment extends Fragment {
      * Récupère toutes les stories (les X prochaines à partir de l'offset défini en paramètre)
      */
     public void getMoreStories(int offset){
-        loader.show();
+        loader.smoothToShow();
         loader.bringToFront();
         Map<String, String> dataToPass = new HashMap<>();
         dataToPass.put("action", "getMoreStories");
@@ -165,16 +166,24 @@ public class BrowseStoryFragment extends Fragment {
             if(o.getInt("status") == 200 && stories != null){
                 for(int i=0; i<stories.length(); i++){
                     JSONObject json_data = stories.getJSONObject(i);
+                    MyUser author = new MyUser(json_data.getString("authorId"),
+                            json_data.getString("authorEmail"),
+                            json_data.getString("authorPseudo"),
+                            json_data.getString("authorFirstname"),
+                            json_data.getString("authorLastname"),
+                            json_data.getString("authorDescription"),
+                            json_data.getString("authorPhoto"));
                     Story story = new Story(json_data.getString("storyId"),
                             json_data.getString("storyTitle"),
                             json_data.getString("storyDescription"),
                             json_data.getString("storyPicture"),
-                            "1".equals(json_data.getString("storyIsPublished")));
+                            "1".equals(json_data.getString("storyIsPublished")),
+                            author);
                     storyArrayList.add(story);
                 }
 
                 browseStoriesAdapter.notifyDataSetChanged();
-                loader.hide();
+                loader.smoothToHide();
                 return true;
             }else{
                 ToastClass.toastError(this.getActivity(), o.getString("feedback"));
@@ -183,6 +192,7 @@ public class BrowseStoryFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        loader.smoothToHide();
         return false;
     }
 

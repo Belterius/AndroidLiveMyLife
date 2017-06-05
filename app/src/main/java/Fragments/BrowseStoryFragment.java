@@ -7,8 +7,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import API_request.RequestClass;
 import ClassPackage.GlobalState;
+import ClassPackage.Story;
+import ClassPackage.ToastClass;
 import lml.androidlivemylife.R;
 
 
@@ -26,13 +43,28 @@ public class BrowseStoryFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private GlobalState gs;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    final public String TAG = "browseStories";
+
+    private ListView lv;
+    private BrowseStoriesAdapter browseStoriesAdapter;
+    private ArrayList<Story> storyArrayList;
+    private AVLoadingIndicatorView loader;
+
+    private GlobalState gs;
+
+    public ArrayList<Story> getStoryArrayList() {
+        return storyArrayList;
+    }
+
+    public BrowseStoriesAdapter getBrowseStoriesAdapter() {
+        return browseStoriesAdapter;
+    }
 
     public BrowseStoryFragment() {
         // Required empty public constructor
@@ -64,14 +96,41 @@ public class BrowseStoryFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        storyArrayList = new ArrayList<>();
         gs = new GlobalState();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_browse_story, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_browse_story, container, false);
+        lv = (ListView) rootView.findViewById(R.id.listView);
+        loader = (AVLoadingIndicatorView) rootView.findViewById(R.id.avi);
+
+
+        browseStoriesAdapter = new BrowseStoriesAdapter(this.getActivity(), storyArrayList, this);
+        lv.setAdapter(browseStoriesAdapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int position, long arg3) {
+                //TODO ouvrir l'activité affichant les détails de la story pour la jouer
+                gs.alerter(container.getContext(), "CLIC");
+            }
+        });
+
+        lv.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                getMoreStories(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -79,6 +138,52 @@ public class BrowseStoryFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getMoreStories(0);
+    }
+
+    /**
+     * Récupère toutes les stories (les X prochaines à partir de l'offset défini en paramètre)
+     */
+    public void getMoreStories(int offset){
+        loader.show();
+        loader.bringToFront();
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getMoreStories");
+        dataToPass.put("offset", String.valueOf(offset));
+
+        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::resultGetMoreStories);
+    }
+
+    public boolean resultGetMoreStories(JSONObject o){
+        try {
+            JSONArray stories = o.getJSONArray("stories");
+            if(o.getInt("status") == 200 && stories != null){
+                for(int i=0; i<stories.length(); i++){
+                    JSONObject json_data = stories.getJSONObject(i);
+                    Story story = new Story(json_data.getString("storyId"),
+                            json_data.getString("storyTitle"),
+                            json_data.getString("storyDescription"),
+                            json_data.getString("storyPicture"),
+                            "1".equals(json_data.getString("storyIsPublished")));
+                    storyArrayList.add(story);
+                }
+
+                browseStoriesAdapter.notifyDataSetChanged();
+                loader.hide();
+                return true;
+            }else{
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

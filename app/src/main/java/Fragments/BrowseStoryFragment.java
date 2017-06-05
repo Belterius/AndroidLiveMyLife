@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,10 @@ import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import ClassPackage.Story;
 import ClassPackage.ToastClass;
+import lml.androidlivemylife.MainActivity;
+import lml.androidlivemylife.PublishStoryActivity;
 import lml.androidlivemylife.R;
+import lml.androidlivemylife.StoryToPlayActivity;
 
 
 /**
@@ -116,8 +120,13 @@ public class BrowseStoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,
                                     int position, long arg3) {
-                //TODO ouvrir l'activité affichant les détails de la story pour la jouer
-                gs.alerter(container.getContext(), "CLIC");
+                Story s = (Story) storyArrayList.get(position);
+                Intent nextView = new Intent(getActivity(), StoryToPlayActivity.class);
+                nextView.putExtra("storyTitle", s.getTitle().toString());
+                nextView.putExtra("authorPseudo", s.getAuthor().getPseudo().toString());
+                nextView.putExtra("authorFirstname", s.getAuthor().getFirstname().toString());
+                nextView.putExtra("authorLastname", s.getAuthor().getLastname().toString());
+                getActivity().startActivity(nextView);
             }
         });
 

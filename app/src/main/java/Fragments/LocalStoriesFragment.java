@@ -102,6 +102,7 @@ public class LocalStoriesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getPersonalStories();
     }
 
     @Override
@@ -138,7 +139,7 @@ public class LocalStoriesFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getPersonalStories();
+       // getPersonalStories();
     }
 
     public void showButtons(View hiddenbuttons){

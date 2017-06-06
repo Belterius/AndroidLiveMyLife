@@ -45,6 +45,9 @@ public class StartStoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_story);
+
+        this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
+
         FragmentManager fm = getSupportFragmentManager();
         Location gareLocation = new Location("");
         gareLocation.setLatitude(50.4275348d);//your coords of course

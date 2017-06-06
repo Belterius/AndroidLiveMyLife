@@ -1,10 +1,12 @@
 package ClassPackage;
 
+import java.io.Serializable;
+
 /**
  * Created by Gimlibéta on 26/05/2017.
  */
 
-public class Step {
+public class Step  implements Serializable {
 
     private String id;
     private String urlPicture;

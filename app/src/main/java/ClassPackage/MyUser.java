@@ -1,10 +1,12 @@
 package ClassPackage;
 
+import java.io.Serializable;
+
 /**
  * Created by Gimlibéta on 30/04/2017.
  */
 
-public class MyUser {
+public class MyUser  implements Serializable {
 
     private String idUser;
     private String email;

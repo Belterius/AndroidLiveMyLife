@@ -132,6 +132,11 @@ public class EditStoryActivity extends UploadPictureActivity {
             return;
         }
 
+        if(title_to_edit.getText().toString().length() > 20){
+            ToastClass.toastError(this, getString(R.string.error_title_too_long));
+            return;
+        }
+
         if(!old_description.equals(description_to_edit.getText().toString()) || ! old_title.equals(title_to_edit.getText().toString()) || bitmap != null){
 
             Map<String, String> dataToPass = new HashMap<>();

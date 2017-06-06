@@ -132,9 +132,9 @@ public class LocalStoriesAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if(! data.get(position).isPublished()){
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
-                    alert.setTitle("Publish");
-                    alert.setMessage("Are you sure you want to publish this story?");
-                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    alert.setTitle(R.string.title_publish);
+                    alert.setMessage(R.string.confirmation_publish);
+                    alert.setPositiveButton(R.string.choice_yes, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -143,7 +143,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
                         }
                     });
 
-                    alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    alert.setNegativeButton(R.string.choice_no, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -184,9 +184,9 @@ public class LocalStoriesAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
-                alert.setTitle("Delete");
-                alert.setMessage("Are you sure you want to delete this story?");
-                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                alert.setTitle(R.string.title_delete);
+                alert.setMessage(R.string.confirmation_delete);
+                alert.setPositiveButton(R.string.choice_yes, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -207,7 +207,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
                     }
                 });
 
-                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                alert.setNegativeButton(R.string.choice_no, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

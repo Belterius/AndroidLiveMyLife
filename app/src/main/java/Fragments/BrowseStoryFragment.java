@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Button;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -23,7 +21,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import API_request.RequestClass;
@@ -31,10 +28,8 @@ import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import ClassPackage.Story;
 import ClassPackage.ToastClass;
-import lml.androidlivemylife.MainActivity;
-import lml.androidlivemylife.PublishStoryActivity;
 import lml.androidlivemylife.R;
-import lml.androidlivemylife.StoryToPlayActivity;
+import lml.androidlivemylife.StartStoryActivity;
 
 
 /**
@@ -97,7 +92,6 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
         return fragment;
     }
 
-    @Override
     public void onResume() {
         super.onResume();
     }
@@ -127,11 +121,13 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
 
         storyArrayList = new ArrayList<>();
         gs = new GlobalState();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_browse_story, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
         loader = (AVLoadingIndicatorView) rootView.findViewById(R.id.avi);
@@ -140,7 +136,7 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
         searchView.setSubmitButtonEnabled(true);
-        searchView.setQueryHint("Search Here");
+        searchView.setQueryHint(getString(R.string.search_here));
 
         browseStoriesAdapter = new BrowseStoriesAdapter(this.getActivity(), storyArrayList, this);
         lv.setAdapter(browseStoriesAdapter);
@@ -151,11 +147,8 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
             public void onItemClick(AdapterView<?> arg0, View arg1,
                                     int position, long arg3) {
                 Story s = (Story) browseStoriesAdapter.getData().get(position);
-                Intent nextView = new Intent(getActivity(), StoryToPlayActivity.class);
-                nextView.putExtra("storyTitle", s.getTitle().toString());
-                nextView.putExtra("authorPseudo", s.getAuthor().getPseudo().toString());
-                nextView.putExtra("authorFirstname", s.getAuthor().getFirstname().toString());
-                nextView.putExtra("authorLastname", s.getAuthor().getLastname().toString());
+                Intent nextView = new Intent(getActivity(), StartStoryActivity.class);
+                nextView.putExtra("storyId", s.getIdStory().toString());
                 getActivity().startActivity(nextView);
             }
         });

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    tools:context="lml.androidlivemylife.PlayStoryActivity"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="57dp">
+
+        <TextView
+            android:id="@+id/play_story_title_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:fontFamily="serif"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:text="Story long text test blablabla"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/play_story_exit_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:onClick="backToSelectStory"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/cancel_red" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/play_story_step_x"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step"
+        android:textAlignment="center"
+        android:textStyle="italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <FrameLayout
+            android:id="@+id/play_story_frame_maps"
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="goToStepDone"
+        android:text="Test button to finish step" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <Switch
+                android:id="@+id/play_story_switch_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:splitTrack="true"
+                android:switchPadding="20dp"
+                android:text="@string/map_off"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                android:theme="@style/switchBlue" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/description"
+        android:textAlignment="textStart"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/play_story_description_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="4"
+        android:text="will be completed by the description\nfeg\n\n"
+        android:textAlignment="textStart"
+        android:verticalScrollbarPosition="defaultPosition" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/play_story_previous_step_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:onClick="backToPreviousStep"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/back" />
+
+        <ImageButton
+            android:id="@+id/play_story_next_step_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:onClick="goToNextStep"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/next" />
+    </RelativeLayout>
+
+</LinearLayout>

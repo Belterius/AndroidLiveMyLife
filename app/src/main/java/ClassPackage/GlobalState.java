@@ -46,6 +46,8 @@ public class GlobalState{
 
     private static int notificationId = 1;
 
+    public static Story myCurrentPlayedStory;
+
     public GlobalState() {
         if(cookieManager == null){
             cookieManager = new CookieManager();

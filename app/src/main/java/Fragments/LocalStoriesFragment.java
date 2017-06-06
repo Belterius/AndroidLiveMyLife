@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +52,8 @@ public class LocalStoriesFragment extends Fragment {
     private LocalStoriesAdapter localStoriesAdapter;
     private ArrayList<Story> storyArrayList;
     private int lastItemOpened;
+    private View lastViewOpened;
+    private AVLoadingIndicatorView loader;
 
     private GlobalState gs;
 
@@ -107,6 +111,7 @@ public class LocalStoriesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
         title_local_stories = (TextView) rootView.findViewById(R.id.title_local_stories);
         lv = (ListView) rootView.findViewById(R.id.listView);
+        loader = (AVLoadingIndicatorView) rootView.findViewById(R.id.avilocal);
 
         localStoriesAdapter = new LocalStoriesAdapter(this.getActivity(), storyArrayList, this);
         lv.setAdapter(localStoriesAdapter);
@@ -115,12 +120,14 @@ public class LocalStoriesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,
                                     int position, long arg3) {
-                if(lv.getChildAt(position).findViewById(R.id.buttonshidden).getVisibility() == View.GONE){
-                    showButtons(position);
+
+                if(arg1.findViewById(R.id.buttonshidden).getVisibility() == View.GONE){
+                    showButtons(arg1);
                     lastItemOpened = position;
+                    lastViewOpened = arg1;
                 }
                 else{
-                    hideButtons(position);
+                    hideButtons(arg1);
                 }
             }
         });
@@ -134,20 +141,20 @@ public class LocalStoriesFragment extends Fragment {
         getPersonalStories();
     }
 
-    public void showButtons(int position){
-        if(lastItemOpened != position && localStoriesAdapter.getLastRemoved() == -1){
-                View toHide = lv.getChildAt(lastItemOpened).findViewById(R.id.buttonshidden);
-                toHide.setVisibility(View.GONE);
+    public void showButtons(View hiddenbuttons){
+        if(lastViewOpened != null && lastViewOpened != hiddenbuttons && localStoriesAdapter.getLastRemoved() == -1){
+            View toHide = lastViewOpened.findViewById(R.id.buttonshidden);
+            toHide.setVisibility(View.GONE);
         }else{
             localStoriesAdapter.resetLastRemoved();
         }
 
-        View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
-        v.setVisibility(View.VISIBLE);
+        View v = hiddenbuttons.findViewById(R.id.buttonshidden);
+           v.setVisibility(View.VISIBLE);
     }
 
-    public void hideButtons(int position){
-        View v = lv.getChildAt(position).findViewById(R.id.buttonshidden);
+    public void hideButtons(View hiddenbuttons){
+        View v = hiddenbuttons.findViewById(R.id.buttonshidden);
         v.setVisibility(View.GONE);
     }
 
@@ -155,6 +162,8 @@ public class LocalStoriesFragment extends Fragment {
      * Récupère les stories de l'utilisateur courant (utilisation de la variable de session côté serveur)
      */
     public void getPersonalStories(){
+        loader.smoothToShow();
+        loader.bringToFront();
         Map<String, String> dataToPass = new HashMap<>();
         dataToPass.put("action", "getPersonalStories");
 
@@ -177,6 +186,7 @@ public class LocalStoriesFragment extends Fragment {
                 }
 
                 localStoriesAdapter.notifyDataSetChanged();
+                loader.smoothToHide();
                 return true;
             }else{
                 ToastClass.toastError(this.getActivity(), o.getString("feedback"));
@@ -187,6 +197,7 @@ public class LocalStoriesFragment extends Fragment {
             e.printStackTrace();
         }
 
+        loader.smoothToHide();
         return false;
     }
 

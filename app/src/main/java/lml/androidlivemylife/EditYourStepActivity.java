@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +27,7 @@ public class EditYourStepActivity extends UploadPictureActivity {
     private EditText stepDescription;
     private GlobalState gs;
     private boolean goToPicture;
+    private AVLoadingIndicatorView loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,8 @@ public class EditYourStepActivity extends UploadPictureActivity {
         //On veut éviter de passer aussi dans le this.finish()
         goToPicture = false;
         this.takeNewPicture(this.getCurrentFocus());
+
+        this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_step_gif);
     }
 
     @Override
@@ -92,6 +97,9 @@ public class EditYourStepActivity extends UploadPictureActivity {
         dataToPass.put("stepGpsData", "1;2;3");
         dataToPass.put("stepPicture", getImageToPassForRequest());
 
+        loader.smoothToShow();
+        loader.bringToFront();
+
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getReturnFromPublishStep);
     }
 
@@ -102,6 +110,7 @@ public class EditYourStepActivity extends UploadPictureActivity {
      */
     public Boolean getReturnFromPublishStep(JSONObject o){
 
+        loader.smoothToHide();
         try {
 
             if(o.getInt("status") == 200 && o.getJSONObject("newStep") != null){

@@ -53,6 +53,7 @@
     <string name="title_edit_your_step">Edit your step</string>
     <string name="prompt_description_step">Enter a description for the current step</string>
     <string name="title_your_story">Your story</string>
+    <string name="title_no_step">No step created yet. Start playing !</string>
     <string name="prompt_new_title">Title of the story</string>
     <string name="prompt_story_description">Enter a description for the current story</string>
     <string name="prompt_description_short">Enter a description</string>
@@ -83,6 +84,7 @@
     <string name="map_on">Map on</string>
     <string name="you_finished_this_story">You finished this story !</string>
     <string name="search_here">Search Here</string>
+    <string name="error_no_stories">No stories created yet. Start sharing !</string>
 
 
 </resources>

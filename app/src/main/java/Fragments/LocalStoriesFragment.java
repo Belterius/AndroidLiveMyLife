@@ -194,7 +194,7 @@ public class LocalStoriesFragment extends Fragment {
             }
 
         } catch (JSONException e) {
-            this.title_local_stories.setText("No stories created yet. Start sharing !");
+            this.title_local_stories.setText(R.string.error_no_stories);
             e.printStackTrace();
         }
 

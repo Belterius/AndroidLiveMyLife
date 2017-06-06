@@ -29,4 +29,11 @@ android:orientation="vertical">
     android:onClick="testDirection"
     android:text="@string/maps_test_button" />
 
+<ImageView
+    android:id="@+id/compass"
+    android:src="@mipmap/ic_compass"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="4"
+    />
 </LinearLayout>

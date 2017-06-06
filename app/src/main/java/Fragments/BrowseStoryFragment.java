@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -97,6 +98,26 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -168,7 +189,6 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
     {
         return false;
     }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -262,4 +282,5 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

@@ -10,14 +10,24 @@ android:paddingRight="20dp"
 tools:layout_editor_absoluteX="8dp"
 tools:layout_editor_absoluteY="8dp">
 
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avilocal"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallClipRotateMultipleIndicator" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="57dp">
+            android:layout_width="wrap_content"
+            android:layout_height="52dp">
 
             <TextView
                 android:id="@+id/textView2"
@@ -58,6 +68,43 @@ tools:layout_editor_absoluteY="8dp">
                 app:srcCompat="@drawable/right_arrow" />
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_local_stories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textViewError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/textView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/textView2"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/title_no_step"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="#CCCCCC"
+                android:dividerHeight="1dp"
+                android:paddingLeft="2dp"></ListView>
+
+        </FrameLayout>
     </LinearLayout>
 
 </RelativeLayout>

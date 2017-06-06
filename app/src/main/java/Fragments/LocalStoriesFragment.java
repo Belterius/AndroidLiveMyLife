@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +52,7 @@ public class LocalStoriesFragment extends Fragment {
     private LocalStoriesAdapter localStoriesAdapter;
     private ArrayList<Story> storyArrayList;
     private int lastItemOpened;
+    private AVLoadingIndicatorView loader;
 
     private GlobalState gs;
 
@@ -107,6 +110,7 @@ public class LocalStoriesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_local_stories, container, false);
         title_local_stories = (TextView) rootView.findViewById(R.id.title_local_stories);
         lv = (ListView) rootView.findViewById(R.id.listView);
+        loader = (AVLoadingIndicatorView) rootView.findViewById(R.id.avilocal);
 
         localStoriesAdapter = new LocalStoriesAdapter(this.getActivity(), storyArrayList, this);
         lv.setAdapter(localStoriesAdapter);
@@ -155,6 +159,8 @@ public class LocalStoriesFragment extends Fragment {
      * Récupère les stories de l'utilisateur courant (utilisation de la variable de session côté serveur)
      */
     public void getPersonalStories(){
+        loader.smoothToShow();
+        loader.bringToFront();
         Map<String, String> dataToPass = new HashMap<>();
         dataToPass.put("action", "getPersonalStories");
 
@@ -177,6 +183,7 @@ public class LocalStoriesFragment extends Fragment {
                 }
 
                 localStoriesAdapter.notifyDataSetChanged();
+                loader.smoothToHide();
                 return true;
             }else{
                 ToastClass.toastError(this.getActivity(), o.getString("feedback"));
@@ -187,6 +194,7 @@ public class LocalStoriesFragment extends Fragment {
             e.printStackTrace();
         }
 
+        loader.smoothToHide();
         return false;
     }
 

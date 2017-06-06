@@ -78,7 +78,8 @@
         </provider>
 
         <activity android:name=".EditYourStepActivity" />
-        <activity android:name=".EditStoryActivity"></activity>
+        <activity android:name=".EditStoryActivity" />
+        <activity android:name=".StoryToPlayActivity"></activity>
     </application>
 
 </manifest>

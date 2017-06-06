@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="lml.androidlivemylife.StoryToPlayActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="57dp">
+
+        <TextView
+            android:id="@+id/titleStoryToPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="title"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/authorStoryToPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleStoryToPlay"
+            android:layout_centerHorizontal="true"
+            android:text="authorPseudo"
+            android:textSize="15dp"
+            android:textStyle="italic" />
+
+        <ImageButton
+            android:id="@+id/storyToPlay_previous_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:rotation="180"
+            android:scaleType="fitCenter"
+            android:src="@drawable/right_arrow" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -25,6 +25,16 @@ public class Story {
         this.steps = new ArrayList<Step>();
     }
 
+    public Story(String idStory, String title, String description, String highlight, boolean isPublished, MyUser author) {
+        this.idStory = idStory;
+        this.title = title;
+        this.description = description;
+        this.highlight = highlight;
+        this.isPublished = isPublished;
+        this.steps = new ArrayList<Step>();
+        this.author = author;
+    }
+
     public Story(String idStory, String title, String description, String highlight, boolean isPublished, List<Step> steps ) {
         this.idStory = idStory;
         this.title = title;

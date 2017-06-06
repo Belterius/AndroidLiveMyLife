@@ -66,9 +66,17 @@ public class RequestClass {
                         }
                     }) {
                 @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("Accept-Language", Locale.getDefault().toString());
+                    return map;
+                }
+
+                @Override
                 protected Map<String, String> getParams(){
                     return paramsToPass;
                 }
+
             };
 
             jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

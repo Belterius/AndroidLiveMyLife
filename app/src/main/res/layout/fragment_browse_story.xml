@@ -29,7 +29,7 @@
             android:id="@+id/fragment_browse_story"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/searchView1"
+            android:layout_below="@+id/searchView1"
             android:layout_above="@+id/navigation"
             >
 

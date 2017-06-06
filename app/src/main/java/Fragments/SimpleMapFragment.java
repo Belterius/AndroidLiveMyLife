@@ -90,6 +90,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
+    private boolean showCurrentPos;//We don't show our current pos on the screen displaying a story
     private Location mCurrentLocation;//Notre position actuelle, mise à jour automatiquement par des appels sur onLocationChanged lorsque la position GPS du téléphone change
     private Location targetLocation;//La position que l'on souhaite atteindre
     private Marker mCurrLocationMarker;//le marqueur correspondant à notre position actuelle
@@ -97,15 +98,34 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private Polyline currentPolylinePath;//le chemin entre notre position et notre cible, sauvegardé de manière à pouvoir le supprimmer lorsque le chemin change
 
 
-    public static SimpleMapFragment newInstance(String param1, String param2) {
+    public static SimpleMapFragment newInstance(String param1, String param2, Location targetLocation, Boolean showCurrentPos) {
         SimpleMapFragment fragment = new SimpleMapFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+        fragment.targetLocation = targetLocation;
+        fragment.showCurrentPos = showCurrentPos;
         return fragment;
     }
 
+    /**
+     * Called when the fragment's activity has been created and this
+     * fragment's view hierarchy instantiated.  It can be used to do final
+     * initialization once these pieces are in place, such as retrieving
+     * views or restoring state.  It is also useful for fragments that use
+     * {@link #setRetainInstance(boolean)} to retain their instance,
+     * as this callback tells the fragment when it is fully associated with
+     * the new activity instance.  This is called after {@link #onCreateView}
+     * and before {@link #onViewStateRestored(Bundle)}.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -133,11 +153,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         myMap.onCreate(savedInstanceState);
         myMap.getMapAsync(this); //Permet de récupérer notre googlemap depuis notre mapview
         myMap.onResume();//Permet un affichage instantané de la map
-        Button clickButton = (Button) view.findViewById(R.id.buttonTestDirection);
-        clickButton.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
-            testDirection(view);
-        });
 
         mSensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -244,13 +259,15 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         } else {
             throw new Error("Permissions manquantes");
         }
+        if(!showCurrentPos){
+            if(targetLocation == null)
+                return;
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(17.385044, 78.486671)).zoom(12).build();
-        mMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(cameraPosition));
-
-        // Perform any camera updates here
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude())));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+            setMarker(targetLocation, "Target Location");
+            return;
+        }
     }
 
     /**
@@ -271,6 +288,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
      * @param markerText le nom (description) de notre marker
      */
     public void setMarker(Location loc, String markerText) {
+        if(loc == null)
+            return;
         LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -289,6 +308,16 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
      */
     @Override
     public void onLocationChanged(Location location) {
+        if(!showCurrentPos){
+            return;
+        }
+
+
+        if(mCurrentLocation == null){
+            mCurrentLocation = location;
+        }else if(mCurrentLocation.getLongitude() == location.getLongitude() && mCurrentLocation.getLatitude() == location.getLatitude())
+            return;
+
         mCurrentLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -296,26 +325,22 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
 
         //Place le marker de notre position actuelle
         setMarker(location, "Current Position");
+        setMarker(targetLocation, "Target Location");
 
         //place la carte sur notre position actuelle
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
 
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-
         //Si on a une destination, trâce le chemin
-        if(targetLocation != null)
+        if(mCurrentLocation != null && targetLocation != null)
             pathFromCurrentToTarget();
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(100000);
+        mLocationRequest.setSmallestDisplacement(20);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -360,55 +385,14 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     * Fonction de test, permet de simuler sur l'emulateur un changement de position/target
-     * @param view
-     */
-    public void saveCurrentLocation(View view) {
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location gareLocation = new Location("");
-        gareLocation.setLatitude(50.4275348d);//your coords of course
-        gareLocation.setLongitude(2.8252978d);
-        Location ig2iLocation = new Location("");
-        ig2iLocation.setLatitude(50.4340974d);//your coords of course
-        ig2iLocation.setLongitude(2.824354d);
-        Location maisonLocation = new Location("");
-        maisonLocation.setLatitude(50.4330315d);//your coords of course
-        maisonLocation.setLongitude(2.8297024d);
-
-        onLocationChanged(maisonLocation);
-
-        if(targetLocation == null || !( targetLocation.getLatitude() == gareLocation.getLatitude() && targetLocation.getLongitude() == gareLocation.getLongitude()))
-            targetLocation = gareLocation;
-        else
-            targetLocation = ig2iLocation;
-
-        setMarker(targetLocation, "target");
-    }
-
-
-    public void testDirection(View view) {
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        //mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        saveCurrentLocation(view);
-        pathFromCurrentToTarget();
-    }
-
-    /**
      * Permet de lancer l'analyse du chemin entre notre position et notre cible
      * récupère les informations depuis Google Api Client, puis les affiche sur notre googlemap
      */
     private void pathFromCurrentToTarget(){
+        if(mCurrentLocation == null)
+            return;
+        if(targetLocation == null)
+            return;
         String url = getDirectionsUrl(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude()));
 
         SimpleMapFragment.DownloadTask downloadTask = new SimpleMapFragment.DownloadTask();
@@ -620,7 +604,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
         else bearingText = "?";
 
-        System.out.println(bearingText);
+        //System.out.println(bearingText);
        // fieldBearing.setText(bearingText);
 
     }

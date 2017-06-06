@@ -1,7 +1,10 @@
 package lml.androidlivemylife;
 
+import android.location.Location;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +28,7 @@ import ClassPackage.MyUser;
 import ClassPackage.Step;
 import ClassPackage.Story;
 import ClassPackage.ToastClass;
+import Fragments.SimpleMapFragment;
 
 public class StartStoryActivity extends AppCompatActivity {
 
@@ -37,9 +41,19 @@ public class StartStoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_story);
-
+        FragmentManager fm = getSupportFragmentManager();
+        Location gareLocation = new Location("");
+        gareLocation.setLatitude(50.4275348d);//your coords of course
+        gareLocation.setLongitude(2.8252978d);
+        fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",gareLocation,false), "tagMyMap").commit();
         Bundle b = this.getIntent().getExtras();
         getStoryToPlay(b.getString("storyId"));
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override

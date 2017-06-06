@@ -83,6 +83,7 @@
     <string name="map_on">Map on</string>
     <string name="you_finished_this_story">You finished this story !</string>
     <string name="search_here">Search Here</string>
+    <string name="error_no_stories">No stories created yet. Start sharing !</string>
 
 
 </resources>

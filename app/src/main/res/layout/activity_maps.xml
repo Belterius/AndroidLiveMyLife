@@ -1,39 +1,58 @@
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical">
-
-<fragment
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="wrap_content"
-    android:layout_height="0dp"
-    android:layout_weight="4"
-    tools:context="lml.androidlivemylife.MapsActivity" />
-
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="0dp"
-    android:text="@string/maps_test_button"
-    android:onClick="saveCurrentLocation"
-    android:layout_weight="1"/>
-
-<Button
-    android:id="@+id/button2"
-    android:layout_width="wrap_content"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:onClick="testDirection"
-    android:text="@string/maps_test_button" />
-
-<ImageView
-    android:id="@+id/compass"
-    android:src="@mipmap/ic_compass"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/maps_layout_global"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="4"
-    />
-</LinearLayout>
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="350dp" />
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<FrameLayout-->
+            <!--android:id="@+id/fragment_browse_story"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="350dp"-->
+            <!--android:layout_alignParentEnd="true">-->
+
+            <!---->
+
+        <!--</FrameLayout>-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/compass"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_weight="4"-->
+            <!--android:clickable="false"-->
+            <!--android:src="@mipmap/ic_compass" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/button3"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/maps_test_button" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/button2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_weight="1"-->
+            <!--android:onClick="testDirection"-->
+            <!--android:text="@string/maps_test_button" />-->
+
+    <!--</RelativeLayout>-->
+</android.support.design.widget.CoordinatorLayout>

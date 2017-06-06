@@ -31,9 +31,9 @@ public class RequestClass {
 
     public static void doRequestWithApi(Context c, final String TAG, final Map<String, String> paramsToPass, final Function<JSONObject,Boolean> f){
 
-        //String urlData = "https://api.livemylife.coniface.fr/verif.php";
+        String urlData = "https://api.livemylife.coniface.fr/verif.php";
         //For localhost
-        String urlData = "http://10.0.2.2/PHP-LiveMyLife/verif.php";
+        //String urlData = "http://10.0.2.2/PHP-LiveMyLife/verif.php";
 
         Log.i(CAT,paramsToPass.toString());
 

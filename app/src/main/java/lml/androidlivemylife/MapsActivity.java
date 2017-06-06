@@ -460,7 +460,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             direction = direction + 360;
         }
 
-        rotateImageView((ImageView) findViewById(R.id.compass), R.mipmap.ic_compass, direction );
+//        rotateImageView((ImageView) findViewById(R.id.compass), R.mipmap.ic_compass, direction );
 
 
         //Set the field
@@ -492,7 +492,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 drawable );
 
         // Get the width/height of the drawable
-        DisplayMetrics dm = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(dm);
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = bitmapOrg.getWidth(), height = bitmapOrg.getHeight();
 
         // Initialize a new Matrix

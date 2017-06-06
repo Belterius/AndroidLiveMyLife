@@ -1,6 +1,7 @@
-package Fragment;
+package Fragments;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,7 +22,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -38,9 +38,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -144,9 +143,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 //
 //        return v;
 
-            View rootView = inflater.inflate(R.layout.activity_maps, container, false);
+//            View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
-            return rootView;
+//            return rootView;
+
+        return inflater.inflate(R.layout.activity_maps, container, false);
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        MapFragment fragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        fragment.getMapAsync(this);
+
     }
 
     @Override
@@ -591,7 +602,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             direction = direction + 360;
         }
 
-        rotateImageView((ImageView) this.getActivity().findViewById(R.id.compass), R.mipmap.ic_compass, direction );
+//        rotateImageView((ImageView) this.getActivity().findViewById(R.id.compass), R.mipmap.ic_compass, direction );
 
 
         //Set the field

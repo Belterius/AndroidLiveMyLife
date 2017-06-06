@@ -100,7 +100,6 @@ public class LoginActivity extends AppCompatActivity {
             findViewById(R.id.login_background_gif).setVisibility(View.VISIBLE);
             loader.smoothToShow();
             loader.bringToFront();
-            loader.setTranslationZ(99);
 
             RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getMyAccount);
         }

@@ -25,6 +25,22 @@ public class Story implements Serializable {
      * @param title
      * @param description
      * @param highlight
+     */
+    public Story(String idStory, String title, String description, String highlight) {
+        this.idStory = idStory;
+        this.title = title;
+        this.description = description;
+        this.highlight = highlight;
+        this.isPublished = isPublished;
+        this.steps = new ArrayList<Step>();
+    }
+
+    /**
+     * Constructor
+     * @param idStory
+     * @param title
+     * @param description
+     * @param highlight
      * @param isPublished
      */
     public Story(String idStory, String title, String description, String highlight, boolean isPublished) {
@@ -42,24 +58,21 @@ public class Story implements Serializable {
      * @param title
      * @param description
      * @param highlight
+     * @param isPublished
+     * @param author
      */
-    public Story(String idStory, String title, String description, String highlight) {
+    public Story(String idStory, String title, String description, String highlight, boolean isPublished, MyUser author) {
+
         this.idStory = idStory;
         this.title = title;
         this.description = description;
         this.highlight = highlight;
+
+        this.isPublished = isPublished;
         this.steps = new ArrayList<Step>();
+        this.author = author;
     }
 
-    /**
-     * Constructor
-     * @param idStory
-     * @param title
-     * @param description
-     * @param highlight
-     * @param isPublished
-     * @param steps
-     */
     public Story(String idStory, String title, String description, String highlight, boolean isPublished, List<Step> steps ) {
         this.idStory = idStory;
         this.title = title;

@@ -5,26 +5,31 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SearchView;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
-import ClassPackage.Step;
 import ClassPackage.Story;
 import ClassPackage.ToastClass;
-import lml.androidlivemylife.StartStoryActivity;
 import lml.androidlivemylife.R;
+import lml.androidlivemylife.StartStoryActivity;
 
 
 /**
@@ -35,23 +40,35 @@ import lml.androidlivemylife.R;
  * Use the {@link BrowseStoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BrowseStoryFragment extends Fragment {
+public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryTextListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    final public String TAG = "browseStory";
-
-    private GlobalState gs;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private Story myStoryToPlay;
-
     private OnFragmentInteractionListener mListener;
+
+    final public String TAG = "browseStories";
+
+    private ListView lv;
+    private BrowseStoriesAdapter browseStoriesAdapter;
+    private ArrayList<Story> storyArrayList;
+    private AVLoadingIndicatorView loader;
+    private SearchView searchView;
+
+    private GlobalState gs;
+
+    public ArrayList<Story> getStoryArrayList() {
+        return storyArrayList;
+    }
+
+    public BrowseStoriesAdapter getBrowseStoriesAdapter() {
+        return browseStoriesAdapter;
+    }
 
     public BrowseStoryFragment() {
         // Required empty public constructor
@@ -75,87 +92,23 @@ public class BrowseStoryFragment extends Fragment {
         return fragment;
     }
 
+    public void onResume() {
+        super.onResume();
+    }
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getStoryToPlay();
+    public void onPause() {
+        super.onPause();
     }
 
-    /**
-     * Sends the request to the API server - gets the data about the story to play
-     */
-    public void getStoryToPlay(){
-        Map<String, String> dataToPass = new HashMap<>();
-        dataToPass.put("action", "getStoryToPlayWithSteps");
-        dataToPass.put("storyId", "27");
-
-        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::initializeStoryToPlay);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
-    /**
-     * Gets the data from the API server about the story to play
-     * @param o
-     * @return
-     */
-    public Boolean initializeStoryToPlay(JSONObject o){
-
-        try {
-
-            if(o.getInt("status") == 200 &&  o.getJSONObject("story") != null){
-                JSONObject myStoryToPlay = o.getJSONObject("story");
-                if(myStoryToPlay != null){
-
-                    this.myStoryToPlay = new Story(
-                            myStoryToPlay.getString("id"),
-                            myStoryToPlay.getString("storyTitle"),
-                            myStoryToPlay.getString("storyDescription"),
-                            myStoryToPlay.getString("storyPicture")
-                    );
-
-                    JSONArray mySteps = myStoryToPlay.getJSONArray("steps");
-                    if(mySteps != null){
-
-                        for (int i = 0; i < mySteps.length(); i++) {
-                            JSONObject step = mySteps.getJSONObject(i);
-                            this.myStoryToPlay.addStep(
-                                    new Step(
-                                            step.getString("stepId"),
-                                            step.getString("stepPicture"),
-                                            step.getString("stepGpsData"),
-                                            step.getString("stepDescription")
-                                    )
-                            );
-                        }
-                    }
-
-                    JSONObject myAuthor = myStoryToPlay.getJSONObject("user");
-                    if(myAuthor != null){
-                        this.myStoryToPlay.setAuthor(new MyUser(
-                                myAuthor.getString("id"),
-                                myAuthor.getString("email"),
-                                myAuthor.getString("pseudo"),
-                                myAuthor.getString("firstname"),
-                                myAuthor.getString("lastname"),
-                                myAuthor.getString("description"),
-                                myAuthor.getString("photo")
-                        ));
-                    }
-
-                    this.myStoryToPlay.setLikedByThisUser(myStoryToPlay.getBoolean("isLikedByMe"));
-                }
-                Button button = (Button) getView().findViewById(R.id.test_play_story);
-                button.setVisibility(View.VISIBLE);
-
-                return true;
-            }else{
-                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 
     @Override
@@ -166,39 +119,129 @@ public class BrowseStoryFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        storyArrayList = new ArrayList<>();
         gs = new GlobalState();
 
-    }
-
-    public void goToPlayStory(){
-        Intent nextView = new Intent(this.getContext(), StartStoryActivity.class);
-        nextView.putExtra("storyToPlay", this.myStoryToPlay);
-        startActivity(nextView);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_browse_story, container, false);
-        Button button = (Button) v.findViewById(R.id.test_play_story);
-        button.setOnClickListener(new View.OnClickListener()
-        {
+
+        View rootView = inflater.inflate(R.layout.fragment_browse_story, container, false);
+        lv = (ListView) rootView.findViewById(R.id.listView);
+        loader = (AVLoadingIndicatorView) rootView.findViewById(R.id.avi);
+        searchView = (SearchView) rootView.findViewById(R.id.searchView1);
+
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint(getString(R.string.search_here));
+
+        browseStoriesAdapter = new BrowseStoriesAdapter(this.getActivity(), storyArrayList, this);
+        lv.setAdapter(browseStoriesAdapter);
+        lv.setTextFilterEnabled(true);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                goToPlayStory();
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int position, long arg3) {
+                Story s = (Story) browseStoriesAdapter.getData().get(position);
+                Intent nextView = new Intent(getActivity(), StartStoryActivity.class);
+                nextView.putExtra("storyId", s.getIdStory().toString());
+                getActivity().startActivity(nextView);
             }
         });
 
-        return v;
+        lv.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                getMoreStories(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
+
+        return rootView;
     }
 
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+        if (TextUtils.isEmpty(newText)) {
+            lv.clearTextFilter();
+        } else {
+            lv.setFilterText(newText);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        return false;
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getMoreStories(0);
+    }
+
+    /**
+     * Récupère toutes les stories (les X prochaines à partir de l'offset défini en paramètre)
+     */
+    public void getMoreStories(int offset){
+        loader.smoothToShow();
+        loader.bringToFront();
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getMoreStories");
+        dataToPass.put("offset", String.valueOf(offset));
+
+        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::resultGetMoreStories);
+    }
+
+    public boolean resultGetMoreStories(JSONObject o){
+        try {
+            JSONArray stories = o.getJSONArray("stories");
+            if(o.getInt("status") == 200 && stories != null){
+                for(int i=0; i<stories.length(); i++){
+                    JSONObject json_data = stories.getJSONObject(i);
+                    MyUser author = new MyUser(json_data.getString("authorId"),
+                            json_data.getString("authorEmail"),
+                            json_data.getString("authorPseudo"),
+                            json_data.getString("authorFirstname"),
+                            json_data.getString("authorLastname"),
+                            json_data.getString("authorDescription"),
+                            json_data.getString("authorPhoto"));
+                    Story story = new Story(json_data.getString("storyId"),
+                            json_data.getString("storyTitle"),
+                            json_data.getString("storyDescription"),
+                            json_data.getString("storyPicture"),
+                            "1".equals(json_data.getString("storyIsPublished")),
+                            author);
+                    storyArrayList.add(story);
+                }
+
+                browseStoriesAdapter.notifyDataSetChanged();
+                loader.smoothToHide();
+                return true;
+            }else{
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        loader.smoothToHide();
+        return false;
     }
 
     @Override
@@ -232,4 +275,5 @@ public class BrowseStoryFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

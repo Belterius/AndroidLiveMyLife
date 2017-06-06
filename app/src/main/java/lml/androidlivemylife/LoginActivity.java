@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText editEmail;
     private TextInputEditText editPassword;
     final public String TAG = "login";
-    private GlobalState gs;
+    private GlobalState gs;//Loading
+    private AVLoadingIndicatorView loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         editPassword.setText("test");
         checkLocationPermission();
         gs = new GlobalState();
+
+        this.loader = (AVLoadingIndicatorView) findViewById(R.id.login_gif);
     }
 
     @Override
@@ -91,6 +96,12 @@ public class LoginActivity extends AppCompatActivity {
         if(this.gs.getConnected() && email.equals(this.gs.getMyAccount().getEmail())){
             goToMainPage();
         }else{
+
+            findViewById(R.id.login_background_gif).setVisibility(View.VISIBLE);
+            loader.smoothToShow();
+            loader.bringToFront();
+            loader.setTranslationZ(99);
+
             RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::getMyAccount);
         }
 
@@ -115,6 +126,9 @@ public class LoginActivity extends AppCompatActivity {
     public Boolean getMyAccount(JSONObject o){
 
         try {
+
+            loader.smoothToHide();
+            findViewById(R.id.login_background_gif).setVisibility(View.GONE);
 
             if(o.getInt("status") == 200 && o.getJSONObject("user") != null){
 

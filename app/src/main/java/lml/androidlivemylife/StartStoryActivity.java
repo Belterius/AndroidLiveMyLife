@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,10 +34,15 @@ public class StartStoryActivity extends AppCompatActivity {
 
     private final String TAG = "startStory";
 
+    //Loading
+    private AVLoadingIndicatorView loader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_story);
+
+        this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 
         Bundle b = this.getIntent().getExtras();
         getStoryToPlay(b.getString("storyId"));
@@ -55,6 +61,9 @@ public class StartStoryActivity extends AppCompatActivity {
      * Sends the request to the API server - gets the data about the story to play
      */
     public void getStoryToPlay(String idToPass){
+        loader.smoothToShow();
+        loader.bringToFront();
+
         Map<String, String> dataToPass = new HashMap<>();
         dataToPass.put("action", "getStoryToPlayWithSteps");
         dataToPass.put("storyId", idToPass);
@@ -70,7 +79,7 @@ public class StartStoryActivity extends AppCompatActivity {
     public Boolean initializeStoryToPlay(JSONObject o) {
 
         try {
-
+            loader.smoothToHide();
             if (o.getInt("status") == 200 && o.getJSONObject("story") != null) {
                 JSONObject myStoryToPlay = o.getJSONObject("story");
                 if (myStoryToPlay != null) {
@@ -113,6 +122,7 @@ public class StartStoryActivity extends AppCompatActivity {
 
                     GlobalState.myCurrentPlayedStory.setLikedByThisUser(myStoryToPlay.getBoolean("isLikedByMe"));
                     displayWithData();
+
                 }
 
                 return true;

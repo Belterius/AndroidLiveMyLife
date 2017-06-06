@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,9 @@ public class EditMyProfileActivity extends UploadPictureActivity {
 
     final public String TAG = "editMyProfile";
 
+    //Loading
+    private AVLoadingIndicatorView loader;
+
     /**
      * Reponse from the server : Updates the local attributes
      * @param o JSONObject : the response
@@ -53,6 +57,7 @@ public class EditMyProfileActivity extends UploadPictureActivity {
                 }
 
                 if((--requestDoing) == 0 ){
+                    loader.smoothToHide();
                     this.finish();
                     return true;
                 }
@@ -88,6 +93,7 @@ public class EditMyProfileActivity extends UploadPictureActivity {
             .error(R.drawable.ic_menu_report_image)
             .into(imageViewPicturePreview);
 
+        this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_my_profile_gif);
     }
 
     /**
@@ -128,6 +134,8 @@ public class EditMyProfileActivity extends UploadPictureActivity {
 
         //If we do not send a request, so we close this activity
         if(requestDoing > 0) {
+            loader.smoothToShow();
+            loader.bringToFront();
             return true;
         }else{
             this.finish();

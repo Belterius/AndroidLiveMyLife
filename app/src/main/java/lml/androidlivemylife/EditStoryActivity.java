@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +48,9 @@ public class EditStoryActivity extends UploadPictureActivity {
 
     private ImageButton previousarrow;
     private ImageButton validate;
+
+    //Loading
+    private AVLoadingIndicatorView loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,8 @@ public class EditStoryActivity extends UploadPictureActivity {
             validate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    loader.smoothToShow();
+                    loader.bringToFront();
                     editStory();
                 }
             });
@@ -97,6 +103,8 @@ public class EditStoryActivity extends UploadPictureActivity {
             validate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    loader.smoothToShow();
+                    loader.bringToFront();
                     createStory();
                 }
             });
@@ -110,6 +118,8 @@ public class EditStoryActivity extends UploadPictureActivity {
         });
 
         gs = new GlobalState();
+
+        this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_story_gif);
     }
 
     @Override
@@ -139,6 +149,9 @@ public class EditStoryActivity extends UploadPictureActivity {
 
         if(!old_description.equals(description_to_edit.getText().toString()) || ! old_title.equals(title_to_edit.getText().toString()) || bitmap != null){
 
+            loader.smoothToShow();
+            loader.bringToFront();
+
             Map<String, String> dataToPass = new HashMap<>();
             dataToPass.put("action", "editStory");
             dataToPass.put("storyId", storyId);
@@ -157,6 +170,7 @@ public class EditStoryActivity extends UploadPictureActivity {
      */
     public boolean resultEditStory(JSONObject o){
         try {
+            loader.smoothToHide();
             if(o.getInt("status") == 200){
 
                 JSONObject newCurrentStory = o.getJSONObject("story");
@@ -217,6 +231,7 @@ public class EditStoryActivity extends UploadPictureActivity {
 
         try {
 
+            loader.smoothToHide();
             if(o.getInt("status") == 200){
 
                 JSONObject newCurrentStory = o.getJSONObject("newCurrentStory");

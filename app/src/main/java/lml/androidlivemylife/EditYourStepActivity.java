@@ -121,7 +121,8 @@ public class EditYourStepActivity extends UploadPictureActivity {
                         new Step(
                                 newStep.getString("id"),
                                 newStep.getString("pictureUrl"),
-                                newStep.getString("gpsData"),
+                                newStep.getString("gpsLongitude"),
+                                newStep.getString("gpsLatitude"),
                                 newStep.getString("description")
                         )
                 );

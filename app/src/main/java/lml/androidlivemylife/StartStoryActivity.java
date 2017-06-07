@@ -52,6 +52,10 @@ public class StartStoryActivity extends AppCompatActivity {
         Location gareLocation = new Location("");
         gareLocation.setLatitude(50.4275348d);//your coords of course
         gareLocation.setLongitude(2.8252978d);
+
+        Location targetLocation = new Location("");
+        targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
+        targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
         fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",gareLocation,false), "tagMyMap").commit();
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
@@ -118,7 +122,8 @@ public class StartStoryActivity extends AppCompatActivity {
                                     new Step(
                                             step.getString("stepId"),
                                             step.getString("stepPicture"),
-                                            step.getString("stepGpsData"),
+                                            step.getString("gpsLongitude"),
+                                            step.getString("gpsLatitude"),
                                             step.getString("stepDescription")
                                     )
                             );

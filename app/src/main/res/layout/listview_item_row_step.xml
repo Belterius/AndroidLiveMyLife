@@ -54,7 +54,7 @@
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:elevation="0dp"
-        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
         android:scaleType="fitCenter"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />

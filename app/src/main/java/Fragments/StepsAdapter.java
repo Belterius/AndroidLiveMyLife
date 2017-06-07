@@ -108,12 +108,14 @@ public class StepsAdapter extends BaseAdapter {
                 .error(R.drawable.error_triangle)
                 .into(((ImageView)holder.img));
 
+        holder.deletebutton.setImageResource(R.drawable.delete);
+
         holder.deletebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
                 alert.setTitle(R.string.title_delete);
-                alert.setMessage(R.string.confirmation_delete);
+                alert.setMessage(R.string.confirmation_delete_step);
                 alert.setPositiveButton(R.string.choice_yes, new DialogInterface.OnClickListener() {
 
                     @Override

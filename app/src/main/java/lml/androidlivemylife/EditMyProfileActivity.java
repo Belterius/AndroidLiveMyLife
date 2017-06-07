@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import API_request.RequestClass;
 import ClassPackage.ToastClass;
@@ -150,6 +151,14 @@ public class EditMyProfileActivity extends UploadPictureActivity {
     public void goToChangeMyPasswordActivity(View v){
         Intent nextView = new Intent(this,ChangeMyPasswordActivity.class);
         startActivity(nextView);
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 
 }

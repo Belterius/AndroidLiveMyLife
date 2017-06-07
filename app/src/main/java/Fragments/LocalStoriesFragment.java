@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import API_request.RequestClass;
 import ClassPackage.Story;
@@ -134,6 +135,14 @@ public class LocalStoriesFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this.getContext()).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this.getContext()).getRequestQueue().cancelAll(TAG);
+        }
     }
 
     @Override

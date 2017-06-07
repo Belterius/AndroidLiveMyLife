@@ -86,7 +86,7 @@ public class RequestClass {
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             // Access the RequestQueue through your singleton class.
-            MySingletonRequestApi.getInstance(c).addToRequestQueue(jsObjRequest);
+            MySingletonRequestApi.getInstance(c).addToRequestQueue(jsObjRequest, TAG);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

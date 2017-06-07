@@ -58,10 +58,10 @@
     <string name="prompt_story_description">Enter a description for the current story</string>
     <string name="prompt_description_short">Enter a description</string>
     <string name="error_fill_field">Please fill every field, and take a picture !</string>
-    <string name="error_any_modifications">Any fields have been modified, please click on back instead.</string>
+    <string name="error_any_modifications">No fields have been modified, please click on back instead.</string>
     <string name="error_passwords_and_confirm">Passwords are not the same !</string>
     <string name="title_edit_and_other_name">Edit</string>
-    <string name="error_empty_field">Any fields can\'t be empty</string>
+    <string name="error_empty_field">No field can be empty</string>
     <string name="error_oldPassword_equal_newPassword">The old password must be different from the new one !</string>
     <string name="error_password_and_confirmation_different">The new password and the confirmation password must be the same !</string>
     <string name="title">Title</string>

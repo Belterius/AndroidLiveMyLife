@@ -161,8 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                                         new Step(
                                                 step.getString("stepId"),
                                                 step.getString("stepPicture"),
-                                                step.getString("gpsLongitude"),
-                                                step.getString("gpsLatitude"),
+                                                step.getString("stepGpsLongitude"),
+                                                step.getString("stepGpsLatitude"),
                                                 step.getString("stepDescription")
                                         )
                                 );

@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import API_request.RequestClass;
@@ -48,15 +49,6 @@ public class StartStoryActivity extends AppCompatActivity {
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 
-        FragmentManager fm = getSupportFragmentManager();
-        Location gareLocation = new Location("");
-        gareLocation.setLatitude(50.4275348d);//your coords of course
-        gareLocation.setLongitude(2.8252978d);
-
-        Location targetLocation = new Location("");
-        targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
-        targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
-        fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",gareLocation,false), "tagMyMap").commit();
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 
@@ -122,8 +114,8 @@ public class StartStoryActivity extends AppCompatActivity {
                                     new Step(
                                             step.getString("stepId"),
                                             step.getString("stepPicture"),
-                                            step.getString("gpsLongitude"),
-                                            step.getString("gpsLatitude"),
+                                            step.getString("stepGpsLongitude"),
+                                            step.getString("stepGpsLatitude"),
                                             step.getString("stepDescription")
                                     )
                             );
@@ -145,6 +137,20 @@ public class StartStoryActivity extends AppCompatActivity {
 
                     GlobalState.myCurrentPlayedStory.setLikedByThisUser(myStoryToPlay.getBoolean("isLikedByMe"));
                     displayWithData();
+
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    Location gareLocation = new Location("");
+                    gareLocation.setLatitude(50.4275348d);//your coords of course
+                    gareLocation.setLongitude(2.8252978d);
+                    List<Step> mySteps2 =  GlobalState.myCurrentPlayedStory.getSteps();
+                    Step myStep = GlobalState.myCurrentPlayedStory.getSteps().get(0);
+
+
+                    Location targetLocation = new Location("");
+                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
+                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+                    fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",targetLocation,false), "tagMyMap").commit();
 
                 }
 

@@ -73,7 +73,7 @@ import lml.androidlivemylife.R;
  * https://pastebin.com/ABNtuHNQ Save
  */
 
-public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
+public class SimpleCompassFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
@@ -99,8 +99,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private Polyline currentPolylinePath;//le chemin entre notre position et notre cible, sauvegardé de manière à pouvoir le supprimmer lorsque le chemin change
 
 
-    public static SimpleMapFragment newInstance(String param1, String param2, Location targetLocation, Boolean showCurrentPos) {
-        SimpleMapFragment fragment = new SimpleMapFragment();
+    public static SimpleCompassFragment newInstance(String param1, String param2, Location targetLocation, Boolean showCurrentPos) {
+        SimpleCompassFragment fragment = new SimpleCompassFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -149,7 +149,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragmentgooglemap, container, false);//On récupère notre XML qui vient remplir le fragment
+        View view = inflater.inflate(R.layout.fragment_boussole, container, false);//On récupère notre XML qui vient remplir le fragment
         myMap = (MapView) view.findViewById(R.id.myGoogleMap); //On récupère notre MapView
         myMap.onCreate(savedInstanceState);
         myMap.getMapAsync(this); //Permet de récupérer notre googlemap depuis notre mapview
@@ -401,7 +401,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             return;
         String url = getDirectionsUrl(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude()));
 
-        SimpleMapFragment.DownloadTask downloadTask = new SimpleMapFragment.DownloadTask();
+        SimpleCompassFragment.DownloadTask downloadTask = new SimpleCompassFragment.DownloadTask();
 
         // télécharge les informations (json) fournie par Google Directions API
         downloadTask.execute(url);
@@ -492,7 +492,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            SimpleMapFragment.ParserGooglePlacesToJSONTask parserTask = new SimpleMapFragment.ParserGooglePlacesToJSONTask();
+            SimpleCompassFragment.ParserGooglePlacesToJSONTask parserTask = new SimpleCompassFragment.ParserGooglePlacesToJSONTask();
 
             // Parse la data récupéré depuis l'URL en JSON
             parserTask.execute(result);
@@ -579,8 +579,12 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
 
         azimuth -= geoField.getDeclination(); //converti le nord magnétique (intersection des lignes de champ magnétiques) en nord réel (emplacement physique correspondant à l'intersection des méridens)
 
+                Location test = new Location("");
+        test.setLatitude(50.3946885);
+        test.setLongitude(2.8287587);
+
         // récupère l'orientation entre notre position et notre destination
-        float bearTo = mCurrentLocation.bearingTo( targetLocation );
+        float bearTo = mCurrentLocation.bearingTo( test );
 
         //Si notre orientation est <0, on doit ajouter 360 pour conserver une rotation dans le sens des aiguilles d'une montre
         if (bearTo < 0) {
@@ -598,8 +602,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         if(this.getActivity() == null)
             return;
 
-//        if(this.getActivity().findViewById(R.id.compass) != null)
-//            this.getActivity().findViewById(R.id.compass).setRotation(direction % 360);
+        if(this.getActivity().findViewById(R.id.compass) != null)
+            this.getActivity().findViewById(R.id.compass).setRotation(direction % 360);
 
         //Set the field
         String bearingText = "N";
@@ -615,7 +619,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         else bearingText = "?";
 
         //System.out.println(bearingText);
-       // fieldBearing.setText(bearingText);
+        // fieldBearing.setText(bearingText);
 
     }
 

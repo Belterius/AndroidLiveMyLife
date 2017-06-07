@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--<com.google.android.gms.maps.MapView-->
+            <!--android:id="@+id/myGoogleMap"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+        <!--<Button-->
+        <!--android:id="@+id/buttonTestDirection"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="@string/maps_test_button" />-->
+
+        <!--&lt;!&ndash;android:onClick="testDirection"&ndash;&gt;-->
+        <ImageView
+        android:id="@+id/compass"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:clickable="false"
+        android:rotation="0"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_compass" />
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/myGoogleMap"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</FrameLayout>

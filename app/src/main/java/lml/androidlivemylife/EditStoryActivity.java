@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.Story;
@@ -90,8 +91,6 @@ public class EditStoryActivity extends UploadPictureActivity {
             validate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    loader.smoothToShow();
-                    loader.bringToFront();
                     editStory();
                 }
             });
@@ -103,8 +102,6 @@ public class EditStoryActivity extends UploadPictureActivity {
             validate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    loader.smoothToShow();
-                    loader.bringToFront();
                     createStory();
                 }
             });
@@ -125,6 +122,9 @@ public class EditStoryActivity extends UploadPictureActivity {
     @Override
     protected void onStop () {
         super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 
     @Override
@@ -208,6 +208,9 @@ public class EditStoryActivity extends UploadPictureActivity {
             ToastClass.toastError(this, getString(R.string.error_fill_field));
             return false;
         }
+
+        loader.smoothToShow();
+        loader.bringToFront();
 
         String action = "createStory";
 

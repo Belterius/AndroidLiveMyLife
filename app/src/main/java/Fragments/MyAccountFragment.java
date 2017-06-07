@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import lml.androidlivemylife.EditMyProfileActivity;
 import lml.androidlivemylife.R;

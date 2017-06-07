@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.Step;
@@ -107,6 +108,14 @@ public class NewStoryFragment extends Fragment{
         stepsArrayList = new ArrayList<>();
         gs = new GlobalState();
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this.getContext()).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this.getContext()).getRequestQueue().cancelAll(TAG);
+        }
     }
 
     @Override

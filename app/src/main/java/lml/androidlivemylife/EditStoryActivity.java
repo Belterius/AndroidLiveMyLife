@@ -90,8 +90,6 @@ public class EditStoryActivity extends UploadPictureActivity {
             validate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    loader.smoothToShow();
-                    loader.bringToFront();
                     editStory();
                 }
             });
@@ -103,8 +101,6 @@ public class EditStoryActivity extends UploadPictureActivity {
             validate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    loader.smoothToShow();
-                    loader.bringToFront();
                     createStory();
                 }
             });
@@ -208,6 +204,9 @@ public class EditStoryActivity extends UploadPictureActivity {
             ToastClass.toastError(this, getString(R.string.error_fill_field));
             return false;
         }
+
+        loader.smoothToShow();
+        loader.bringToFront();
 
         String action = "createStory";
 

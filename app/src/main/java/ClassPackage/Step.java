@@ -10,13 +10,15 @@ public class Step  implements Serializable {
 
     private String id;
     private String urlPicture;
-    private String gpsData;
+    private String gpsLongitude;
+    private String gpsLatitude;
     private String description;
 
-    public Step(String id, String urlPicture, String gpsData, String description) {
+    public Step(String id, String urlPicture, String gpsLongitude,String gpsLatitude, String description) {
         this.id = id;
         this.urlPicture = urlPicture;
-        this.gpsData = gpsData;
+        this.gpsLatitude = gpsLatitude;
+        this.gpsLongitude = gpsLongitude;
         this.description = description;
     }
 
@@ -36,12 +38,20 @@ public class Step  implements Serializable {
         this.urlPicture = urlPicture;
     }
 
-    public String getGpsData() {
-        return gpsData;
+    public String getGpsLongitude() {
+        return gpsLongitude;
     }
 
-    public void setGpsData(String gpsData) {
-        this.gpsData = gpsData;
+    public void setGpsLongitude(String gpsLongitude) {
+        this.gpsLongitude = gpsLongitude;
+    }
+
+    public String getGpsLatitude() {
+        return gpsLatitude;
+    }
+
+    public void setGpsLatitude(String gpsLatitude) {
+        this.gpsLatitude = gpsLatitude;
     }
 
     public String getDescription() {

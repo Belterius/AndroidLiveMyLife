@@ -588,7 +588,10 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             direction = direction + 360;
         }
 
-        //rotateImageView((ImageView) this.getActivity().findViewById(R.id.compass), R.mipmap.ic_compass, direction );
+        //Permet de sécuriser, si l'utilisateur
+        if(this.getActivity() == null)
+            return;
+
         this.getActivity().findViewById(R.id.compass).setRotation(direction % 360);
 
         //Set the field

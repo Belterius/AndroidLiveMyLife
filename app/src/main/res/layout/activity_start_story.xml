@@ -127,6 +127,7 @@
                 app:srcCompat="@drawable/ic_menu_report_image" />
 
             <FrameLayout
+                android:id="@+id/start_story_framelayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

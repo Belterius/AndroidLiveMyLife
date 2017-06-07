@@ -52,7 +52,7 @@ public class StartStoryActivity extends AppCompatActivity {
         Location gareLocation = new Location("");
         gareLocation.setLatitude(50.4275348d);//your coords of course
         gareLocation.setLongitude(2.8252978d);
-        fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",gareLocation,false), "tagMyMap").commit();
+        fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",gareLocation,true), "tagMyMap").commit();
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 

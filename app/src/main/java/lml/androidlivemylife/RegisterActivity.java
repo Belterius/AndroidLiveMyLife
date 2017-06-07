@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
 import API_request.RequestClass;
@@ -150,5 +151,13 @@ public class RegisterActivity extends UploadPictureActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 }

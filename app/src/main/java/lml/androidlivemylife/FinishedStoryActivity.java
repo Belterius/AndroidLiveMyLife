@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.ToastClass;
@@ -147,6 +148,14 @@ public class FinishedStoryActivity extends AppCompatActivity {
      */
     public void backToSelectStory(View v){
         this.finish();
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 
 }

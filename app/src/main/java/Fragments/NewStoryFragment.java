@@ -188,7 +188,8 @@ public class NewStoryFragment extends Fragment{
                     JSONObject json_data = steps.getJSONObject(i);
                     Step step = new Step(json_data.getString("stepId"),
                             json_data.getString("stepPicture"),
-                            json_data.getString("stepGpsData"),
+                            json_data.getString("gpsLongitude"),
+                            json_data.getString("gpsLatitude"),
                             json_data.getString("stepDescription"));
                     stepsArrayList.add(step);
                 }

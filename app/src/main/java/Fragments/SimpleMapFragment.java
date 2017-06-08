@@ -52,6 +52,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -66,6 +67,7 @@ import java.util.List;
 
 import ClassPackage.GlobalState;
 import GPS.DirectionsJSONParser;
+import lml.androidlivemylife.PlayStoryActivity;
 import lml.androidlivemylife.R;
 
 /**
@@ -95,6 +97,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private Location mCurrentLocation;//Notre position actuelle, mise à jour automatiquement par des appels sur onLocationChanged lorsque la position GPS du téléphone change
     private Location targetLocation;//La position que l'on souhaite atteindre
     private Marker mCurrLocationMarker;//le marqueur correspondant à notre position actuelle
+    private Marker mTargetLocationMarker;//le marqueur correspondant à notre position actuelle
     private LocationRequest mLocationRequest;
     private Polyline currentPolylinePath;//le chemin entre notre position et notre cible, sauvegardé de manière à pouvoir le supprimmer lorsque le chemin change
 
@@ -264,9 +267,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             if(targetLocation == null)
                 return;
 
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude())));
-//            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-
             LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             mMap.animateCamera(cameraUpdate);
@@ -289,7 +289,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *Permet de placer un market sur notre google map
+     *Permet de placer un marker sur notre google map
      * @param loc l'emplacement de notre marker
      * @param markerText le nom (description) de notre marker
      */
@@ -301,7 +301,14 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         markerOptions.position(latLng);
         markerOptions.title(markerText);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
+        if(markerText.equals("Current Position")){
+            mCurrLocationMarker = mMap.addMarker(markerOptions);
+        }
+        else if(markerText.equals("Target Location")){
+            mTargetLocationMarker = mMap.addMarker(markerOptions);
+        }else {
+            mMap.addMarker(markerOptions);
+        }
     }
 
     /**
@@ -324,9 +331,24 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         }else if(mCurrentLocation.getLongitude() == location.getLongitude() && mCurrentLocation.getLatitude() == location.getLatitude())
             return;
 
+        float testDist = mCurrentLocation.distanceTo(targetLocation);
+        if(mCurrentLocation.distanceTo(targetLocation) <= 10){
+            if(this.getActivity() instanceof PlayStoryActivity)
+                ((PlayStoryActivity)this.getActivity()).goToStepDone(this.getView());
+            return;
+        }
+
+
+
         mCurrentLocation = location;
+
+
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
+        }
+
+        if (mTargetLocationMarker != null) {
+            mTargetLocationMarker.remove();
         }
 
         //Place le marker de notre position actuelle
@@ -421,6 +443,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         // Destination de la route
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
+
         // Si le sensor est activé
         String sensor = "sensor=true";
 
@@ -484,6 +507,24 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             }catch(Exception e){
                 Log.d("Background Task",e.toString());
             }
+
+
+            try {
+
+                JSONObject obj = new JSONObject(data);
+                JSONArray route = obj.getJSONArray("routes");
+                JSONArray legs = ((JSONObject)route.get(0)).getJSONArray("legs");
+                JSONObject duration = ((JSONObject)legs.get(0)).getJSONObject("duration");
+
+
+                Log.d("My App", obj.toString());
+
+            } catch (Throwable t) {
+                Log.e("My App", "Could not parse malformed JSON: \"" + data + "\"");
+            }
+
+
+
             return data;
         }
 
@@ -512,6 +553,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
                 routes = parser.parse(jObject);
+                System.out.println("a la con");
             }catch(Exception e){
                 e.printStackTrace();
             }

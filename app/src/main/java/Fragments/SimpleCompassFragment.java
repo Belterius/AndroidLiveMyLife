@@ -29,6 +29,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -561,13 +563,60 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
     }
 
 
+
+    float currentDegree = 0f;
     /**
      * Appellé lorsque le sensor du téléphone change
      * @param event
      */
     public void onSensorChanged( SensorEvent event ) {
         if ( mCurrentLocation == null || targetLocation == null) return;
+        GeomagneticField geoField = new GeomagneticField(
+                Double.valueOf(mCurrentLocation.getLatitude()).floatValue(),
+                Double.valueOf(mCurrentLocation.getLongitude()).floatValue(),
+                Double.valueOf(mCurrentLocation.getAltitude()).floatValue(),
+                System.currentTimeMillis()
+        );
 
+        float degree = Math.round(event.values[0]);
+        degree += geoField.getDeclination();
+
+
+        float bearing = mCurrentLocation.bearingTo(targetLocation);
+        degree = (bearing - degree) * -1;
+        degree = normalizeDegree(degree);
+
+        RotateAnimation ra = new RotateAnimation(
+                currentDegree,
+                -degree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        // how long the animation will take place
+        ra.setDuration(210);
+
+        // set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        this.getActivity().findViewById(R.id.compass).startAnimation(ra);
+        currentDegree = -degree;
+
+
+
+    }
+
+    private float normalizeDegree(float value) {
+        if (value >= 0.0f && value <= 180.0f) {
+            return value;
+        } else {
+            return 180 + (180 + value);
+        }
+    }
+
+    public void testSensor(){
+        SensorEvent event = null;
         float azimuth = event.values[0];
         float baseAzimuth = azimuth;
 
@@ -579,7 +628,7 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
 
         azimuth -= geoField.getDeclination(); //converti le nord magnétique (intersection des lignes de champ magnétiques) en nord réel (emplacement physique correspondant à l'intersection des méridens)
 
-                Location test = new Location("");
+        Location test = new Location("");
         test.setLatitude(50.3946885);
         test.setLongitude(2.8287587);
 
@@ -618,9 +667,12 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
         else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
         else bearingText = "?";
 
-        //System.out.println(bearingText);
+        System.out.println(bearingText);
+        System.out.println(direction);
+        Log.i("bearing",bearingText);
+        Log.i("direction",String.valueOf(direction));
+        Log.i("azimuth",String.valueOf(baseAzimuth));
         // fieldBearing.setText(bearingText);
-
     }
 
 }

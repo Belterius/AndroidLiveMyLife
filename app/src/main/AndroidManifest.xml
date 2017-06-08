@@ -96,7 +96,7 @@
         <activity android:name=".StartStoryActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".PlayStoryActivity"
-            android:screenOrientation="portrait" />
+        android:screenOrientation="portrait" />
         <activity android:name=".FinishedStoryActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".FinishedStepActivity"

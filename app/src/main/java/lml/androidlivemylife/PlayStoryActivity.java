@@ -46,15 +46,15 @@ public class PlayStoryActivity extends AppCompatActivity {
 
                     FragmentManager fm = getSupportFragmentManager();
                     Location targetLocation = new Location("");
-                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
-                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLatitude()));//your coords of course
+                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLongitude()));
                     fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true, null), "tagMyMap").commit();
                 }else{
                     mySwitch.setText(R.string.map_off);
                     FragmentManager fm = getSupportFragmentManager();
                     Location targetLocation = new Location("");
-                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
-                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLatitude()));//your coords of course
+                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLongitude()));
                     fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleCompassFragment.newInstance("","",targetLocation,true), "tagMyMap").commit();
                 }
             }
@@ -63,8 +63,8 @@ public class PlayStoryActivity extends AppCompatActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         Location targetLocation = new Location("");
-        targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
-        targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+        targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLatitude()));//your coords of course
+        targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLongitude()));
         fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true, null), "tagMyMap").commit();
 
     }

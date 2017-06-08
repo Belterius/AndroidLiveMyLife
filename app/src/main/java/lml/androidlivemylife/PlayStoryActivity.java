@@ -1,7 +1,9 @@
 package lml.androidlivemylife;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import ClassPackage.GlobalState;
+import Fragments.SimpleCompassFragment;
+import Fragments.SimpleMapFragment;
 
 public class PlayStoryActivity extends AppCompatActivity {
 
@@ -39,11 +43,30 @@ public class PlayStoryActivity extends AppCompatActivity {
                 //TODO - Change map - boussole
                 if(isChecked){
                     mySwitch.setText(R.string.map_on);
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    Location targetLocation = new Location("");
+                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
+                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+                    fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true), "tagMyMap").commit();
                 }else{
                     mySwitch.setText(R.string.map_off);
+                    FragmentManager fm = getSupportFragmentManager();
+                    Location targetLocation = new Location("");
+                    targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
+                    targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+                    fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleCompassFragment.newInstance("","",targetLocation,true), "tagMyMap").commit();
                 }
             }
         });
+
+
+        FragmentManager fm = getSupportFragmentManager();
+        Location targetLocation = new Location("");
+        targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
+        targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
+        fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true), "tagMyMap").commit();
+
     }
 
     /**

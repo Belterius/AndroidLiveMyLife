@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
@@ -211,5 +212,13 @@ public class EditYourStepActivity extends UploadPictureActivity implements Locat
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 }

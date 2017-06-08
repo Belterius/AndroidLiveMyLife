@@ -10,28 +10,28 @@
         <com.google.android.gms.maps.MapView
             android:id="@+id/myGoogleMap"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="match_parent" />
 
-        <Button
-            android:id="@+id/buttonTestDirection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_weight="1"
-            android:text="@string/maps_test_button" />
+        <!--<Button-->
+            <!--android:id="@+id/buttonTestDirection"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/maps_test_button" />-->
 
-        <!--android:onClick="testDirection"-->
-        <ImageView
-            android:id="@+id/compass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:adjustViewBounds="true"
-            android:clickable="false"
-            android:rotation="45"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_compass" />
+        <!--&lt;!&ndash;android:onClick="testDirection"&ndash;&gt;-->
+        <!--<ImageView-->
+            <!--android:id="@+id/compass"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="4"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:clickable="false"-->
+            <!--android:rotation="45"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:src="@mipmap/ic_compass" />-->
     </LinearLayout>
 
 </FrameLayout>

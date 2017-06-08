@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case (result_from_publish) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    String newText = data.getStringExtra("backFromPublishStory");
                     FragmentManager manager = getSupportFragmentManager();
                     Fragment myFragment = manager.findFragmentByTag("LocalStoriesFragment");
                     ((LocalStoriesFragment) myFragment).getPersonalStories();

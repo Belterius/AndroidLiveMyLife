@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 
 public class PublishStoryActivity extends AppCompatActivity {
@@ -42,6 +43,9 @@ public class PublishStoryActivity extends AppCompatActivity {
     @Override
     protected void onStop () {
         super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
+        }
     }
 
     @Override
@@ -54,7 +58,6 @@ public class PublishStoryActivity extends AppCompatActivity {
      */
     private void goBackToLocalStories(){
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("backFromPublishStory", 1);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }

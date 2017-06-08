@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import API_request.MySingletonRequestApi;
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.MyUser;
@@ -318,6 +319,14 @@ public class StartStoryActivity extends AppCompatActivity {
             setOnClickListenerUnlike();
         }else{
             setOnClickListenerLike();
+        }
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (MySingletonRequestApi.getInstance(this).getRequestQueue() != null) {
+            MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
         }
     }
 

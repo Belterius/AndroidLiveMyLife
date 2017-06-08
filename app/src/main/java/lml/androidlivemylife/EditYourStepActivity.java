@@ -1,15 +1,20 @@
 package lml.androidlivemylife;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,26 +65,18 @@ public class EditYourStepActivity extends UploadPictureActivity implements Locat
         //False la première fois : car on passe dans le onResume à la création de la page
         //On veut éviter de passer aussi dans le this.finish()
         goToPicture = false;
-        this.takeNewPicture(this.getCurrentFocus());
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_step_gif);
+
+        if(requestEveryPermission()){
+            goToPicture = true;
+            this.takeNewPicture(this.getCurrentFocus());
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        //On a fait précédent, et on a donc pas d'image
-        // Retour direct aux steps
-        if(this.bitmap == null && goToPicture == true){
-            this.finish();
-        }
-
-        //On indique qu'au retour de la prise de photo ou non, on aura été sur l'activité camera
-        //On regardera donc si on doit continuer la création de la step ou non
-        if(goToPicture == false){
-            goToPicture = true;
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -90,6 +87,59 @@ public class EditYourStepActivity extends UploadPictureActivity implements Locat
             }
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if( requestCode == this.PERMISSION_ALL){
+            int returnPermissions = verificatePermissions(permissions, grantResults, false);
+            if(returnPermissions == 1){
+
+                //On indique qu'au retour de la prise de photo ou non, on aura été sur l'activité camera
+                //On regardera donc si on doit continuer la création de la step ou non
+                goToPicture = true;
+
+                this.takeNewPicture(this.getCurrentFocus());
+
+            }else if(returnPermissions == -1){
+                Toast.makeText(this, R.string.permissions_remember_edit_your_step, Toast.LENGTH_LONG).show();
+                finish();
+            }else{ //0
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle(R.string.alert_confirm);
+                alert.setMessage(R.string.alert_permissions_create_step);
+                alert.setPositiveButton(R.string.alert_choice_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+
+                alert.setNegativeButton(R.string.alert_permissions_retry, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestEveryPermission();
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+            }
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //On a fait précédent, et on a donc pas d'image
+        // Retour direct aux steps
+        if(this.bitmap == null && goToPicture == true){
+            this.finish();
+        }
     }
 
     /**

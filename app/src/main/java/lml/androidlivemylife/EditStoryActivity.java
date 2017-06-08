@@ -1,14 +1,18 @@
 package lml.androidlivemylife;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -63,6 +67,8 @@ public class EditStoryActivity extends UploadPictureActivity {
         description_to_edit = (TextView) findViewById(R.id.edit_story_description_edit);
 
         this.setImageViewForUploadClass(R.id.edit_story_picture_edit);
+        setChoosePictureFromGalleryButton(R.id.edit_story_button_galery);
+        setTakePictureButton(R.id.edit_story_button_take_new_picture);
 
         previousarrow = (ImageButton) findViewById(R.id.edit_story_previous_button);
         validate = (ImageButton) findViewById(R.id.edit_story_validate_button);
@@ -117,6 +123,50 @@ public class EditStoryActivity extends UploadPictureActivity {
         gs = new GlobalState();
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_story_gif);
+        requestEveryPermission();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(! isCreation){
+            //Edition : normal use case
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            return;
+        }
+
+        //Creation : specific use case
+        if( requestCode == this.PERMISSION_ALL){
+            int returnPermissions = verificatePermissions(permissions, grantResults, false);
+            if(returnPermissions == 1){
+                //Do nothing
+            }else if(returnPermissions == -1){
+                Toast.makeText(this, R.string.permissions_remember_edit_story, Toast.LENGTH_LONG).show();
+                finish();
+            }else{ //0
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle(R.string.alert_confirm);
+                alert.setMessage(R.string.permissions_edit_story_cant_create);
+                alert.setPositiveButton(R.string.alert_choice_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+
+                alert.setNegativeButton(R.string.alert_permissions_retry, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestEveryPermission();
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+            }
+        }
+
     }
 
     @Override

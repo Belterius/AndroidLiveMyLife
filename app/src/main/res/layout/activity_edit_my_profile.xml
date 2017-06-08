@@ -68,20 +68,40 @@
                 android:layout_alignParentTop="true"
                 app:srcCompat="@drawable/ic_menu_report_image" />
 
-            <ImageButton
-                android:id="@+id/imageView2"
-                android:background="@android:color/transparent"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1"
-                android:clickable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:onClick="showFileChooser"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/switch_image" />
+                android:layout_centerHorizontal="true">
+
+                <ImageButton
+                    android:id="@+id/my_profile_button_take_new_picture"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription=""
+                    android:elevation="0dp"
+                    android:focusableInTouchMode="false"
+                    android:onClick="takeNewPicture"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/photo_camera_with_white_border" />
+
+                <ImageButton
+                    android:id="@+id/my_profile_button_galery"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@+id/my_profile_button_take_new_picture"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:onClick="showFileChooser"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/gallery_with_white_border" />
+            </RelativeLayout>
 
         </RelativeLayout>
 

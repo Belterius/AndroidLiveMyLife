@@ -85,6 +85,16 @@
     <string name="you_finished_this_story">You finished this story !</string>
     <string name="search_here">Search Here</string>
     <string name="error_no_stories">No stories created yet. Start sharing !</string>
+    <string name="permissions_granted">Permissions granted</string>
+    <string name="alert_confirm">Confirm</string>
+    <string name="alert_message_permission_confirm">You revoked some permissions, are you really sure ? This will deactive some features !</string>
+    <string name="toast_remember_permission">Be careful, you have choosen to not authorize some functionalities and to remember your choices.</string>
+    <string name="alert_choice_ok">Ok</string>
+    <string name="alert_permissions_retry">Retry permissions.</string>
+    <string name="alert_permissions_create_step">You cannot create a step because you denied some permissions !</string>
+    <string name="permissions_remember_edit_your_step">You can\'t create a step because you choosed to refuse the access to your camera or to your files and it is mandatory to continue. Please change your settings application.</string>
+    <string name="permissions_remember_edit_story">You can\'t create your story because you choosed to refuse the access to your camera or to your files and it is mandatory to continue. Please change your settings application.</string>
+    <string name="permissions_edit_story_cant_create">You can\'t create your story because access to your files and to your camera is mandatory !</string>
 
 
 </resources>

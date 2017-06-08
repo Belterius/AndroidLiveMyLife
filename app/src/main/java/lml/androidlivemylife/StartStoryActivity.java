@@ -303,11 +303,11 @@ public class StartStoryActivity extends AppCompatActivity {
         //ETA
         //Pedestrian
         TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
-        //txt4.setText("x h");
+        txt4.setText("?");
 
         //Cyclist
         TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
-        //txt5.setText("x h");
+        txt5.setText("?");
 
         initLikeUnlike();
     }

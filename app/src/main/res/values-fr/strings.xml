@@ -86,4 +86,5 @@
     <string name="title_your_story">Votre Histoire</string>
     <string name="toast_remember_permission">Attention, vous avez choisi de ne pas autoriser certaines fonctionalités, et de rendre ce choix définitif, des problèmes de fonctionnement pourront survenir.</string>
     <string name="you_finished_this_story">Vous avez terminé cette Histoire !</string>
+    <string name="not_yet_registered_button">Pas encore inscrit ? Cliquez ici !</string>
 </resources>

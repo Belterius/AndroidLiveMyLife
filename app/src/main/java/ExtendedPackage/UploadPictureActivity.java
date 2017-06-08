@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +38,7 @@ import net.gotev.uploadservice.UploadNotificationConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -129,40 +134,18 @@ public class UploadPictureActivity extends AppCompatActivity {
             filePath = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageViewPicturePreview.setImageBitmap(bitmap);
-
+                mCurrentPhotoPath = getPath(filePath);
+                setPictureWithRotation();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            setPic();
+            setPictureWithRotation();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
-    /**
-     * Gets the file path from uri
-     * @param uri
-     * @return
-     */
-    public String getPath(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-
-        cursor = getContentResolver().query(
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-        cursor.close();
-
-        return path;
     }
 
     protected Boolean requestEveryPermission(){
@@ -352,14 +335,38 @@ public class UploadPictureActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Gets the file path from uri
+     * @param uri
+     * @return
+     */
+    public String getPath(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+
+        return path;
+    }
+
     /**
      * Encodes the picture to Base64 string
      * @param bmp
      * @return the encoded picture
      */
     private String getStringImage(Bitmap bmp){
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 10, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
@@ -380,9 +387,6 @@ public class UploadPictureActivity extends AppCompatActivity {
      */
     private void dispatchTakePictureIntent() {
 
-//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -399,9 +403,6 @@ public class UploadPictureActivity extends AppCompatActivity {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoFile);7
-//                Uri photoURI = Uri.fromFile(photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
@@ -443,6 +444,110 @@ public class UploadPictureActivity extends AppCompatActivity {
     }
 
     /**
+     * Resize the picture - rotate the picture correctly - Add it immediatly to the gallery
+     * From : https://stackoverflow.com/questions/39287131/how-reduce-image-size-when-upload-to-server
+     */
+    private void setPictureWithRotation(){
+        String filePath = mCurrentPhotoPath;
+        Bitmap scaledBitmap = null;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+
+//      by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
+//      you try the use the bitmap here, you will get null.
+        options.inJustDecodeBounds = true;
+        Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+
+        int actualHeight = options.outHeight;
+        int actualWidth = options.outWidth;
+
+//      max Height and width values of the compressed image is taken as 816x612
+        float maxHeight = 1280.0f;
+        float maxWidth = 800.0f;
+        float imgRatio = actualWidth / actualHeight;
+        float maxRatio = maxWidth / maxHeight;
+
+//      width and height values are set maintaining the aspect ratio of the image
+        if (actualHeight > maxHeight || actualWidth > maxWidth) {
+            if (imgRatio < maxRatio) {
+                imgRatio = maxHeight / actualHeight;
+                actualWidth = (int) (imgRatio * actualWidth);
+                actualHeight = (int) maxHeight;
+            } else if (imgRatio > maxRatio) {
+                imgRatio = maxWidth / actualWidth;
+                actualHeight = (int) (imgRatio * actualHeight);
+                actualWidth = (int) maxWidth;
+            } else {
+                actualHeight = (int) maxHeight;
+                actualWidth = (int) maxWidth;
+
+            }
+        }
+
+//      setting inSampleSize value allows to load a scaled down version of the original image
+        options.inSampleSize = calculateInSampleSize(options, actualWidth, actualHeight);
+
+//      inJustDecodeBounds set to false to load the actual bitmap
+        options.inJustDecodeBounds = false;
+
+//      this options allow android to claim the bitmap memory if it runs low on memory
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        options.inTempStorage = new byte[16 * 1024];
+
+        try {
+//          load the bitmap from its path
+            bmp = BitmapFactory.decodeFile(filePath, options);
+        } catch (OutOfMemoryError exception) {
+            exception.printStackTrace();
+
+        }
+        try {
+            scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight, Bitmap.Config.ARGB_8888);
+        } catch (OutOfMemoryError exception) {
+            exception.printStackTrace();
+        }
+
+        float ratioX = actualWidth / (float) options.outWidth;
+        float ratioY = actualHeight / (float) options.outHeight;
+        float middleX = actualWidth / 2.0f;
+        float middleY = actualHeight / 2.0f;
+
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
+
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.setMatrix(scaleMatrix);
+        canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
+
+//      check the rotation of the image
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(filePath);
+
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION, 0);
+            Matrix matrix = new Matrix();
+            int rotate = exifOrientationToDegrees(orientation);
+            Log.d("EXIF", "Rotate: " + rotate);
+            matrix.postRotate(rotate);
+
+            //Display it properly
+            scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
+                    scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
+                    true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        this.bitmap = scaledBitmap;
+        imageViewPicturePreview.setImageBitmap(scaledBitmap);
+
+        galleryAddPic();
+    }
+
+    /**
      * The following example method demonstrates how to invoke the system's media scanner
      * to add your photo to the Media Provider's database, making it available in the Android
      * Gallery application and to other apps.
@@ -456,60 +561,40 @@ public class UploadPictureActivity extends AppCompatActivity {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * TODO
-     * If you want to resize the picture before uploading (and reduce its weight)
+     * Setting inSampleSize value allows to load a scaled down version of the original image
+     * @param options
+     * @param reqWidth
+     * @param reqHeight
+     * @return
      */
-    private void setPicAndResize() {
-        throw new UnsupportedOperationException("UploadPictureActivity - setPicAndResize : Not yet implemented !");
-//        // Get the dimensions of the View
-//        int targetW = imageViewPicturePreview.getWidth();
-//        int targetH = imageViewPicturePreview.getHeight();
-//
-//        // Get the dimensions of the bitmap
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        int photoW = bmOptions.outWidth;
-//        int photoH = bmOptions.outHeight;
-//
-//        // Determine how much to scale down the image
-//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-//
-//        // Decode the image file into a Bitmap sized to fill the View
-//        bmOptions.inJustDecodeBounds = false;
-//        bmOptions.inSampleSize = scaleFactor;
-//        bmOptions.inPurgeable = true;
-//
-//        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        imageViewPicturePreview.setImageBitmap(bitmap);
+    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        final float totalPixels = width * height;
+        final float totalReqPixelsCap = reqWidth * reqHeight * 2;
+        while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
+            inSampleSize++;
+        }
+
+        return inSampleSize;
     }
 
-    /**
-     * Set the image view after having taken a new picture from the camera
-     * And make it available.
-     */
-    private void setPic() {
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-
-        //Use Picasso to handle rotated picture
-        Picasso.with(this.getApplicationContext()).load(contentUri).into(imageViewPicturePreview);
-
-        /*
-            Make the new picture instantly vailable in the Android
-            Gallery application and to other apps.
-         */
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-
-        //Set the bitmap which will be used for the upload
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
         }
+        return 0;
     }
 
 }

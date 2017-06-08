@@ -215,7 +215,7 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
         dataToPass.put("action", "getMoreStories");
         dataToPass.put("offset", String.valueOf(offset));
 
-        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::resultGetMoreStories);
+        RequestClass.doRequestWithApi(this.getActivity(), this.TAG,dataToPass, this::resultGetMoreStories); //this.getActivity().getApplicationContext()
     }
 
     public boolean resultGetMoreStories(JSONObject o){

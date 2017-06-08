@@ -97,7 +97,7 @@
                 android:checked="true"
                 android:splitTrack="true"
                 android:switchPadding="20dp"
-                android:text="@string/map_off"
+                android:text="@string/map_on"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
                 android:theme="@style/switchBlue"

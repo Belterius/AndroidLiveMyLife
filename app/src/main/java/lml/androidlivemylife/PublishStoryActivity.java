@@ -58,7 +58,6 @@ public class PublishStoryActivity extends AppCompatActivity {
      */
     private void goBackToLocalStories(){
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("backFromPublishStory", 1);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }

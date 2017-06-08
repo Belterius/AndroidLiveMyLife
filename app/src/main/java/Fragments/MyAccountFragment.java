@@ -147,14 +147,20 @@ public class MyAccountFragment extends Fragment {
         ((TextView) getView().findViewById(R.id.show_profile_pseudo)).setText(this.gs.getMyAccount().getPseudo());
         ((TextView) getView().findViewById(R.id.show_profile_description)).setText(this.gs.getMyAccount().getDescription());
 
-        Picasso.with(this.getContext())
-            .load(this.gs.getMyAccount().getPicture())
-            .placeholder(R.drawable.loading_gears)
-            .error(R.drawable.ic_menu_report_image)
-            .into(((ImageView)getView().findViewById(R.id.show_profile_picture)));
-
+        if(this.gs.getMyAccount().getPicture().equals("")){
+            Picasso.with(this.getContext())
+                    .load(R.drawable.users)
+                    .placeholder(R.drawable.loading_gears)
+                    .error(R.drawable.ic_menu_report_image)
+                    .into(((ImageView)getView().findViewById(R.id.show_profile_picture)));
+        }else{
+            Picasso.with(this.getContext())
+                    .load(this.gs.getMyAccount().getPicture())
+                    .placeholder(R.drawable.loading_gears)
+                    .error(R.drawable.ic_menu_report_image)
+                    .into(((ImageView)getView().findViewById(R.id.show_profile_picture)));
+        }
         //TODO : charger aussi les différentes story et afficher le slider avec les preview
-
     }
 
     public void editMyProfile(View v){

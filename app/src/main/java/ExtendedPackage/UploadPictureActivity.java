@@ -2,12 +2,14 @@ package ExtendedPackage;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -15,11 +17,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,6 +39,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
+import ClassPackage.ToastClass;
+import lml.androidlivemylife.R;
+
+import static android.R.attr.data;
+import static android.R.attr.permission;
 
 /**
  * Created by Gimlibéta on 14/05/2017.
@@ -68,14 +78,25 @@ public class UploadPictureActivity extends AppCompatActivity {
 
     private String mCurrentPhotoPath;
 
+    protected final int PERMISSION_ALL = 10;
+    private ImageButton takePictureButton;
+    private ImageButton choosePictureFromGalleryButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestPermissions();
     }
 
     public void setImageViewForUploadClass(int idFromViewById){
         imageViewPicturePreview = (ImageView) findViewById(idFromViewById);
+    }
+
+    public void setTakePictureButton(int idFromViewById){
+        this.takePictureButton = (ImageButton) findViewById(idFromViewById);
+    }
+
+    public void setChoosePictureFromGalleryButton(int idFromViewById){
+        this.choosePictureFromGalleryButton = (ImageButton) findViewById(idFromViewById);
     }
 
     /**
@@ -119,7 +140,6 @@ public class UploadPictureActivity extends AppCompatActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-
     }
 
 
@@ -145,6 +165,30 @@ public class UploadPictureActivity extends AppCompatActivity {
         return path;
     }
 
+    protected Boolean requestEveryPermission(){
+
+        String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                //For every permissions, check if it is granted
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    //If it is not, we will ask them
+                    return false;
+                }
+            }
+        }
+        //Otherwise do nothing
+        return true;
+    }
 
     /**
      * Requesting permission
@@ -210,6 +254,101 @@ public class UploadPictureActivity extends AppCompatActivity {
                 //Displaying another toast if permission is not granted
                 Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
             }
+        }
+
+        if( requestCode == PERMISSION_ALL){
+            if(verificatePermissions(permissions, grantResults, true) == 0){
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle(R.string.alert_confirm);
+                alert.setMessage(R.string.alert_message_permission_confirm);
+                alert.setPositiveButton(R.string.choice_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.setNegativeButton(R.string.choice_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestEveryPermission();
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+            }
+        }
+    }
+
+    /**
+     *
+     * @param permissions
+     * @param grantResults
+     * @param acceptRevokedPermission If we can go futher with revoked permissions
+     * @return -1 : there are some denied permissions and the user clicked on "remember my choice"
+     *          0 : there are some denied permissions and the user didn't click on "remember my choice"
+     *          1 : Ok
+     */
+    protected int verificatePermissions(@NonNull String[] permissions, @NonNull int[] grantResults, Boolean acceptRevokedPermission ){
+
+        Boolean permissionOk = false;
+        Boolean permissionNotOkButRemember = false;
+        Boolean permissionNotOk = false;
+        Boolean permissionTemp = false;
+
+        for(int i = 0;i<grantResults.length;i++){
+            switch(permissions[i]){
+                case Manifest.permission.WRITE_EXTERNAL_STORAGE :
+                    permissionTemp = setVisibleInvisibleButton(grantResults[i], this.choosePictureFromGalleryButton);
+                    break;
+                case Manifest.permission.CAMERA :
+                    permissionTemp = setVisibleInvisibleButton(grantResults[i], this.takePictureButton);
+                    break;
+            }
+
+            if (! permissionTemp){
+                if(! ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i])){
+                    permissionNotOkButRemember = true;
+                }else{
+                    permissionNotOk = true;
+                }
+            }else if(permissionTemp){
+                permissionOk = true;
+            }
+        }
+
+        if(permissionNotOk){
+            return 0;
+        }else if(permissionNotOkButRemember){
+            if(acceptRevokedPermission){
+                Toast.makeText(this, R.string.toast_remember_permission, Toast.LENGTH_LONG).show();
+                return 1;
+            }else{
+                return -1;
+            }
+        }else{
+            return 1;
+        }
+    }
+
+    /**
+     * Sets to Visible or Invisible the buttons depending on the permissions
+     * @param resultPermission
+     * @param imageButtonToSet
+     */
+    private Boolean setVisibleInvisibleButton(int resultPermission, ImageButton imageButtonToSet){
+        if(resultPermission  == PackageManager.PERMISSION_GRANTED){
+            if(imageButtonToSet != null){
+                imageButtonToSet.setVisibility(View.VISIBLE);
+            }
+            return true;
+        }else{
+            if(imageButtonToSet != null){
+                imageButtonToSet.setVisibility(View.INVISIBLE);
+            }
+            return false;
         }
     }
 
@@ -371,15 +510,6 @@ public class UploadPictureActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    /**
-     * Request the permissions for capture and storage
-     */
-    protected void requestPermissions(){
-        requestStoragePermission();
-        requestCapturePermission();
     }
 
 }

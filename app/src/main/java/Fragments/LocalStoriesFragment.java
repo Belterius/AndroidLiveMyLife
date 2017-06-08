@@ -103,7 +103,8 @@ public class LocalStoriesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getPersonalStories();
+        //getPersonalStories();
+        getMoreLocalStories(0);
     }
 
     @Override
@@ -131,6 +132,16 @@ public class LocalStoriesFragment extends Fragment {
                 else{
                     hideButtons(arg1);
                 }
+            }
+        });
+
+        lv.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                getMoreLocalStories(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
 
@@ -207,6 +218,47 @@ public class LocalStoriesFragment extends Fragment {
             e.printStackTrace();
         }
 
+        loader.smoothToHide();
+        return false;
+    }
+
+    /**
+     * Récupère toutes les stories locales(les X prochaines à partir de l'offset défini en paramètre)
+     */
+    public void getMoreLocalStories(int offset){
+        loader.smoothToShow();
+        loader.bringToFront();
+        Map<String, String> dataToPass = new HashMap<>();
+        dataToPass.put("action", "getMoreLocalStories");
+        dataToPass.put("offset", String.valueOf(offset));
+
+        RequestClass.doRequestWithApi(this.getActivity().getApplicationContext(), this.TAG,dataToPass, this::resultGetMoreLocalStories);
+    }
+
+    public boolean resultGetMoreLocalStories(JSONObject o){
+        try {
+            JSONArray stories = o.getJSONArray("stories");
+            if(o.getInt("status") == 200 && stories != null){
+                for(int i=0; i<stories.length(); i++){
+                    JSONObject json_data = stories.getJSONObject(i);
+                    Story story = new Story(json_data.getString("storyId"),
+                            json_data.getString("storyTitle"),
+                            json_data.getString("storyDescription"),
+                            json_data.getString("storyPicture"),
+                            "1".equals(json_data.getString("storyIsPublished")));
+                    storyArrayList.add(story);
+                }
+
+                localStoriesAdapter.notifyDataSetChanged();
+                loader.smoothToHide();
+                return true;
+            }else{
+                ToastClass.toastError(this.getActivity(), o.getString("feedback"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         loader.smoothToHide();
         return false;
     }

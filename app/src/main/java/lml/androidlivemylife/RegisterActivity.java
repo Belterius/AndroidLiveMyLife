@@ -47,11 +47,15 @@ public class RegisterActivity extends UploadPictureActivity {
 
         //For extended class
         setImageViewForUploadClass(R.id.register_imageView);
+        setChoosePictureFromGalleryButton(R.id.register_button_picture_from_gallery);
+        setTakePictureButton(R.id.register_button_take_new_picture);
 
         Bundle b = this.getIntent().getExtras();
         this.editEmail.setText(b.getString("email"));
 
         gs = new GlobalState();
+
+        requestEveryPermission();
     }
 
     /**
@@ -74,7 +78,7 @@ public class RegisterActivity extends UploadPictureActivity {
             return false;
         }
 
-        if(email.equals("") || pseudo.equals("") || firstname.equals("") || lastname.equals("") || description.equals("") || password.equals("") || passwordConfirm.equals("") || bitmap == null){
+        if(email.equals("") || pseudo.equals("") || firstname.equals("") || lastname.equals("") || description.equals("") || password.equals("") || passwordConfirm.equals("")){
             ToastClass.toastError(this, getString(R.string.error_fill_field));
             return false;
         }
@@ -89,7 +93,7 @@ public class RegisterActivity extends UploadPictureActivity {
         dataToPass.put("firstname", firstname);
         dataToPass.put("lastname", lastname);
         dataToPass.put("description", description);
-        dataToPass.put("photo", getImageToPassForRequest());
+        dataToPass.put("photo", bitmap != null ? getImageToPassForRequest() : "");
 
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequest);
 
@@ -105,30 +109,9 @@ public class RegisterActivity extends UploadPictureActivity {
         try {
 
             JSONObject user = o.getJSONObject("user");
-            if( o.getInt("status") == 200 && user != null ){
+            if( o.getInt("status") == 200){
 
-                this.gs.setMyAccount(new MyUser(
-                        user.getString("id"),
-                        user.getString("email"),
-                        user.getString("pseudo"),
-                        user.getString("firstname"),
-                        user.getString("lastname"),
-                        user.getString("description"),
-                        user.getString("photo"),
-                        new Story(user.getJSONObject("myCurrentStory").getString("id"))
-                ));
-
-                this.gs.setConnected(true);
-                finish();
-                return true;
-
-            }else {
-                ToastClass.toastError(this, o.getString("feedback"));
-            }
-
-            //Account created but problem with the picture
-            if (o.getInt("status") == 202 && user != null){
-
+                if(user != null ){
                     this.gs.setMyAccount(new MyUser(
                             user.getString("id"),
                             user.getString("email"),
@@ -136,7 +119,28 @@ public class RegisterActivity extends UploadPictureActivity {
                             user.getString("firstname"),
                             user.getString("lastname"),
                             user.getString("description"),
-                            user.getString(""),
+                            user.getString("photo"),
+                            new Story(user.getJSONObject("myCurrentStory").getString("id"))
+                    ));
+
+                    this.gs.setConnected(true);
+                    finish();
+                    return true;
+                }
+
+            }
+            //Account created but problem with the picture
+            else if (o.getInt("status") == 202){
+
+                if(user != null){
+                    this.gs.setMyAccount(new MyUser(
+                            user.getString("id"),
+                            user.getString("email"),
+                            user.getString("pseudo"),
+                            user.getString("firstname"),
+                            user.getString("lastname"),
+                            user.getString("description"),
+                            "",
                             new Story(user.getJSONObject("myCurrentStory").getString("id"))
                     ));
 
@@ -144,8 +148,10 @@ public class RegisterActivity extends UploadPictureActivity {
                     this.gs.setConnected(true);
                     finish();
                     return true;
+                }
+            }else {
+                ToastClass.toastError(this, o.getString("feedback"));
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,8 @@ package ClassPackage;
 
 import java.io.Serializable;
 
+import lml.androidlivemylife.R;
+
 /**
  * Created by Gimlibéta on 30/04/2017.
  */

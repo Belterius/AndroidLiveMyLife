@@ -7,6 +7,7 @@ import android.util.LruCache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -56,7 +57,8 @@ public class MySingletonRequestApi {
         return mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
+    public <T> void addToRequestQueue(StringRequest req, String tag) {
+        req.addMarker(tag);
         getRequestQueue().add(req);
     }
 

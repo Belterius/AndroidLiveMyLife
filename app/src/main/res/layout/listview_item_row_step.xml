@@ -47,4 +47,16 @@
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail" />
 
+    <ImageButton
+        android:id="@+id/deletebutton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:elevation="0dp"
+        android:paddingTop="15dp"
+        android:scaleType="fitCenter"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

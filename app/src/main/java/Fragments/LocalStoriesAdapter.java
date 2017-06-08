@@ -185,7 +185,7 @@ public class LocalStoriesAdapter extends BaseAdapter {
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(parent.getContext());
                 alert.setTitle(R.string.title_delete);
-                alert.setMessage(R.string.confirmation_delete);
+                alert.setMessage(R.string.confirmation_delete_story);
                 alert.setPositiveButton(R.string.choice_yes, new DialogInterface.OnClickListener() {
 
                     @Override

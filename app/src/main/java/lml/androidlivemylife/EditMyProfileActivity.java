@@ -83,18 +83,33 @@ public class EditMyProfileActivity extends UploadPictureActivity {
         editDescription = (EditText) findViewById(R.id.my_profile_bio_edit);
 
         this.setImageViewForUploadClass(R.id.my_profile_picture_edit);
+        setChoosePictureFromGalleryButton(R.id.my_profile_button_galery);
+        setTakePictureButton(R.id.my_profile_button_take_new_picture);
 
         gs = new GlobalState();
 
         this.editPseudo.setText(this.gs.getMyAccount().getPseudo());
         this.editDescription.setText(this.gs.getMyAccount().getDescription());
-        Picasso.with(this.getApplicationContext())
-            .load(this.gs.getMyAccount().getPicture())
-            .placeholder(R.drawable.loading_gears)
-            .error(R.drawable.ic_menu_report_image)
-            .into(imageViewPicturePreview);
+
+        if(this.gs.getMyAccount().getPicture().equals("")){
+
+            Picasso.with(this.getApplicationContext())
+                    .load(R.drawable.users)
+                    .placeholder(R.drawable.loading_gears)
+                    .error(R.drawable.ic_menu_report_image)
+                    .into(imageViewPicturePreview);
+        }else{
+            Picasso.with(this.getApplicationContext())
+                    .load(this.gs.getMyAccount().getPicture())
+                    .placeholder(R.drawable.loading_gears)
+                    .error(R.drawable.ic_menu_report_image)
+                    .into(imageViewPicturePreview);
+        }
+
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_my_profile_gif);
+
+        requestEveryPermission();
     }
 
     /**

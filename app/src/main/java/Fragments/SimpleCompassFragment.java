@@ -600,6 +600,8 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
         ra.setFillAfter(true);
 
         // Start the animation
+        if(this.getActivity() == null)
+            return;
         this.getActivity().findViewById(R.id.compass).startAnimation(ra);
         currentDegree = -degree;
 

@@ -151,7 +151,7 @@ public class StartStoryActivity extends AppCompatActivity {
                     Location targetLocation = new Location("");
                     targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
                     targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
-                    fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",targetLocation,false), "tagMyMap").commit();
+                    fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",targetLocation,false, mySteps2), "tagMyMap").commit();
 
                 }
 
@@ -303,11 +303,11 @@ public class StartStoryActivity extends AppCompatActivity {
         //ETA
         //Pedestrian
         TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
-        txt4.setText("x h");
+        //txt4.setText("x h");
 
         //Cyclist
         TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
-        txt5.setText("x h");
+        //txt5.setText("x h");
 
         initLikeUnlike();
     }
@@ -329,5 +329,17 @@ public class StartStoryActivity extends AppCompatActivity {
             MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
         }
     }
+
+    public void updateWalkingTime(String time){
+        //Pedestrian
+        TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
+        txt4.setText(time);
+    }
+    public void updateBicyclingTime(String time){
+        //Pedestrian
+        TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
+        txt5.setText(time);
+    }
+
 
 }

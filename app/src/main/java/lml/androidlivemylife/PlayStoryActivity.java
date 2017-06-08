@@ -48,7 +48,7 @@ public class PlayStoryActivity extends AppCompatActivity {
                     Location targetLocation = new Location("");
                     targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
                     targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
-                    fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true), "tagMyMap").commit();
+                    fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true, null), "tagMyMap").commit();
                 }else{
                     mySwitch.setText(R.string.map_off);
                     FragmentManager fm = getSupportFragmentManager();
@@ -65,7 +65,7 @@ public class PlayStoryActivity extends AppCompatActivity {
         Location targetLocation = new Location("");
         targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
         targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
-        fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true), "tagMyMap").commit();
+        fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true, null), "tagMyMap").commit();
 
     }
 
@@ -127,6 +127,8 @@ public class PlayStoryActivity extends AppCompatActivity {
         //Removes from the stack this Activity
         this.finish();
     }
+
+
 
 
 }

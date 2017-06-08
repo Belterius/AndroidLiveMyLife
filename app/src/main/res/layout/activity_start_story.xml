@@ -110,26 +110,73 @@
                 app:srcCompat="@drawable/is_not_liked" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:padding="10dp"
             android:weightSum="1">
 
+            <LinearLayout
+                android:id="@+id/start_story_description_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/start_story_preview_picture"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/descrip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/start_story_description_textView"
+                    android:layout_weight="0.08"
+                    android:text="@string/description"
+                    android:textAlignment="textStart"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/start_story_description_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/descrip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/start_story_preview_picture"
+                    android:layout_weight="0.11"
+                    android:maxHeight="50dp"
+                    android:text="will be completed by the description hjkpl yghuiok gyhjk"
+                    android:textAlignment="textStart" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/start_story_preview_picture"
-                android:layout_width="109dp"
-                android:layout_height="109dp"
-                android:layout_marginRight="50dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_report_image" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="1">
 
             <FrameLayout
                 android:id="@+id/start_story_framelayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="150dp">
 
             </FrameLayout>
 
@@ -138,7 +185,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/start_story_ETA_textview"
@@ -168,8 +215,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="71dp"
+                            android:layout_width="30dp"
+                            android:layout_height="45dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/pedestrian" />
 
@@ -194,8 +241,8 @@
 
                         <ImageView
                             android:id="@+id/imageView"
-                            android:layout_width="50dp"
-                            android:layout_height="71dp"
+                            android:layout_width="30dp"
+                            android:layout_height="45dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/cyclist" />
 
@@ -211,24 +258,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/description"
-            android:textAlignment="textStart"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/start_story_description_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="will be completed by the description"
-            android:textAlignment="textStart" />
 
     </LinearLayout>
 </RelativeLayout>

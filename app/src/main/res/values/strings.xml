@@ -78,7 +78,7 @@
     <string name="title_publish">Publish</string>
     <string name="confirmation_publish">Are you sure you want to publish this story?</string>
     <string name="title_resume_story">Resume story ?</string>
-    <string name="alert_resume_story">Do you resume your story where you had left it ?</string>
+    <string name="alert_resume_story">Do you want to resume your story where you left it ?</string>
     <string name="step">Step</string>
     <string name="story_finished">You finished the story</string>
     <string name="map_off">Map off</string>

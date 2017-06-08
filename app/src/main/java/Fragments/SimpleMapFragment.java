@@ -66,9 +66,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import ClassPackage.GlobalState;
+import ClassPackage.Step;
 import GPS.DirectionsJSONParser;
 import lml.androidlivemylife.PlayStoryActivity;
 import lml.androidlivemylife.R;
+import lml.androidlivemylife.StartStoryActivity;
 
 /**
  * Created by belterius on 30/05/2017.
@@ -100,9 +102,10 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private Marker mTargetLocationMarker;//le marqueur correspondant à notre position actuelle
     private LocationRequest mLocationRequest;
     private Polyline currentPolylinePath;//le chemin entre notre position et notre cible, sauvegardé de manière à pouvoir le supprimmer lorsque le chemin change
+    List<Step> allMySteps;
 
 
-    public static SimpleMapFragment newInstance(String param1, String param2, Location targetLocation, Boolean showCurrentPos) {
+    public static SimpleMapFragment newInstance(String param1, String param2, Location targetLocation, Boolean showCurrentPos, List<Step> mySteps) {
         SimpleMapFragment fragment = new SimpleMapFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -110,6 +113,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         fragment.setArguments(args);
         fragment.targetLocation = targetLocation;
         fragment.showCurrentPos = showCurrentPos;
+        fragment.allMySteps = mySteps;
         return fragment;
     }
 
@@ -271,7 +275,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             mMap.animateCamera(cameraUpdate);
             setMarker(targetLocation, "Target Location");
-
+            timeFromStartToEnd();
             return;
         }
     }
@@ -331,7 +335,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         }else if(mCurrentLocation.getLongitude() == location.getLongitude() && mCurrentLocation.getLatitude() == location.getLatitude())
             return;
 
-        float testDist = mCurrentLocation.distanceTo(targetLocation);
         if(mCurrentLocation.distanceTo(targetLocation) <= 10){
             if(this.getActivity() instanceof PlayStoryActivity)
                 ((PlayStoryActivity)this.getActivity()).goToStepDone(this.getView());
@@ -429,6 +432,74 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         downloadTask.execute(url);
     }
 
+    private void timeFromStartToEnd(){
+        if(allMySteps == null)
+            return;
+        String urlWalking = getFullDurationUrl(allMySteps, "walking");
+
+        SimpleMapFragment.DownloadTask downloadTaskWalking = new SimpleMapFragment.DownloadTask();
+
+        downloadTaskWalking.typeTime = "walking";
+        // télécharge les informations (json) fournie par Google Directions API
+        downloadTaskWalking.execute(urlWalking);
+
+
+        String url = getFullDurationUrl(allMySteps, "bicycling");
+
+        SimpleMapFragment.DownloadTask downloadTaskBicycling = new SimpleMapFragment.DownloadTask();
+
+        downloadTaskBicycling.typeTime = "bicycling";
+        // télécharge les informations (json) fournie par Google Directions API
+        downloadTaskBicycling.execute(url);
+
+
+    }
+    private String getFullDurationUrl(List<Step> mySteps, String modeTravelling){
+        LatLng origin = new LatLng(Double.parseDouble(mySteps.get(0).getGpsLatitude()), Double.parseDouble(mySteps.get(0).getGpsLongitude()));
+        LatLng dest = new LatLng(Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLatitude()), Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLongitude()));
+
+
+        // Origine de la route
+        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+
+        // Destination de la route
+        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+
+
+        // Si le sensor est activé
+        String sensor = "sensor=true";
+
+        //Le type de moyen de déplacement (walking/driving/bicycling/transit)
+        String mode = "mode="+modeTravelling;
+
+
+        String via = "waypoints=";
+        String parameters = "";
+        if(mySteps.size() > 2){
+
+            List<Step> tempoSteps = new ArrayList<>(mySteps);
+            tempoSteps.remove(tempoSteps.size() - 1);
+            tempoSteps.remove(0);
+            for(Step step : tempoSteps){
+                via+="via:"+step.getGpsLatitude()+","+step.getGpsLongitude();
+            }
+                parameters = str_origin+"&"+str_dest+"&"+via +"&"+sensor+"&"+mode;
+        }else{
+
+                parameters = str_origin+"&"+str_dest +"&"+sensor+"&"+mode;
+        }
+
+
+        // le format de la réponse
+        String output = "json";
+
+        // Construction de l'URL
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+        return url;
+    }
+
+
     /**
      * Crée la structure de l'url de requête pour le chemin entre notre position et notre destination
      * @param origin latitude de notre position
@@ -498,6 +569,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     // Permet de récupérer des données de réponse à l'URL fourni de manière asynchrone
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
+        public String typeTime = null;
         @Override
         protected String doInBackground(String... url) {
             // les données que l'on récupère
@@ -516,6 +588,12 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 JSONArray legs = ((JSONObject)route.get(0)).getJSONArray("legs");
                 JSONObject duration = ((JSONObject)legs.get(0)).getJSONObject("duration");
 
+                if(typeTime.equals("walking")){
+                    setWalkingTimeStory(duration.getString("text"));
+                }
+                if(typeTime.equals("bicycling")){
+                    setBicyclingTimeStory(duration.getString("text"));
+                }
 
                 Log.d("My App", obj.toString());
 
@@ -532,11 +610,13 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(typeTime == null){
+                SimpleMapFragment.ParserGooglePlacesToJSONTask parserTask = new SimpleMapFragment.ParserGooglePlacesToJSONTask();
 
-            SimpleMapFragment.ParserGooglePlacesToJSONTask parserTask = new SimpleMapFragment.ParserGooglePlacesToJSONTask();
+                // Parse la data récupéré depuis l'URL en JSON
+                parserTask.execute(result);
+            }
 
-            // Parse la data récupéré depuis l'URL en JSON
-            parserTask.execute(result);
         }
     }
 
@@ -659,6 +739,15 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         //System.out.println(bearingText);
        // fieldBearing.setText(bearingText);
 
+    }
+
+    public void setWalkingTimeStory(String duration){
+            if(this.getActivity() instanceof StartStoryActivity)
+                ((StartStoryActivity)this.getActivity()).updateWalkingTime(duration);
+    }
+    public void setBicyclingTimeStory(String duration){
+        if(this.getActivity() instanceof StartStoryActivity)
+            ((StartStoryActivity)this.getActivity()).updateBicyclingTime(duration);
     }
 
 }

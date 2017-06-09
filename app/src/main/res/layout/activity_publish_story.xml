@@ -24,9 +24,9 @@
             android:layout_toRightOf="@+id/publish_story_previous_button"
             android:layout_weight="1"
             android:fontFamily="serif"
+            android:textSize="24sp"
             android:text="Title"
             android:textAlignment="center"
-            android:textSize="30dp"
             android:ellipsize="end"
             android:maxLines="1"/>
 

@@ -98,6 +98,7 @@
     <string name="permissions_remember_edit_story">You can\'t create your story because you choosed to refuse the access to your camera or to your files and it is mandatory to continue. Please change your settings application.</string>
     <string name="permissions_edit_story_cant_create">You can\'t create your story because access to your files and to your camera is mandatory !</string>
     <string name="not_yet_registered_button">Not yet registered ? Click here to sign up !</string>
+    <string name="about">About</string>
 
 
 </resources>

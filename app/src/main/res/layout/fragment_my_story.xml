@@ -30,7 +30,7 @@ tools:layout_editor_absoluteY="8dp">
             android:layout_height="52dp">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/show_profile_pseudo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -78,10 +78,10 @@ tools:layout_editor_absoluteY="8dp">
                 android:id="@+id/textViewError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/textView2"
+                android:layout_above="@id/show_profile_pseudo"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/textView2"
+                android:layout_below="@id/show_profile_pseudo"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:layout_weight="1"

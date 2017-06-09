@@ -335,10 +335,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         setMarker(location, "Current Position");
         setMarker(targetLocation, "Target Location");
 
-        //place la carte sur notre position actuelle
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
-
         //Si on a une destination, trâce le chemin
         if(mCurrentLocation != null && targetLocation != null)
             pathFromCurrentToTarget();
@@ -409,6 +405,9 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         downloadTask.execute(url);
     }
 
+    /**
+     * Execute les étapes nécessaires à l'affichage du temps pour réaliser la Story
+     */
     private void timeFromStartToEnd(){
         if(allMySteps == null)
             return;
@@ -431,6 +430,13 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+
+    /**
+     * Crée la structure de l'url de requête pour le parcours entre le départ de notre Story et l'arrivée
+     * @param mySteps la listes des steps de notre Story
+     * @param modeTravelling le moyen de déplacement
+     * @return
+     */
     private String getFullDurationUrl(List<Step> mySteps, String modeTravelling){
         LatLng origin = new LatLng(Double.parseDouble(mySteps.get(0).getGpsLatitude()), Double.parseDouble(mySteps.get(0).getGpsLongitude()));
         LatLng dest = new LatLng(Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLatitude()), Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLongitude()));
@@ -543,7 +549,10 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         return data;
     }
 
-    // Permet de récupérer des données de réponse à l'URL fourni de manière asynchrone
+
+    /**
+     * Permet de récupérer des données de réponse à l'URL fourni de manière asynchrone
+     */
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
         public String typeTime = null;
@@ -597,7 +606,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    /** Parse les réponses de l'api Google place/direction en JSON */
+    /** Parse les réponses de l'api Google place/direction en JSON  puis crée et affiche une PolyLine sur la GoogleMap représentant le trajet effectué*/
     private class ParserGooglePlacesToJSONTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
 
         @Override
@@ -659,12 +668,21 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
+    /**
+     * Affiche la durée du parcours à pied
+     * @param duration
+     */
     public void setWalkingTimeStory(String duration){
-            if(this.getActivity() instanceof StartStoryActivity)
+            if(this.getActivity() instanceof StartStoryActivity)//nécessaire au cas où l'utilisateur quitte la page alors que l'appel Asynchrone était en cours
                 ((StartStoryActivity)this.getActivity()).updateWalkingTime(duration);
     }
+
+    /**
+     * affiche la durée du parcours à vélo
+     * @param duration
+     */
     public void setBicyclingTimeStory(String duration){
-        if(this.getActivity() instanceof StartStoryActivity)
+        if(this.getActivity() instanceof StartStoryActivity)//nécessaire au cas où l'utilisateur quitte la page alors que l'appel Asynchrone était en cours
             ((StartStoryActivity)this.getActivity()).updateBicyclingTime(duration);
     }
 

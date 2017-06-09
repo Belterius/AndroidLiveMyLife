@@ -566,10 +566,10 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 JSONObject duration = ((JSONObject)legs.get(0)).getJSONObject("duration");
 
                 if(typeTime.equals("walking")){
-                    setWalkingTimeStory(duration.getString("text"));
+                    setWalkingTimeStory(duration.getString("text").toString());
                 }
                 if(typeTime.equals("bicycling")){
-                    setBicyclingTimeStory(duration.getString("text"));
+                    setBicyclingTimeStory(duration.getString("text").toString());
                 }
 
                 Log.d("My App", obj.toString());

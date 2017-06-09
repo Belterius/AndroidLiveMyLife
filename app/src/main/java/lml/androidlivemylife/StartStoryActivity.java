@@ -48,8 +48,6 @@ public class StartStoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_story);
         rootView = findViewById(R.id.activityStartID);
-        this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
-
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 
@@ -331,16 +329,29 @@ public class StartStoryActivity extends AppCompatActivity {
     }
 
     public void updateWalkingTime(String time){
-        //Pedestrian
-        TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
-        txt4.setText(time);
-        rootView.invalidate();
+        // Trying to access UI elements from any thread that is not the UI thread causes Exception and Errors
+        //So use that instead !
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Pedestrian
+                TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
+                txt4.setText(time);
+                rootView.invalidate();
+            }
+        });
     }
     public void updateBicyclingTime(String time){
-        //Pedestrian
-        TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
-        txt5.setText(time);
-        rootView.invalidate();
+        //As updateWalkingTime
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Pedestrian
+                TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
+                txt5.setText(time);
+                rootView.invalidate();
+            }
+        });
     }
 
 

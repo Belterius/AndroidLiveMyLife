@@ -249,14 +249,12 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         if(!showCurrentPos){
             if(targetLocation == null)
                 return;
-
-            LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            mMap.animateCamera(cameraUpdate);
             setMarker(targetLocation, "Target Location");
             timeFromStartToEnd();
-            return;
         }
+        LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+        mMap.animateCamera(cameraUpdate);
     }
 
     /**
@@ -350,7 +348,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
-        mLocationRequest.setSmallestDisplacement(10);
+        mLocationRequest.setSmallestDisplacement(5);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)

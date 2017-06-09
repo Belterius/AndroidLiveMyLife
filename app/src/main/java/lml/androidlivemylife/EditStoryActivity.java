@@ -259,6 +259,11 @@ public class EditStoryActivity extends UploadPictureActivity {
             return false;
         }
 
+        if(title_to_edit.getText().toString().length() > 20){
+            ToastClass.toastError(this, getString(R.string.error_title_too_long));
+            return false;
+        }
+
         loader.smoothToShow();
         loader.bringToFront();
 

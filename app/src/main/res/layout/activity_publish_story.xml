@@ -19,14 +19,16 @@
             android:id="@+id/titleStory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/publish_story_previous_button"
             android:layout_weight="1"
             android:fontFamily="serif"
-            android:textSize="30dp"
             android:text="Title"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <ImageButton
             android:id="@+id/publish_story_previous_button"
@@ -46,22 +48,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
         android:layout_marginTop="10dp"
+        android:background="@drawable/border"
         android:orientation="vertical"
         android:padding="25dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Congratulations ! Your story is now online !"/>
+            android:text="@string/congratulations_your_story_is_now_online"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Feel free to share it with your friends !"/>
+            android:text="@string/feel_free_to_share_it_with_your_friends"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

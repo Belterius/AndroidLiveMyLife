@@ -88,4 +88,6 @@
     <string name="you_finished_this_story">Vous avez terminé cette Histoire !</string>
     <string name="not_yet_registered_button">Pas encore inscrit ? Cliquez ici !</string>
     <string name="about">À propos de </string>
+    <string name="congratulations_your_story_is_now_online">Félicitations ! Votre histoire est desormais en ligne !</string>
+    <string name="feel_free_to_share_it_with_your_friends">Partagez la avec vos amis !</string>
 </resources>

@@ -99,6 +99,6 @@
     <string name="permissions_edit_story_cant_create">You can\'t create your story because access to your files and to your camera is mandatory !</string>
     <string name="not_yet_registered_button">Not yet registered ? Click here to sign up !</string>
     <string name="about">About</string>
-
-
+    <string name="congratulations_your_story_is_now_online">Congratulations ! Your story is now online !</string>
+    <string name="feel_free_to_share_it_with_your_friends">Feel free to share it with your friends !</string>
 </resources>

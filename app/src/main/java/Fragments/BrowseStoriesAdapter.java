@@ -1,39 +1,21 @@
 package Fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.Story;
-import ClassPackage.ToastClass;
-import lml.androidlivemylife.EditStoryActivity;
-import lml.androidlivemylife.MainActivity;
-import lml.androidlivemylife.PublishStoryActivity;
 import lml.androidlivemylife.R;
 
 /**

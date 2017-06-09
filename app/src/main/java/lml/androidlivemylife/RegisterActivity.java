@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;

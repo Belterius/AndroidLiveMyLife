@@ -19,6 +19,9 @@ public class FinishedStepActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finished_step);
 
+        TextView txTitle = (TextView) findViewById(R.id.step_done_title_textView);
+        txTitle.setText(GlobalState.myCurrentPlayedStory.getTitle());
+
         //Picture - Highlight
         ImageView imageViewPicturePreview = (ImageView) findViewById(R.id.step_done_image);
         Picasso.with(this.getApplicationContext())

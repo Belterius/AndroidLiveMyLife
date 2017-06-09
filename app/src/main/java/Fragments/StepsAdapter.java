@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import java.util.Map;
 import API_request.RequestClass;
 import ClassPackage.GlobalState;
 import ClassPackage.Step;
-import ClassPackage.Story;
 import ClassPackage.ToastClass;
 import lml.androidlivemylife.R;
 

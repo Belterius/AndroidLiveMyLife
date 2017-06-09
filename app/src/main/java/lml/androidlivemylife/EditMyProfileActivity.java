@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -16,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import API_request.MySingletonRequestApi;
-import ClassPackage.GlobalState;
 import API_request.RequestClass;
+import ClassPackage.GlobalState;
 import ClassPackage.ToastClass;
 import ExtendedPackage.UploadPictureActivity;
 

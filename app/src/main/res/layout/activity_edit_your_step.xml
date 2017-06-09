@@ -32,7 +32,7 @@
             android:layout_height="60dp">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/show_profile_pseudo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"

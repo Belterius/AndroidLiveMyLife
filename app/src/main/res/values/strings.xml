@@ -2,7 +2,8 @@
     <string name="app_name">LiveMyLife</string>
     <string name="title_activity_maps">Map</string>
 
-    <string name="google_maps_key">AIzaSyCPcmmWh8OTpkzykHX_wQjmtYp7C_7Erxw</string>
+    <!--<string name="google_maps_key">AIzaSyCPcmmWh8OTpkzykHX_wQjmtYp7C_7Erxw</string>-->
+    <string name="google_maps_key">AIzaSyA56y_BwrlpqyKdRBafyVqo6LgxsC7dGTY</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -97,6 +98,7 @@
     <string name="permissions_remember_edit_story">You can\'t create your story because you choosed to refuse the access to your camera or to your files and it is mandatory to continue. Please change your settings application.</string>
     <string name="permissions_edit_story_cant_create">You can\'t create your story because access to your files and to your camera is mandatory !</string>
     <string name="not_yet_registered_button">Not yet registered ? Click here to sign up !</string>
-
-
+    <string name="about">About</string>
+    <string name="congratulations_your_story_is_now_online">Congratulations ! Your story is now online !</string>
+    <string name="feel_free_to_share_it_with_your_friends">Feel free to share it with your friends !</string>
 </resources>

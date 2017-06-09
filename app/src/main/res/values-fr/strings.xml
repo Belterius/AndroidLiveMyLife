@@ -79,7 +79,7 @@
     <string name="title_my_account">Mon compte</string>
     <string name="title_my_profile">Mon profil</string>
     <string name="title_new_story">Nouvelle Histoire</string>
-    <string name="title_no_step">Aucune étape crée pour le moment. Commencez à jouer !</string>
+    <string name="title_no_step">Aucune étape créée pour le moment. Commencez à jouer !</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_publish">Publier</string>
     <string name="title_resume_story">Reprendre l\'Histoire</string>
@@ -87,4 +87,7 @@
     <string name="toast_remember_permission">Attention, vous avez choisi de ne pas autoriser certaines fonctionalités, et de rendre ce choix définitif, des problèmes de fonctionnement pourront survenir.</string>
     <string name="you_finished_this_story">Vous avez terminé cette Histoire !</string>
     <string name="not_yet_registered_button">Pas encore inscrit ? Cliquez ici !</string>
+    <string name="about">À propos de </string>
+    <string name="congratulations_your_story_is_now_online">Félicitations ! Votre histoire est desormais en ligne !</string>
+    <string name="feel_free_to_share_it_with_your_friends">Partagez la avec vos amis !</string>
 </resources>

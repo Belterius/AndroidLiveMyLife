@@ -3,11 +3,9 @@ package lml.androidlivemylife;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,7 +45,6 @@ public class EditStoryActivity extends UploadPictureActivity {
 
     private String old_title;
     private String old_description;
-    private String old_highlight;
 
 //    private ImageView highlight_to_edit;
 
@@ -85,7 +82,6 @@ public class EditStoryActivity extends UploadPictureActivity {
             old_title = b.getString("storyTitle").toString();
             description_to_edit.setText(b.getString("storyDescription").toString());
             old_description = b.getString("storyDescription").toString();
-            old_highlight = b.getString("storyHighlight").toString();
 
             Picasso.with(this.getApplicationContext())
                     .load(b.getString("storyHighlight").toString())
@@ -256,6 +252,11 @@ public class EditStoryActivity extends UploadPictureActivity {
 
         if(descriptionToPass.equals("") || titleToPass.equals("") || bitmap == null){
             ToastClass.toastError(this, getString(R.string.error_fill_field));
+            return false;
+        }
+
+        if(title_to_edit.getText().toString().length() > 20){
+            ToastClass.toastError(this, getString(R.string.error_title_too_long));
             return false;
         }
 

@@ -1,14 +1,12 @@
 package lml.androidlivemylife;
 
-import android.location.Location;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +35,7 @@ public class StartStoryActivity extends AppCompatActivity {
 
     private ImageView imageViewPicturePreview;
     private ImageButton isLikedButton;
-
+    private View rootView;
     private final String TAG = "startStory";
 
     //Loading
@@ -47,9 +45,7 @@ public class StartStoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_story);
-
-        this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
-
+        rootView = findViewById(R.id.activityStartID);
 
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 
@@ -331,14 +327,29 @@ public class StartStoryActivity extends AppCompatActivity {
     }
 
     public void updateWalkingTime(String time){
-        //Pedestrian
-        TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
-        txt4.setText(time);
+        // Trying to access UI elements from any thread that is not the UI thread causes Exception and Errors
+        //So use that instead !
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Pedestrian
+                TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
+                txt4.setText(time);
+                rootView.invalidate();
+            }
+        });
     }
     public void updateBicyclingTime(String time){
-        //Pedestrian
-        TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
-        txt5.setText(time);
+        //As updateWalkingTime
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Pedestrian
+                TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
+                txt5.setText(time);
+                rootView.invalidate();
+            }
+        });
     }
 
 

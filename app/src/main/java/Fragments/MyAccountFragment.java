@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import API_request.MySingletonRequestApi;
 import ClassPackage.GlobalState;
 import lml.androidlivemylife.EditMyProfileActivity;
 import lml.androidlivemylife.R;
@@ -146,6 +145,9 @@ public class MyAccountFragment extends Fragment {
         ((TextView) getView().findViewById(R.id.show_profile_name)).setText(this.gs.getMyAccount().getFirstname() + " " + this.gs.getMyAccount().getLastname());
         ((TextView) getView().findViewById(R.id.show_profile_pseudo)).setText(this.gs.getMyAccount().getPseudo());
         ((TextView) getView().findViewById(R.id.show_profile_description)).setText(this.gs.getMyAccount().getDescription());
+        TextView about = ((TextView) getView().findViewById(R.id.show_profile_about));
+        about.setText(getString(R.string.about) + " " + this.gs.getMyAccount().getFirstname() + " " + this.gs.getMyAccount().getLastname());
+
 
         if(this.gs.getMyAccount().getPicture().equals("")){
             Picasso.with(this.getContext())

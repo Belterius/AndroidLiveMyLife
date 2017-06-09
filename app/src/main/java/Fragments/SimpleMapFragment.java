@@ -1,36 +1,22 @@
 package Fragments;
 
 import android.Manifest;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.hardware.GeomagneticField;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,9 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -80,8 +64,7 @@ import lml.androidlivemylife.StartStoryActivity;
 public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        SensorEventListener {
+        LocationListener{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -92,8 +75,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private GlobalState gs; //nos fonctions/paramètres globaux
 
     private OnFragmentInteractionListener mListener;//Permet d'intéragir avec notre fragment
-    private SensorManager mSensorManager;
-    private Sensor mSensor;
 
     private boolean showCurrentPos;//We don't show our current pos on the screen displaying a story
     private Location mCurrentLocation;//Notre position actuelle, mise à jour automatiquement par des appels sur onLocationChanged lorsque la position GPS du téléphone change
@@ -162,9 +143,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         myMap.getMapAsync(this); //Permet de récupérer notre googlemap depuis notre mapview
         myMap.onResume();//Permet un affichage instantané de la map
 
-        mSensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         return view;
     }
 
@@ -182,21 +160,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     }
 
-    /**
-     * Called when the accuracy of the registered sensor has changed.  Unlike
-     * onSensorChanged(), this is only called when this accuracy value changes.
-     * <p>
-     * <p>See the SENSOR_STATUS_* constants in
-     * {@link SensorManager SensorManager} for details.
-     *
-     * @param sensor
-     * @param accuracy The new accuracy of this sensor, one of
-     *                 {@code SensorManager.SENSOR_STATUS_*}
-     */
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -270,14 +233,12 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         if(!showCurrentPos){
             if(targetLocation == null)
                 return;
-
-            LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            mMap.animateCamera(cameraUpdate);
             setMarker(targetLocation, "Target Location");
             timeFromStartToEnd();
-            return;
         }
+        LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+        mMap.animateCamera(cameraUpdate);
     }
 
     /**
@@ -358,10 +319,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         setMarker(location, "Current Position");
         setMarker(targetLocation, "Target Location");
 
-        //place la carte sur notre position actuelle
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
-
         //Si on a une destination, trâce le chemin
         if(mCurrentLocation != null && targetLocation != null)
             pathFromCurrentToTarget();
@@ -370,8 +327,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setSmallestDisplacement(1);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setSmallestDisplacement(5);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -432,6 +389,9 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         downloadTask.execute(url);
     }
 
+    /**
+     * Execute les étapes nécessaires à l'affichage du temps pour réaliser la Story
+     */
     private void timeFromStartToEnd(){
         if(allMySteps == null)
             return;
@@ -454,6 +414,13 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+
+    /**
+     * Crée la structure de l'url de requête pour le parcours entre le départ de notre Story et l'arrivée
+     * @param mySteps la listes des steps de notre Story
+     * @param modeTravelling le moyen de déplacement
+     * @return
+     */
     private String getFullDurationUrl(List<Step> mySteps, String modeTravelling){
         LatLng origin = new LatLng(Double.parseDouble(mySteps.get(0).getGpsLatitude()), Double.parseDouble(mySteps.get(0).getGpsLongitude()));
         LatLng dest = new LatLng(Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLatitude()), Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLongitude()));
@@ -566,7 +533,10 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         return data;
     }
 
-    // Permet de récupérer des données de réponse à l'URL fourni de manière asynchrone
+
+    /**
+     * Permet de récupérer des données de réponse à l'URL fourni de manière asynchrone
+     */
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
         public String typeTime = null;
@@ -589,10 +559,10 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 JSONObject duration = ((JSONObject)legs.get(0)).getJSONObject("duration");
 
                 if(typeTime.equals("walking")){
-                    setWalkingTimeStory(duration.getString("text"));
+                    setWalkingTimeStory(duration.getString("text").toString());
                 }
                 if(typeTime.equals("bicycling")){
-                    setBicyclingTimeStory(duration.getString("text"));
+                    setBicyclingTimeStory(duration.getString("text").toString());
                 }
 
                 Log.d("My App", obj.toString());
@@ -620,7 +590,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    /** Parse les réponses de l'api Google place/direction en JSON */
+    /** Parse les réponses de l'api Google place/direction en JSON  puis crée et affiche une PolyLine sur la GoogleMap représentant le trajet effectué*/
     private class ParserGooglePlacesToJSONTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
 
         @Override
@@ -633,7 +603,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
                 routes = parser.parse(jObject);
-                System.out.println("a la con");
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -684,69 +653,20 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
 
 
     /**
-     * Appellé lorsque le sensor du téléphone change
-     * @param event
+     * Affiche la durée du parcours à pied
+     * @param duration
      */
-    public void onSensorChanged( SensorEvent event ) {
-        if ( mCurrentLocation == null || targetLocation == null) return;
-
-        float azimuth = event.values[0];
-        float baseAzimuth = azimuth;
-
-        GeomagneticField geoField = new GeomagneticField( Double
-                .valueOf( mCurrentLocation.getLatitude() ).floatValue(), Double
-                .valueOf( mCurrentLocation.getLongitude() ).floatValue(),
-                Double.valueOf( mCurrentLocation.getAltitude() ).floatValue(),
-                System.currentTimeMillis() );
-
-        azimuth -= geoField.getDeclination(); //converti le nord magnétique (intersection des lignes de champ magnétiques) en nord réel (emplacement physique correspondant à l'intersection des méridens)
-
-        // récupère l'orientation entre notre position et notre destination
-        float bearTo = mCurrentLocation.bearingTo( targetLocation );
-
-        //Si notre orientation est <0, on doit ajouter 360 pour conserver une rotation dans le sens des aiguilles d'une montre
-        if (bearTo < 0) {
-            bearTo = bearTo + 360;
-        }
-        //On souhaite donc pointer vers notre orientation, MOINS la compensation entre le nord magnétique, et le nord physique
-        float direction = bearTo - azimuth ;
-
-        //Si notre orientation est <0, on doit ajouter 360 pour conserver une rotation dans le sens des aiguilles d'une montre
-        if (direction < 0) {
-            direction = direction + 360;
-        }
-
-        //Permet de sécuriser, si l'utilisateur
-        if(this.getActivity() == null)
-            return;
-
-//        if(this.getActivity().findViewById(R.id.compass) != null)
-//            this.getActivity().findViewById(R.id.compass).setRotation(direction % 360);
-
-        //Set the field
-        String bearingText = "N";
-
-        if ( (360 >= baseAzimuth && baseAzimuth >= 337.5) || (0 <= baseAzimuth && baseAzimuth <= 22.5) ) bearingText = "N";
-        else if (baseAzimuth > 22.5 && baseAzimuth < 67.5) bearingText = "NE";
-        else if (baseAzimuth >= 67.5 && baseAzimuth <= 112.5) bearingText = "E";
-        else if (baseAzimuth > 112.5 && baseAzimuth < 157.5) bearingText = "SE";
-        else if (baseAzimuth >= 157.5 && baseAzimuth <= 202.5) bearingText = "S";
-        else if (baseAzimuth > 202.5 && baseAzimuth < 247.5) bearingText = "SW";
-        else if (baseAzimuth >= 247.5 && baseAzimuth <= 292.5) bearingText = "W";
-        else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
-        else bearingText = "?";
-
-        //System.out.println(bearingText);
-       // fieldBearing.setText(bearingText);
-
-    }
-
     public void setWalkingTimeStory(String duration){
-            if(this.getActivity() instanceof StartStoryActivity)
+            if(this.getActivity() instanceof StartStoryActivity)//nécessaire au cas où l'utilisateur quitte la page alors que l'appel Asynchrone était en cours
                 ((StartStoryActivity)this.getActivity()).updateWalkingTime(duration);
     }
+
+    /**
+     * affiche la durée du parcours à vélo
+     * @param duration
+     */
     public void setBicyclingTimeStory(String duration){
-        if(this.getActivity() instanceof StartStoryActivity)
+        if(this.getActivity() instanceof StartStoryActivity)//nécessaire au cas où l'utilisateur quitte la page alors que l'appel Asynchrone était en cours
             ((StartStoryActivity)this.getActivity()).updateBicyclingTime(duration);
     }
 

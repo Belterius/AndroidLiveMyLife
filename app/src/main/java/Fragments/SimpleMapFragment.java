@@ -80,8 +80,7 @@ import lml.androidlivemylife.StartStoryActivity;
 public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        SensorEventListener {
+        LocationListener{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -92,8 +91,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     private GlobalState gs; //nos fonctions/paramètres globaux
 
     private OnFragmentInteractionListener mListener;//Permet d'intéragir avec notre fragment
-    private SensorManager mSensorManager;
-    private Sensor mSensor;
 
     private boolean showCurrentPos;//We don't show our current pos on the screen displaying a story
     private Location mCurrentLocation;//Notre position actuelle, mise à jour automatiquement par des appels sur onLocationChanged lorsque la position GPS du téléphone change
@@ -162,9 +159,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         myMap.getMapAsync(this); //Permet de récupérer notre googlemap depuis notre mapview
         myMap.onResume();//Permet un affichage instantané de la map
 
-        mSensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         return view;
     }
 
@@ -182,21 +176,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     }
 
-    /**
-     * Called when the accuracy of the registered sensor has changed.  Unlike
-     * onSensorChanged(), this is only called when this accuracy value changes.
-     * <p>
-     * <p>See the SENSOR_STATUS_* constants in
-     * {@link SensorManager SensorManager} for details.
-     *
-     * @param sensor
-     * @param accuracy The new accuracy of this sensor, one of
-     *                 {@code SensorManager.SENSOR_STATUS_*}
-     */
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -359,8 +338,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         setMarker(targetLocation, "Target Location");
 
         //place la carte sur notre position actuelle
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
 
         //Si on a une destination, trâce le chemin
         if(mCurrentLocation != null && targetLocation != null)
@@ -370,8 +349,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setSmallestDisplacement(1);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setSmallestDisplacement(10);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -633,7 +612,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
                 routes = parser.parse(jObject);
-                System.out.println("a la con");
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -682,64 +660,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
-    /**
-     * Appellé lorsque le sensor du téléphone change
-     * @param event
-     */
-    public void onSensorChanged( SensorEvent event ) {
-        if ( mCurrentLocation == null || targetLocation == null) return;
-
-        float azimuth = event.values[0];
-        float baseAzimuth = azimuth;
-
-        GeomagneticField geoField = new GeomagneticField( Double
-                .valueOf( mCurrentLocation.getLatitude() ).floatValue(), Double
-                .valueOf( mCurrentLocation.getLongitude() ).floatValue(),
-                Double.valueOf( mCurrentLocation.getAltitude() ).floatValue(),
-                System.currentTimeMillis() );
-
-        azimuth -= geoField.getDeclination(); //converti le nord magnétique (intersection des lignes de champ magnétiques) en nord réel (emplacement physique correspondant à l'intersection des méridens)
-
-        // récupère l'orientation entre notre position et notre destination
-        float bearTo = mCurrentLocation.bearingTo( targetLocation );
-
-        //Si notre orientation est <0, on doit ajouter 360 pour conserver une rotation dans le sens des aiguilles d'une montre
-        if (bearTo < 0) {
-            bearTo = bearTo + 360;
-        }
-        //On souhaite donc pointer vers notre orientation, MOINS la compensation entre le nord magnétique, et le nord physique
-        float direction = bearTo - azimuth ;
-
-        //Si notre orientation est <0, on doit ajouter 360 pour conserver une rotation dans le sens des aiguilles d'une montre
-        if (direction < 0) {
-            direction = direction + 360;
-        }
-
-        //Permet de sécuriser, si l'utilisateur
-        if(this.getActivity() == null)
-            return;
-
-//        if(this.getActivity().findViewById(R.id.compass) != null)
-//            this.getActivity().findViewById(R.id.compass).setRotation(direction % 360);
-
-        //Set the field
-        String bearingText = "N";
-
-        if ( (360 >= baseAzimuth && baseAzimuth >= 337.5) || (0 <= baseAzimuth && baseAzimuth <= 22.5) ) bearingText = "N";
-        else if (baseAzimuth > 22.5 && baseAzimuth < 67.5) bearingText = "NE";
-        else if (baseAzimuth >= 67.5 && baseAzimuth <= 112.5) bearingText = "E";
-        else if (baseAzimuth > 112.5 && baseAzimuth < 157.5) bearingText = "SE";
-        else if (baseAzimuth >= 157.5 && baseAzimuth <= 202.5) bearingText = "S";
-        else if (baseAzimuth > 202.5 && baseAzimuth < 247.5) bearingText = "SW";
-        else if (baseAzimuth >= 247.5 && baseAzimuth <= 292.5) bearingText = "W";
-        else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
-        else bearingText = "?";
-
-        //System.out.println(bearingText);
-       // fieldBearing.setText(bearingText);
-
-    }
 
     public void setWalkingTimeStory(String duration){
             if(this.getActivity() instanceof StartStoryActivity)

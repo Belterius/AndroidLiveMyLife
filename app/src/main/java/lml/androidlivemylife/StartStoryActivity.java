@@ -37,7 +37,7 @@ public class StartStoryActivity extends AppCompatActivity {
 
     private ImageView imageViewPicturePreview;
     private ImageButton isLikedButton;
-
+    private View rootView;
     private final String TAG = "startStory";
 
     //Loading
@@ -47,7 +47,7 @@ public class StartStoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_story);
-
+        rootView = findViewById(R.id.activityStartID);
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.start_story_gif);
 
 
@@ -334,11 +334,13 @@ public class StartStoryActivity extends AppCompatActivity {
         //Pedestrian
         TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
         txt4.setText(time);
+        rootView.invalidate();
     }
     public void updateBicyclingTime(String time){
         //Pedestrian
         TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
         txt5.setText(time);
+        rootView.invalidate();
     }
 
 

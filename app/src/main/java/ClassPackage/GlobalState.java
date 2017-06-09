@@ -127,5 +127,4 @@ public class GlobalState{
         this.alerter(c, sType);
         return bStatut;
     }
-
 }

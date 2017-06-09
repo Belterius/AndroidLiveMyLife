@@ -255,7 +255,6 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
             if(targetLocation == null)
                 return;
 
-
             LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             mMap.animateCamera(cameraUpdate);
@@ -306,7 +305,6 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
         if(!showCurrentPos){
             return;
         }
-
 
         if(mCurrentLocation == null){
             mCurrentLocation = location;
@@ -549,8 +547,6 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
         }
     }
 
-
-
     float currentDegree = 0f;
     /**
      * Appellé lorsque le sensor du téléphone change
@@ -661,7 +657,5 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
         Log.i("bearing",bearingText);
         Log.i("direction",String.valueOf(direction));
         Log.i("azimuth",String.valueOf(baseAzimuth));
-        // fieldBearing.setText(bearingText);
     }
-
 }

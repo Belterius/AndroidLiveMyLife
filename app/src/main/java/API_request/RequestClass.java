@@ -64,7 +64,6 @@ public class RequestClass {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO Auto-generated method stub
                             Log.i(TAG, error.toString());
                         }
                     }) {
@@ -93,7 +92,5 @@ public class RequestClass {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
     }
-
 }

@@ -106,7 +106,6 @@ public class RegisterActivity extends UploadPictureActivity {
      */
     public Boolean postRequest(JSONObject o) {
         try {
-
             JSONObject user = o.getJSONObject("user");
             if( o.getInt("status") == 200){
 
@@ -126,11 +125,9 @@ public class RegisterActivity extends UploadPictureActivity {
                     finish();
                     return true;
                 }
-
             }
             //Account created but problem with the picture
             else if (o.getInt("status") == 202){
-
                 if(user != null){
                     this.gs.setMyAccount(new MyUser(
                             user.getString("id"),

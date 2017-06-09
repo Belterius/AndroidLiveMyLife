@@ -53,7 +53,6 @@ public class StartStoryActivity extends AppCompatActivity {
         getStoryToPlay(b.getString("storyId"));
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -148,7 +147,6 @@ public class StartStoryActivity extends AppCompatActivity {
                     targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLatitude()));//your coords of course
                     targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getSteps().get(0).getGpsLongitude()));
                     fm.beginTransaction().replace(R.id.start_story_framelayout, SimpleMapFragment.newInstance("","",targetLocation,false, mySteps2), "tagMyMap").commit();
-
                 }
 
                 return true;
@@ -178,7 +176,6 @@ public class StartStoryActivity extends AppCompatActivity {
 
         isLikedButton.setImageResource(R.drawable.is_not_liked);
     }
-
 
     /**
      * Initiliazes the button listener to unlike the story the next time they hit the button
@@ -274,7 +271,6 @@ public class StartStoryActivity extends AppCompatActivity {
     }
 
     private void displayWithData(){
-
         //Title
         TextView txt = (TextView) findViewById(R.id.start_story_title_textView);
         txt.setText(GlobalState.myCurrentPlayedStory.getTitle());
@@ -295,15 +291,6 @@ public class StartStoryActivity extends AppCompatActivity {
                 .placeholder(R.drawable.loading_gears)
                 .error(R.drawable.ic_menu_report_image)
                 .into(this.imageViewPicturePreview);
-
-        //ETA
-        //Pedestrian
-//        TextView txt4 = (TextView) findViewById(R.id.start_story_pedestrian_time_textview);
-//        txt4.setText("?");
-
-        //Cyclist
-//        TextView txt5 = (TextView) findViewById(R.id.start_story_cyclist_time_textview);
-//        txt5.setText("?");
 
         initLikeUnlike();
     }
@@ -351,6 +338,4 @@ public class StartStoryActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

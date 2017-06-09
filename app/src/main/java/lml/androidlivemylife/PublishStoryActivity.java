@@ -61,5 +61,4 @@ public class PublishStoryActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
-
 }

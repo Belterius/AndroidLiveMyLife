@@ -28,14 +28,12 @@ import lml.androidlivemylife.R;
  * create an instance of this fragment.
  */
 public class MyAccountFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private GlobalState gs;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -53,7 +51,6 @@ public class MyAccountFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment MyAccountFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MyAccountFragment newInstance(String param1, String param2) {
         MyAccountFragment fragment = new MyAccountFragment();
         Bundle args = new Bundle();
@@ -84,9 +81,6 @@ public class MyAccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_my_account, container, false);
-
-
         View view = inflater.inflate(R.layout.fragment_my_account, container, false);
         ImageButton button = (ImageButton) view.findViewById(R.id.show_profile_validate);
         button.setOnClickListener(new View.OnClickListener()
@@ -101,7 +95,6 @@ public class MyAccountFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -111,12 +104,6 @@ public class MyAccountFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
@@ -136,7 +123,6 @@ public class MyAccountFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -162,7 +148,6 @@ public class MyAccountFragment extends Fragment {
                     .error(R.drawable.ic_menu_report_image)
                     .into(((ImageView)getView().findViewById(R.id.show_profile_picture)));
         }
-        //TODO : charger aussi les différentes story et afficher le slider avec les preview
     }
 
     public void editMyProfile(View v){
@@ -173,5 +158,4 @@ public class MyAccountFragment extends Fragment {
         Intent nextView = new Intent(this.getContext(),EditMyProfileActivity.class);
         startActivity(nextView);
     }
-
 }

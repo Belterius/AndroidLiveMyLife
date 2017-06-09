@@ -105,7 +105,6 @@ public class EditMyProfileActivity extends UploadPictureActivity {
                     .into(imageViewPicturePreview);
         }
 
-
         this.loader = (AVLoadingIndicatorView) findViewById(R.id.edit_my_profile_gif);
 
         requestEveryPermission();
@@ -174,5 +173,4 @@ public class EditMyProfileActivity extends UploadPictureActivity {
             MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
         }
     }
-
 }

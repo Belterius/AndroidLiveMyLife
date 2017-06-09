@@ -45,7 +45,6 @@ import lml.androidlivemylife.R;
 /**
  *
  * The classes uses that needs to use the following functions : showFileChooser
- * TODO : Use multipart upload in  order to get lighter cache file on the server
  */
 public class UploadPictureActivity extends AppCompatActivity {
 
@@ -583,5 +582,4 @@ public class UploadPictureActivity extends AppCompatActivity {
         }
         return 0;
     }
-
 }

@@ -65,7 +65,6 @@ public class ChangeMyPasswordActivity extends AppCompatActivity {
 
         //Avoid doing the request
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::postRequestUpdatePassword);
-
     }
 
     private Boolean postRequestUpdatePassword(JSONObject o){

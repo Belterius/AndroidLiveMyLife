@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -29,6 +30,8 @@ public class FinishedStoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finished_story);
 
+        TextView myTitle =(TextView)findViewById(R.id.story_done_title_textView);
+        myTitle.setText(GlobalState.myCurrentPlayedStory.getTitle());
         //Picture - Highlight
         ImageView imageViewPicturePreview = (ImageView) findViewById(R.id.story_done_image);
         Picasso.with(this.getApplicationContext())
@@ -45,7 +48,6 @@ public class FinishedStoryActivity extends AppCompatActivity {
             setOnClickListenerLike();
         }
     }
-
 
     /**
      * Initiliazes the button listener to like the story the next time they hit the button
@@ -157,5 +159,4 @@ public class FinishedStoryActivity extends AppCompatActivity {
             MySingletonRequestApi.getInstance(this).getRequestQueue().cancelAll(TAG);
         }
     }
-
 }

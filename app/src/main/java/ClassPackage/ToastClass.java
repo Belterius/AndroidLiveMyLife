@@ -35,7 +35,5 @@ public class ToastClass {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
-
     }
-
 }

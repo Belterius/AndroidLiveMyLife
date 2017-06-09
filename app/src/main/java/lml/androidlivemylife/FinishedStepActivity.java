@@ -30,8 +30,6 @@ public class FinishedStepActivity extends AppCompatActivity {
                 .error(R.drawable.ic_menu_report_image)
                 .into(imageViewPicturePreview);
 
-        //
-
         //Step X
         TextView tx2 = (TextView) findViewById(R.id.step_done_step_x);
         //The index begins at 0, so increment before displaying
@@ -68,5 +66,4 @@ public class FinishedStepActivity extends AppCompatActivity {
         //Removes from the stack this Activity
         this.finish();
     }
-
 }

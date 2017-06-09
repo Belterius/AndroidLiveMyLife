@@ -160,7 +160,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     }
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -190,7 +189,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         gs = new GlobalState();
     }
-
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -302,10 +300,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             return;
         }
 
-
-
         mCurrentLocation = location;
-
 
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -403,7 +398,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         // télécharge les informations (json) fournie par Google Directions API
         downloadTaskWalking.execute(urlWalking);
 
-
         String url = getFullDurationUrl(allMySteps, "bicycling");
 
         SimpleMapFragment.DownloadTask downloadTaskBicycling = new SimpleMapFragment.DownloadTask();
@@ -411,8 +405,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         downloadTaskBicycling.typeTime = "bicycling";
         // télécharge les informations (json) fournie par Google Directions API
         downloadTaskBicycling.execute(url);
-
-
     }
 
     /**
@@ -425,20 +417,17 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         LatLng origin = new LatLng(Double.parseDouble(mySteps.get(0).getGpsLatitude()), Double.parseDouble(mySteps.get(0).getGpsLongitude()));
         LatLng dest = new LatLng(Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLatitude()), Double.parseDouble(mySteps.get(mySteps.size() -1).getGpsLongitude()));
 
-
         // Origine de la route
         String str_origin = "origin="+origin.latitude+","+origin.longitude;
 
         // Destination de la route
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
-
         // Si le sensor est activé
         String sensor = "sensor=true";
 
         //Le type de moyen de déplacement (walking/driving/bicycling/transit)
         String mode = "mode="+modeTravelling;
-
 
         String via = "waypoints=";
         String parameters = "";
@@ -452,10 +441,8 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
             }
                 parameters = str_origin+"&"+str_dest+"&"+via +"&"+sensor+"&"+mode;
         }else{
-
                 parameters = str_origin+"&"+str_dest +"&"+sensor+"&"+mode;
         }
-
 
         // le format de la réponse
         String output = "json";
@@ -533,7 +520,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         return data;
     }
 
-
     /**
      * Permet de récupérer des données de réponse à l'URL fourni de manière asynchrone
      */
@@ -550,9 +536,7 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 Log.d("Background Task",e.toString());
             }
 
-
             try {
-
                 JSONObject obj = new JSONObject(data);
                 JSONArray route = obj.getJSONArray("routes");
                 JSONArray legs = ((JSONObject)route.get(0)).getJSONArray("legs");
@@ -571,8 +555,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 Log.e("My App", "Could not parse malformed JSON: \"" + data + "\"");
             }
 
-
-
             return data;
         }
 
@@ -586,7 +568,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
                 // Parse la data récupéré depuis l'URL en JSON
                 parserTask.execute(result);
             }
-
         }
     }
 
@@ -651,7 +632,6 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
     /**
      * Affiche la durée du parcours à pied
      * @param duration
@@ -669,5 +649,4 @@ public class SimpleMapFragment extends Fragment implements OnMapReadyCallback,
         if(this.getActivity() instanceof StartStoryActivity)//nécessaire au cas où l'utilisateur quitte la page alors que l'appel Asynchrone était en cours
             ((StartStoryActivity)this.getActivity()).updateBicyclingTime(duration);
     }
-
 }

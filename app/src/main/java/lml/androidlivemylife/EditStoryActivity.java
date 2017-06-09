@@ -46,8 +46,6 @@ public class EditStoryActivity extends UploadPictureActivity {
     private String old_title;
     private String old_description;
 
-//    private ImageView highlight_to_edit;
-
     private ImageButton previousarrow;
     private ImageButton validate;
 
@@ -85,9 +83,7 @@ public class EditStoryActivity extends UploadPictureActivity {
 
             Picasso.with(this.getApplicationContext())
                     .load(b.getString("storyHighlight").toString())
-//                .placeholder(R.drawable.loading_gears)
                     .error(R.drawable.ic_menu_report_image)
-//                .error(R.drawable.error_triangle)
                     .into(((ImageView)this.imageViewPicturePreview));
 
             validate.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +158,6 @@ public class EditStoryActivity extends UploadPictureActivity {
                 alert.show();
             }
         }
-
     }
 
     @Override
@@ -271,7 +266,6 @@ public class EditStoryActivity extends UploadPictureActivity {
         dataToPass.put("storyTitle", titleToPass);
         dataToPass.put("storyDescription", descriptionToPass);
         dataToPass.put("storyPicture", getImageToPassForRequest());
-
 
         RequestClass.doRequestWithApi(this.getApplicationContext(), this.TAG, dataToPass, this::finalizeCreateStory);
 

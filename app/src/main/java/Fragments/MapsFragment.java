@@ -86,17 +86,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
 
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private GlobalState gs;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -114,7 +109,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
      * @param param2 Parameter 2.
      * @return A new instance of fragment BrowseStoryFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MapsFragment newInstance(String param1, String param2) {
         MapsFragment fragment = new MapsFragment();
         Bundle args = new Bundle();
@@ -129,26 +123,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // inflat and return the layout
-//        View v = inflater.inflate(R.layout.activity_maps, container, false);
-//        try {
-//            MapsInitializer.initialize(getActivity().getApplicationContext());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
-//                .findFragmentById(R.id.maps_layout_global);
-//        mapFragment.getMapAsync(this);
-//
-//        return v;
-
-//            View rootView = inflater.inflate(R.layout.activity_maps, container, false);
-
-//            return rootView;
-
         return inflater.inflate(R.layout.activity_maps, container, false);
-
     }
 
     @Override
@@ -191,8 +166,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         gs = new GlobalState();
     }
 
-
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -202,12 +175,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
@@ -262,7 +229,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -377,7 +343,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     public void saveCurrentLocation(View view) {
         if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -569,10 +534,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
-
-
-
     //COMPASS
     public void onSensorChanged( SensorEvent event ) {
 
@@ -602,24 +563,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             direction = direction + 360;
         }
 
-//        rotateImageView((ImageView) this.getActivity().findViewById(R.id.compass), R.mipmap.ic_compass, direction );
-
-
         //Set the field
         String bearingText = "N";
-
-//        if ( (360 >= baseAzimuth && baseAzimuth >= 337.5) || (0 <= baseAzimuth && baseAzimuth <= 22.5) ) bearingText = "N";
-//        else if (baseAzimuth > 22.5 && baseAzimuth < 67.5) bearingText = "NE";
-//        else if (baseAzimuth >= 67.5 && baseAzimuth <= 112.5) bearingText = "E";
-//        else if (baseAzimuth > 112.5 && baseAzimuth < 157.5) bearingText = "SE";
-//        else if (baseAzimuth >= 157.5 && baseAzimuth <= 202.5) bearingText = "S";
-//        else if (baseAzimuth > 202.5 && baseAzimuth < 247.5) bearingText = "SW";
-//        else if (baseAzimuth >= 247.5 && baseAzimuth <= 292.5) bearingText = "W";
-//        else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
-//        else bearingText = "?";
-//
-//        fieldBearing.setText(bearingText);
-
     }
 
     @Override

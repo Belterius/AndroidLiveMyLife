@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
  */
 
 public class MySingletonRequestApi {
+
     private static MySingletonRequestApi mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;

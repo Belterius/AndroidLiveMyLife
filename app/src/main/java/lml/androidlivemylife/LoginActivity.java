@@ -124,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
     public Boolean getMyAccount(JSONObject o){
 
         try {
-
             loader.smoothToHide();
             findViewById(R.id.login_background_gif).setVisibility(View.GONE);
 

@@ -38,7 +38,6 @@ import lml.androidlivemylife.R;
  * create an instance of this fragment.
  */
 public class LocalStoriesFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -78,7 +77,6 @@ public class LocalStoriesFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment LocalStoriesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static LocalStoriesFragment newInstance(String param1, String param2) {
         LocalStoriesFragment fragment = new LocalStoriesFragment();
         Bundle args = new Bundle();
@@ -265,7 +263,6 @@ public class LocalStoriesFragment extends Fragment {
         return storyArrayList;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -275,12 +272,6 @@ public class LocalStoriesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
@@ -300,7 +291,6 @@ public class LocalStoriesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

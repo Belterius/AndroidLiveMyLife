@@ -62,19 +62,16 @@ public class LocalStoriesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return data.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
@@ -89,7 +86,6 @@ public class LocalStoriesAdapter extends BaseAdapter {
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.listview_item_row, null);
@@ -106,8 +102,6 @@ public class LocalStoriesAdapter extends BaseAdapter {
         holder.desc.setText(data.get(position).getDescription());
         Picasso.with(context)
                 .load(data.get(position).getHighlight())
-//                .placeholder(R.drawable.loading_gears)
-//                .error(R.drawable.ic_menu_report_image)
                 .error(R.drawable.error_triangle)
                 .into(((ImageView)holder.img));
 

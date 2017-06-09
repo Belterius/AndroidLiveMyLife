@@ -71,7 +71,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
-
 
     /**
      * Manipulates the map once available.
@@ -187,7 +185,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
-
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
@@ -235,7 +232,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void saveCurrentLocation(View view) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -255,7 +251,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setMarker(targetLocation, "target");
     }
 
-
     public void setMarker(Location loc, String markerText){
         LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
@@ -264,6 +259,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
     }
+
     public void testDirection(View view){
         String url = getDirectionsUrl(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude()));
 
@@ -297,6 +293,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         return url;
     }
+
     /** A method to download json data from url */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
@@ -427,10 +424,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-
-
-
     //COMPASS
     public void onSensorChanged( SensorEvent event ) {
 
@@ -460,24 +453,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             direction = direction + 360;
         }
 
-//        rotateImageView((ImageView) findViewById(R.id.compass), R.mipmap.ic_compass, direction );
-
-
         //Set the field
         String bearingText = "N";
-
-//        if ( (360 >= baseAzimuth && baseAzimuth >= 337.5) || (0 <= baseAzimuth && baseAzimuth <= 22.5) ) bearingText = "N";
-//        else if (baseAzimuth > 22.5 && baseAzimuth < 67.5) bearingText = "NE";
-//        else if (baseAzimuth >= 67.5 && baseAzimuth <= 112.5) bearingText = "E";
-//        else if (baseAzimuth > 112.5 && baseAzimuth < 157.5) bearingText = "SE";
-//        else if (baseAzimuth >= 157.5 && baseAzimuth <= 202.5) bearingText = "S";
-//        else if (baseAzimuth > 202.5 && baseAzimuth < 247.5) bearingText = "SW";
-//        else if (baseAzimuth >= 247.5 && baseAzimuth <= 292.5) bearingText = "W";
-//        else if (baseAzimuth > 292.5 && baseAzimuth < 337.5) bearingText = "NW";
-//        else bearingText = "?";
-//
-//        fieldBearing.setText(bearingText);
-
     }
 
     @Override

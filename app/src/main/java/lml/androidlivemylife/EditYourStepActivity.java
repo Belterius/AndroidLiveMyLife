@@ -82,7 +82,6 @@ public class EditYourStepActivity extends UploadPictureActivity implements Locat
                 buildGoogleApiClient();
             }
         }
-
     }
 
     @Override

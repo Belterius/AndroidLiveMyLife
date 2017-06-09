@@ -40,7 +40,6 @@ public class PlayStoryActivity extends AppCompatActivity {
         Switch mySwitch = (Switch) findViewById(R.id.play_story_switch_button);
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //TODO - Change map - boussole
                 if(isChecked){
                     mySwitch.setText(R.string.map_on);
 
@@ -66,7 +65,6 @@ public class PlayStoryActivity extends AppCompatActivity {
         targetLocation.setLatitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLatitude()));//your coords of course
         targetLocation.setLongitude(Float.parseFloat(GlobalState.myCurrentPlayedStory.getCurrentPlayedStep().getGpsLongitude()));
         fm.beginTransaction().replace(R.id.play_story_frame_maps, SimpleMapFragment.newInstance("","",targetLocation,true, null), "tagMyMap").commit();
-
     }
 
     /**
@@ -127,8 +125,4 @@ public class PlayStoryActivity extends AppCompatActivity {
         //Removes from the stack this Activity
         this.finish();
     }
-
-
-
-
 }

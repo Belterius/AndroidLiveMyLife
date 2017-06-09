@@ -42,7 +42,7 @@
                 android:fontFamily="serif"
                 android:text="@string/title"
                 android:textAlignment="center"
-                android:textSize="30dp" />
+                android:textSize="24sp" />
 
             <ImageButton
                 android:id="@+id/edit_story_previous_button"

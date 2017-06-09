@@ -80,7 +80,7 @@ public class EditStoryActivity extends UploadPictureActivity {
         if(! isCreation){
             //It is edition => Pre-fill labels
             storyId = b.getString("storyId");
-            pageTitle.setText(getString(R.string.title_edit_and_other_name) + b.getString("storyTitle").toString());
+            pageTitle.setText(b.getString("storyTitle").toString());
             title_to_edit.setText(b.getString("storyTitle").toString());
             old_title = b.getString("storyTitle").toString();
             description_to_edit.setText(b.getString("storyDescription").toString());

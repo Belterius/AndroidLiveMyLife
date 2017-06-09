@@ -28,6 +28,7 @@
                 android:text="@string/title_my_profile"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="24sp"
                 tools:text="@string/title_my_profile" />
 
             <ImageButton

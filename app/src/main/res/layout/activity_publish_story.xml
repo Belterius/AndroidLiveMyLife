@@ -24,7 +24,7 @@
             android:layout_centerVertical="true"
             android:layout_weight="1"
             android:fontFamily="serif"
-            android:textSize="30dp"
+            android:textSize="24sp"
             android:text="Title"
             android:textAlignment="center" />
 

@@ -266,8 +266,6 @@ public class SimpleCompassFragment extends Fragment implements OnMapReadyCallbac
             if(targetLocation == null)
                 return;
 
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude())));
-//            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 
             LatLng latLng = new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);

@@ -112,8 +112,6 @@ public class BrowseStoriesAdapter extends BaseAdapter implements Filterable {
         holder.desc.setText(dataStory.getDescription());
         holder.author.setText(" by " + dataStory.getAuthor().getPseudo());
         holder.author.setVisibility(View.VISIBLE);
-//        holder.img.setImageResource(R.drawable.magnifier);
-        //holder.img.setImageResource(data.get(position).getHighlight());
         Picasso.with(context)
                 .load(data.get(position).getHighlight())
 //                .placeholder(R.drawable.loading_gears)
@@ -156,5 +154,4 @@ public class BrowseStoriesAdapter extends BaseAdapter implements Filterable {
             }
         };
     }
-
 }

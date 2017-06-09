@@ -107,8 +107,6 @@ public class LocalStoriesAdapter extends BaseAdapter {
 
         holder.title.setText(data.get(position).getTitle());
         holder.desc.setText(data.get(position).getDescription());
-//        holder.img.setImageResource(R.drawable.magnifier);
-        //holder.img.setImageResource(data.get(position).getHighlight());
         Picasso.with(context)
                 .load(data.get(position).getHighlight())
 //                .placeholder(R.drawable.loading_gears)
@@ -125,8 +123,8 @@ public class LocalStoriesAdapter extends BaseAdapter {
             holder.imgb2.setImageResource(R.drawable.twitter);
         }
         holder.imgb3.setImageResource(R.drawable.delete);
-        holder.imgb1.setOnClickListener(new View.OnClickListener() {
 
+        holder.imgb1.setOnClickListener(new View.OnClickListener() {
             //Publish
             @Override
             public void onClick(View v) {

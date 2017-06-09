@@ -140,11 +140,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if(this.navigation.getSelectedItemId() == R.id.navigation_account){
-            //Refresh the data
-            //initMyProfileView();
-        }
     }
 
 
@@ -189,10 +184,6 @@ public class MainActivity extends AppCompatActivity {
     public static int getResult_from_edit() {
         return result_from_edit;
     }
-
-//    public void goToMaps(View v){
-//        startActivity(new Intent(this, MapsActivity.class));
-//    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean checkLocationPermission(){

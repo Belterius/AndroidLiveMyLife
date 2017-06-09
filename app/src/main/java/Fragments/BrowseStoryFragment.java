@@ -285,5 +285,4 @@ public class BrowseStoryFragment extends Fragment implements SearchView.OnQueryT
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }
